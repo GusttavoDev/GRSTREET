@@ -49,7 +49,7 @@ export default class UserRepository {
                 cpf: user.cpf,
                 profile_img: user.profile_img,
             },
-            adress: {
+            addres: {
                 country: user.country,
                 state: user.state,
                 city: user.city,
@@ -117,7 +117,7 @@ export default class UserRepository {
                     cpf: user.cpf,
                     profile_img: user.profile_img,
                 },
-                adress: {
+                addres: {
                     country: user.country,
                     state: user.state,
                     city: user.city,
@@ -170,12 +170,10 @@ export default class UserRepository {
         return users;
     }
 
-    
-
     async create({
         header,
         personal_data,
-        adress
+        addres
     }: IUser): Promise<void> {
         const id = this.snowflake.generate();
         const token = await this.jwt.create({
@@ -190,13 +188,13 @@ export default class UserRepository {
             password: header.password,
             name: personal_data.name,
             cpf: personal_data.cpf,
-            country: adress.country,
-            state: adress.state,
-            city: adress.city,
-            neighborhood: adress.neighborhood,
-            street: adress.street,
-            number: adress.number,
-            cep: adress.cep,
+            country: addres.country,
+            state: addres.state,
+            city: addres.city,
+            neighborhood: addres.neighborhood,
+            street: addres.street,
+            number: addres.number,
+            cep: addres.cep,
         };
 
         await this.prisma.user.create({
@@ -213,7 +211,7 @@ export default class UserRepository {
         });
     }
 
-    async updateAddress(token: string, newAddress: Partial<IUser['adress']>): Promise<void> {
+    async updateAddress(token: string, newAddress: Partial<IUser['addres']>): Promise<void> {
         const decoded = await this.jwt.verifyToken(token);
         await this.prisma.user.update({
             where: {

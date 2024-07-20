@@ -13,7 +13,7 @@ interface PersonalData {
     profile_img: string,
 }
 
-interface Adress {
+interface Addres {
     country: string,
     state: string,
     city: string,
@@ -26,6 +26,6 @@ interface Adress {
 export default interface IUser {
     header: Header,
     personal_data: PersonalData,
-    adress: Adress,
+    addres: Addres,
     purchases: IPurchase[],
 }
