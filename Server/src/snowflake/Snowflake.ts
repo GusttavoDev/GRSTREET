@@ -1,5 +1,5 @@
 export default class Snowflake {
-    private readonly EPOCH = 1420070400000; // Data de início do Discord: 1 de janeiro de 2015 00:00:00 UTC
+    private readonly EPOCH = 1420070400000;
     private readonly WORKER_ID_BITS = 5;
     private readonly PROCESS_ID_BITS = 5;
     private readonly SEQUENCE_BITS = 12;
@@ -28,7 +28,6 @@ export default class Snowflake {
     public generate(): string {
         let timestamp = Date.now() - this.EPOCH;
 
-        // Validar se o timestamp está dentro do limite para garantir ordem correta
         if (timestamp < 0 || timestamp > 0xFFFFFFFFFFFF) {
             throw new Error('Timestamp fora do intervalo');
         }

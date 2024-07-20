@@ -2,7 +2,7 @@ import IPurchase from "./IPurchase";
 
 interface Header {
     id: number,
-    token: string,
+    token: BigInt,
     email: string,
     password: string,
 }
