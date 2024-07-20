@@ -7,6 +7,6 @@ export default interface IProduct {
     description: string,
     category: string,
     sub_category: string,
-    reviws: IReview[],
+    reviews: IReview[],
     colors: IColor[],
 }

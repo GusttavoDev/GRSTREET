@@ -1,3 +1,4 @@
+import IUser from "../../entities/IUser";
 import UserRepository from "../../repositories/UserRepository";
 
 export default class CreateUserUseCase {
@@ -5,7 +6,7 @@ export default class CreateUserUseCase {
         private usersRepository: UserRepository
     ){}
 
-    async execute(): Promise<void> {
-        return await this.usersRepository.create(); 
+    async execute(data: IUser): Promise<void> {
+        return await this.usersRepository.create(data); 
     }
 }

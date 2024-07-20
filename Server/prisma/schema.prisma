@@ -32,6 +32,7 @@ model User {
   number         Int
   cep            Int
   purchases      Purchase[]
+  reviws         Review[]
 }
 
 // Definição do modelo Purchase
@@ -58,4 +59,34 @@ model ProductPurchase {
   quantity       Int
 
   Purchase Purchase[]
+}
+
+model Product {
+  id           Int      @id @default(autoincrement())
+  name         String
+  description  String
+  category     String
+  sub_category String
+  reviews      Review[]
+  colors       Color[]
+}
+
+model Color {
+  id        Int      @id @default(autoincrement())
+  product   Product  @relation(fields: [product_id], references: [id])
+  product_id Int
+  name      String
+  price     Float
+  stock     Int
+  images    String[]
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [user_id], references: [id])
+  user_id   Int
+  product   Product  @relation(fields: [product_id], references: [id])
+  product_id Int
+  comment   String
+  stars     Int
 }
