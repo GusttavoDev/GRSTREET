@@ -2,7 +2,7 @@ import IPurchase from "./IPurchase";
 
 interface Header {
     id: number,
-    token: BigInt,
+    token: string,
     email: string,
     password: string,
 }
@@ -27,5 +27,5 @@ export default interface IUser {
     header: Header,
     personal_data: PersonalData,
     adress: Adress,
-    purchases: IPurchase[] | [],
+    purchases: IPurchase[],
 }
