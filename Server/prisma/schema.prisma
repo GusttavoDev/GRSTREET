@@ -12,3 +12,50 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// prisma/schema.prisma
+
+// Definição do modelo User
+model User {
+  id             Int      @id @default(autoincrement())
+  token          BigInt
+  email          String   @unique
+  password       String
+  name           String
+  cpf            Int
+  profile_img    String
+  country        String
+  state          String
+  city           String
+  neighborhood   String
+  street         String
+  number         Int
+  cep            Int
+  purchases      Purchase[]
+}
+
+// Definição do modelo Purchase
+model Purchase {
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  products        ProductPurchase[]
+  payment_method  String
+  status          String   // Use um enum se preferir
+
+  User User[]
+}
+
+// Definição do modelo ProductPurchase
+model ProductPurchase {
+  id             Int      @id @default(autoincrement())
+  name           String
+  description    String
+  price          Int      // Pode ser um decimal dependendo do seu caso
+  stock          Int
+  category       String
+  sub_category   String
+  color          String
+  quantity       Int
+
+  Purchase Purchase[]
+}
