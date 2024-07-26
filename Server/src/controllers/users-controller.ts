@@ -12,24 +12,24 @@ import UpdatePersonalData from "../use-cases/UsersUseCases/UpdatePersonalDataUse
 
 const userRepository = new UserRepository();
 
-const createUserUseCase = new CreateUserUseCase(userRepository);
-const deleteUserUseCase = new DeleteUserUseCase(userRepository);
-const authenticateUserUseCase = new AuthenticateUserUseCase(userRepository);
-const getUserUseCase = new GetUserUseCase(userRepository);
-const listUsersUseCase = new ListUsersUseCase(userRepository);
-const updateAddresUseCase = new UpdateAddresUseCase(userRepository);
-const updateEmailUseCase = new UpdateEmailUseCase(userRepository);
-const updatePasswordUseCase = new UpdatePasswordUseCase(userRepository);
-const updatePersonalDataUseCase = new UpdatePersonalData(userRepository);
+const createUserController = new CreateUserUseCase(userRepository);
+const deleteUserController = new DeleteUserUseCase(userRepository);
+const authenticateUserController = new AuthenticateUserUseCase(userRepository);
+const getUserController = new GetUserUseCase(userRepository);
+const listUsersController = new ListUsersUseCase(userRepository);
+const updateAddresController = new UpdateAddresUseCase(userRepository);
+const updateEmailController = new UpdateEmailUseCase(userRepository);
+const updatePasswordController = new UpdatePasswordUseCase(userRepository);
+const updatePersonalDataController = new UpdatePersonalData(userRepository);
 
 export { 
-    createUserUseCase,
-    deleteUserUseCase,
-    authenticateUserUseCase,
-    getUserUseCase,
-    listUsersUseCase,
-    updateAddresUseCase,
-    updateEmailUseCase,
-    updatePasswordUseCase,
-    updatePersonalDataUseCase
+    createUserController,
+    deleteUserController,
+    authenticateUserController,
+    getUserController,
+    listUsersController,
+    updateAddresController,
+    updateEmailController,
+    updatePasswordController,
+    updatePersonalDataController
  };

@@ -12,10 +12,10 @@ export default class ColorRepository {
         this.snowFlake = new Snowflake(1, 1);
     }
 
-    async listColor(product_id: number): Promise<IColor[]> {
+    async listColor(productId: number): Promise<IColor[]> {
         return await this.prisma.color.findMany({
             where: {
-                product_id,
+                product_id: productId,
             }
         })
     }
@@ -40,11 +40,11 @@ export default class ColorRepository {
         })
     }
 
-    async removeColor(product_id: number, color_name: string): Promise<void> {
+    async removeColor(productId: number, colorName: string): Promise<void> {
         await this.prisma.color.deleteMany({
             where: {
-                product_id,
-                name: color_name,
+                product_id: productId,
+                name: colorName,
             }
         })
     }
