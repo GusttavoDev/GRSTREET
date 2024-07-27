@@ -15,5 +15,6 @@ export default interface IPurchase {
     id: number,
     products: IProductPurchase[],
     payment_method: string,
+    date: Date,
     status: "PREPARANDO" | "ENVIADO" | "CONCLUIDO" | "CANCELADO",
 }
