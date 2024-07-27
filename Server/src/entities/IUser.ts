@@ -23,9 +23,21 @@ interface Addres {
     cep: number,
 }
 
+interface CartItem {
+    product_id: number,
+    quantity: number,
+    price: number,
+}
+
+interface Cart {
+    items: CartItem[],
+    total: number,
+}
+
 export default interface IUser {
     header: Header,
     personal_data: PersonalData,
     addres: Addres,
     purchases: IPurchase[],
+    cart: Cart,
 }

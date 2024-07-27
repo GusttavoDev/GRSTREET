@@ -22,7 +22,7 @@ export default class ProductRepository {
         });
     }
 
-    async getProductById(id: number): Promise<IProduct | null> {
+    async getProductById(id: number): Promise<IProduct> {
         // @ts-ignore
         return await this.prisma.product.findUnique({
             where: {

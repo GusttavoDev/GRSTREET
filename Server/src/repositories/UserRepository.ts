@@ -35,7 +35,13 @@ export default class UserRepository {
             }
         });
 
-        if(!user) return undefined;
+        if (!user) return undefined;
+
+        const cart = await this.prisma.cart.findFirst({
+            where: {
+                userId: user.id,
+            }
+        });
 
         let creatingUser: IUser = {
             header: {
@@ -59,6 +65,10 @@ export default class UserRepository {
                 cep: user.cep,
             },
             purchases: [],
+            cart: {
+                items: [],
+                total: 0,
+            },
         };
 
         const purchasesList = await this.prisma.purchase.findMany({
@@ -94,7 +104,23 @@ export default class UserRepository {
                 status: purchase.status,
                 products: products,
             };
-        }));  
+        }));
+
+        if (cart) {
+            const cartItems = await this.prisma.cartItem.findMany({
+                where: {
+                    cartId: cart.id,
+                }
+            });
+
+            creatingUser.cart.items = cartItems.map(item => ({
+                product_id: item.productId,
+                quantity: item.quantity,
+                price: item.price,
+            }));
+
+            creatingUser.cart.total = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+        }
 
         return creatingUser;
     }
@@ -105,6 +131,12 @@ export default class UserRepository {
         const userList = await this.prisma.user.findMany();
 
         await Promise.all(userList.map(async user => {
+            const cart = await this.prisma.cart.findFirst({
+                where: {
+                    userId: user.id,
+                }
+            });
+
             let creatingUser: IUser = {
                 header: {
                     id: user.id,
@@ -127,6 +159,10 @@ export default class UserRepository {
                     cep: user.cep,
                 },
                 purchases: [],
+                cart: {
+                    items: [],
+                    total: 0,
+                },
             };
 
             const purchasesList = await this.prisma.purchase.findMany({
@@ -164,6 +200,22 @@ export default class UserRepository {
                 };
             }));
 
+            if (cart) {
+                const cartItems = await this.prisma.cartItem.findMany({
+                    where: {
+                        cartId: cart.id,
+                    }
+                });
+
+                creatingUser.cart.items = cartItems.map(item => ({
+                    product_id: item.productId,
+                    quantity: item.quantity,
+                    price: item.price,
+                }));
+
+                creatingUser.cart.total = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+            }
+
             users.push(creatingUser);
         }));
 
@@ -196,14 +248,26 @@ export default class UserRepository {
             number: addres.number,
             cep: addres.cep,
         };
-
+    
         await this.prisma.user.create({
             data: userData,
         });
-    }
+    
+        await this.prisma.cart.create({
+            data: {
+                userId: Number(id),
+                total: 0,
+            }
+        });
+    }    
 
     async delete(token: string): Promise<void> {
         const decoded = await this.jwt.verifyToken(token);
+        await this.prisma.cart.deleteMany({
+            where: {
+                userId: decoded.id,
+            },
+        });
         await this.prisma.user.delete({
             where: {
                 id: decoded.id,
@@ -264,7 +328,7 @@ export default class UserRepository {
         const decoded = await this.jwt.verifyToken(token);
         const newToken = await this.jwt.create({
             ...decoded,
-            password: newEmail,
+            email: newEmail,
         })
         await this.prisma.user.update({
             where: {
