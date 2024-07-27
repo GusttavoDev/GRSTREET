@@ -48,12 +48,13 @@ userRouter.get("/:id", async (request: Request, response: Response) => {
 
 userRouter.post("/", async (request: Request, response: Response) => {
     try {
-        const { header, addres, personal_data, purchases }: IUser = request.body;
+        const { header, addres, personal_data, purchases, cart }: IUser = request.body;
         await createUserController.execute({
             header,
             addres,
             personal_data,
-            purchases
+            purchases,
+            cart
         });
         return response.status(201).send({
             msg: "Usuário Criado com Sucesso!",

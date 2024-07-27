@@ -9,4 +9,6 @@ export default interface IProduct {
     sub_category: string,
     reviews: IReview[],
     colors: IColor[],
+    relatedProducts: number[],
+    images: string[],
 }

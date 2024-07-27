@@ -25,14 +25,16 @@ productsRouter.get("id:", async (request, response) => {
 
 productsRouter.post("/", async (request, response) => {
     try {
-        const { name, description, category, sub_category, colors, reviews }: Omit<IProduct, "id"> = request.body;
+        const { name, description, category, sub_category, colors, reviews, images, relatedProducts }: Omit<IProduct, "id"> = request.body;
         return await createProductController.execute({
             name,
             description,
             category,
             sub_category,
             colors,
-            reviews
+            reviews,
+            images,
+            relatedProducts,
         })
     } catch (error: unknown) {
         return response.status(500).send({ error: String(error) });
@@ -41,7 +43,7 @@ productsRouter.post("/", async (request, response) => {
 
 productsRouter.put("/", async (request, response) => {
     try {
-        const { id, name, description, category, sub_category, colors, reviews }: IProduct = request.body;
+        const { id, name, description, category, sub_category, colors, reviews, images, relatedProducts }: IProduct = request.body;
         return await editProductController.execute({
             id,
             name,
@@ -49,7 +51,9 @@ productsRouter.put("/", async (request, response) => {
             category,
             sub_category,
             colors,
-            reviews
+            reviews,
+            images,
+            relatedProducts
         });
     } catch (error: unknown) {
         return response.status(500).send({ error: String(error) });

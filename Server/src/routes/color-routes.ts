@@ -1,8 +1,6 @@
 import { Router, Request, Response } from "express";
 import { addColorController, editColorController, listColorController, removeColorController } from "../controllers/colors-controller";
 import IColor from "../entities/IColor";
-import { request } from "http";
-import { REPLCommand } from "repl";
 
 const colorRouter = Router();
 
