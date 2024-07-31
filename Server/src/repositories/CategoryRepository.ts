@@ -12,8 +12,45 @@ export default class CategoryRepository {
     }
 
     async list(): Promise<ICategory[]> {
-        const data;
+        const data = await this.prisma.category.findMany({
+            include: {
+                subcategories: true
+            }
+        });
 
-        return await data
+        return data.map(category => ({
+            id: category.id,
+            name: category.name,
+            subcategories: category.subcategories
+        }));
+    }
+
+    async create(data: Omit<ICategory, "id">): Promise<void> {
+        const id = Number(this.snowflake.generate());
+        await this.prisma.category.create({
+            data: {
+                id,
+                name: data.name,
+            }
+        });
+    }
+
+    async update(data: ICategory): Promise<void> {
+        await this.prisma.category.update({
+            where: {
+                id: data.id
+            },
+            data: {
+                name: data.name,
+            }
+        });
+    }
+
+    async delete(id: number): Promise<void> {
+        await this.prisma.category.delete({
+            where: {
+                id
+            }
+        });
     }
 }
