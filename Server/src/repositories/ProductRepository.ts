@@ -3,7 +3,6 @@ import IProduct from "../entities/IProduct";
 import Snowflake from "../utils/snowflake/Snowflake";
 
 export default class ProductRepository {
-
     private prisma: PrismaClient;
     private snowFlake: Snowflake;
 
@@ -40,7 +39,12 @@ export default class ProductRepository {
         await this.prisma.product.create({
             data: {
                 id,
-                ...data,
+                name: data.name,
+                description: data.description,
+                images: data.images,
+                relatedProducts: data.relatedProducts,
+                categoryId: data.category, // Mapeando category para categoryId
+                subCategoryId: data.sub_category, // Mapeando sub_category para subCategoryId
                 reviews: {
                     create: data.reviews
                 },
@@ -57,7 +61,12 @@ export default class ProductRepository {
                 id: data.id
             },
             data: {
-                ...data,
+                name: data.name,
+                description: data.description,
+                images: data.images,
+                relatedProducts: data.relatedProducts,
+                categoryId: data.category, // Mapeando category para categoryId
+                subCategoryId: data.sub_category, // Mapeando sub_category para subCategoryId
                 reviews: {
                     upsert: data.reviews.map(review => ({
                         where: { id: review.id },
