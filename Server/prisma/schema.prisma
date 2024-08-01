@@ -7,6 +7,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Admin {
+  id            Int     @id @default(autoincrement())
+  token         String
+  name          String
+  email         String  @unique
+  password      String
+}
+
 model User {
   id             Int      @id @default(autoincrement())
   token          String
