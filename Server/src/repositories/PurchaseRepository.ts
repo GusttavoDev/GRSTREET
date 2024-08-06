@@ -29,7 +29,7 @@ export default class PurchaseRepository {
     }
 
     async create(data: Omit<IPurchase, "id">): Promise<void> {
-        const id = Number(this.snowflake.generate());
+        const id = this.snowflake.generate();
         await this.prisma.purchase.create({
             data: {
                 id,
@@ -80,21 +80,21 @@ export default class PurchaseRepository {
         });
     }
 
-    async updateStatus(id: number, status: "PREPARANDO" | "ENVIADO" | "CONCLUIDO" | "CANCELADO"): Promise<void> {
+    async updateStatus(id: string, status: "PREPARANDO" | "ENVIADO" | "CONCLUIDO" | "CANCELADO"): Promise<void> {
         await this.prisma.purchase.update({
             where: { id },
             data: { status }
         });
     }
 
-    async updatePaymentMethod(id: number, payment_method: string): Promise<void> {
+    async updatePaymentMethod(id: string, payment_method: string): Promise<void> {
         await this.prisma.purchase.update({
             where: { id },
             data: { payment_method }
         });
     }
 
-    async delete(id: number): Promise<void> {
+    async delete(id: string): Promise<void> {
         await this.prisma.purchase.delete({
             where: {
                 id

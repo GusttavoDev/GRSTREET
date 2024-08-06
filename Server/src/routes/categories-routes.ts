@@ -4,9 +4,8 @@ import ICategory from "../entities/ICategory";
 
 const categoryRouter = Router();
 
-categoryRouter.get("/:id", async (request: Request, response: Response) => {
+categoryRouter.get("/", async (request: Request, response: Response) => {
     try {
-        const id = request.params.id;
         const category = await listCategoryController.execute();
         return response.json(category);
     } catch (error: unknown) {
@@ -37,7 +36,7 @@ categoryRouter.put("/", async (request: Request, response: Response) => {
 categoryRouter.delete("/", async (request: Request, response: Response) => {
     try {
         const { id } = request.body;
-        await removeCategoryController.execute(Number(id));
+        await removeCategoryController.execute(id);
         return response.status(200).send({ message: "Category deleted successfully" });
     } catch (error: unknown) {
         return response.status(500).send({ error: String(error) });

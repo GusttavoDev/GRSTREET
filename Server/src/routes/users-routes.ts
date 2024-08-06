@@ -39,7 +39,7 @@ userRouter.get("/", async (request: Request, response: Response) => {
 
 userRouter.get("/:id", async (request: Request, response: Response) => {
     try {
-        const data = await getUserController.execute(Number(request.params.id));
+        const data = await getUserController.execute(String(request.params.id));
         return response.status(200).send(data);
     } catch (error: unknown) {
         return response.status(500).send({ error: String(error) });

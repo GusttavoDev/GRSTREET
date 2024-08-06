@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.PageLoginAdmin {
+    width: 100vw;
+    height: 100vh;;
+    display: flex;
+    justify-content: center;
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f5f5;
+    color: #333;
+    font-family: "Inter Tight", sans-serif;
+}
+
+.FormLoginAdmin {
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.FormLoginAdminH1 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #231f20;
+}
+
+.FormLoginAdminContent {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.FormLoginAdminContent label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #555;
+}
+
+.FormLoginAdminContent input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #333;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.FormLoginAdminContent input:focus {
+    border-color: #0071ce;
+}
+
+.FormLoginAdminContent button {
+    width: 100%;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 8px;
+    background-color: #0071ce;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.FormLoginAdminContent button:hover {
+    background-color: rgb(2, 85, 168);
+}
+
+.FormLoginAdminContent button:focus {
+    outline: none;
+    background-color: rgb(2, 85, 168);
+}
+
+p {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #0071ce;
+}

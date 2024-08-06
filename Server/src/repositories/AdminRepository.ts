@@ -28,7 +28,7 @@ export default class AdminRepository {
         return null;
     }
 
-    async get(userId: number): Promise<IAdmin | undefined> {
+    async get(userId: string): Promise<IAdmin | undefined> {
         const user = await this.prisma.admin.findFirst({
             where: {
                 id: userId,
@@ -43,6 +43,8 @@ export default class AdminRepository {
                 email: user.email,
                 name: user.name,
                 password: user.password,
+                storeLogo: "",
+                storeName: ""
         };
 
         return creatingAdmin;
@@ -51,16 +53,18 @@ export default class AdminRepository {
     async create(data: Omit<IAdmin, "id" | "token">): Promise<void> {
         const id = this.snowflake.generate();
         const token = await this.jwt.create({
-            id: Number(id),
+            id,
             ...data,
         });
     
         const userData = {
-            id: Number(id),
+            id,
             token,
             email: data.email,
             password: data.password,
             name: data.name,
+            storeLogo: data.storeLogo,
+            storeName: data.storeName
         };
     
         await this.prisma.admin.create({

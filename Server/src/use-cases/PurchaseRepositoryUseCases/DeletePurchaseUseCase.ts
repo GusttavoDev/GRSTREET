@@ -5,7 +5,7 @@ export default class DeletePurchaseUseCase {
         private purchasesRepository: PurchaseRepository
     ){}
 
-    async execute(id: number): Promise<void> {
+    async execute(id: string): Promise<void> {
         return await this.purchasesRepository.delete(id);
     }
 }

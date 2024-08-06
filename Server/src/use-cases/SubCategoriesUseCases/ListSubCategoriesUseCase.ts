@@ -6,7 +6,7 @@ export default class ListSubCategoriesUseCase {
         private subCategoriesRepository: SubCategoryRepository
     ){}
 
-    async execute(category_id: number): Promise<ISubCategory[]> {
+    async execute(category_id: string): Promise<ISubCategory[]> {
         return await this.subCategoriesRepository.list(category_id);
     }
 }

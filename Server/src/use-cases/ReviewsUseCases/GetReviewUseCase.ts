@@ -6,7 +6,7 @@ export default class GetReviewUseCase {
         private reviewsRepository: ReviewRepository
     ){}
 
-    async execute(id: number): Promise<IReview | null> {
+    async execute(id: string): Promise<IReview | null> {
         return await this.reviewsRepository.getReviewById(id);
     }
 }

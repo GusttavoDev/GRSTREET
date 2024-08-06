@@ -2,7 +2,7 @@ import { decode, sign, JwtPayload } from "jsonwebtoken";
 import "dotenv/config";
 
 export interface IDataToken {
-    id: number;
+    id: string;
     name: string;
     email: string;
     password: string;
