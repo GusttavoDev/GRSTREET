@@ -6,7 +6,7 @@ const subCategoryRouter = Router();
 
 subCategoryRouter.get("/:categoryId", async (request: Request, response: Response) => {
     try {
-        const categoryId = Number(request.params.categoryId);
+        const categoryId = request.params.categoryId;
         const subCategories = await listSubCategoryController.execute(categoryId);
         return response.json(subCategories);
     } catch (error: unknown) {
@@ -37,7 +37,7 @@ subCategoryRouter.put("/", async (request: Request, response: Response) => {
 subCategoryRouter.delete("/", async (request: Request, response: Response) => {
     try {
         const { id } = request.body;
-        await removeSubCategoryController.execute(Number(id));
+        await removeSubCategoryController.execute(String(id));
         return response.status(200).send({ message: "Subcategory deleted successfully" });
     } catch (error: unknown) {
         return response.status(500).send({ error: String(error) });

@@ -5,7 +5,7 @@ export default class DeleteReviewUseCase {
         private reviewsRepository: ReviewRepository
     ){}
 
-    async execute(id: number): Promise<void> {
+    async execute(id: string): Promise<void> {
         return await this.reviewsRepository.removeReview(id);
     }
 }

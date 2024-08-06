@@ -5,7 +5,7 @@ export default class DeleteSubCategoryUseCase {
         private subCategoriesRepository: SubCategoryRepository
     ){}
 
-    async execute(subCategory_id: number): Promise<void> {
+    async execute(subCategory_id: string): Promise<void> {
         return await this.subCategoriesRepository.delete(subCategory_id);
     }
 }

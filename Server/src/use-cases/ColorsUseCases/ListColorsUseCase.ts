@@ -6,7 +6,7 @@ export default class ListColorsUseCase {
         private colorRepository: ColorRepository
     ){}
 
-    async execute(productId: number): Promise<IColor[]> {
+    async execute(productId: string): Promise<IColor[]> {
         return await this.colorRepository.listColor(productId);
     }
 }

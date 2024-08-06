@@ -23,8 +23,8 @@ adminRouter.post("/auth", async (request: Request, response: Response) => {
 
 adminRouter.post("/", async (request: Request, response: Response) => {
     try {
-        const { email, name, password } = request.body;
-        await createAdminController.execute({ email, name, password });
+        const { email, name, password, storeLogo, storeName } = request.body;
+        await createAdminController.execute({ email, name, password, storeLogo, storeName });
         return response.status(201).send({ msg: "Administrador criado com sucesso!" });
     } catch (error: unknown) {
         return response.status(500).send({ error: String(error) });
@@ -33,7 +33,7 @@ adminRouter.post("/", async (request: Request, response: Response) => {
 
 adminRouter.get("/:id", async (request: Request, response: Response) => {
     try {
-        const admin = await getAdminController.execute(Number(request.params.id));
+        const admin = await getAdminController.execute(request.params.id);
         return response.status(200).send(admin);
     } catch (error: unknown) {
         return response.status(500).send({ error: String(error) });

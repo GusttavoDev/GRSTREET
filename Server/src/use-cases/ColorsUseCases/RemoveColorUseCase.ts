@@ -5,7 +5,7 @@ export default class RemoveColorUseCase {
         private colorRepository: ColorRepository
     ){}
 
-    async execute(productId: number, colorName: string): Promise<void> {
+    async execute(productId: string, colorName: string): Promise<void> {
         return await this.colorRepository.removeColor(productId, colorName);
     }
 }

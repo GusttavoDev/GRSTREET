@@ -1,3 +1,9 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,49 +14,51 @@ datasource db {
 }
 
 model Admin {
-  id            Int     @id @default(autoincrement())
+  id            String   @id @default(cuid())
   token         String
   name          String
-  email         String  @unique
+  email         String   @unique
   password      String
+  storeName     String
+  storeLogo     String
 }
 
 model User {
-  id             Int      @id @default(autoincrement())
-  token          String
-  email          String   @unique
-  password       String
-  name           String
-  cpf            Int
-  profile_img    String   @default("CjwveDp4bXBtZXRhPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAo8P3hwYWNrZXQgZW5kPSd3Jz8")
-  country        String
-  state          String
-  city           String
-  neighborhood   String
-  street         String
-  number         Int
-  cep            Int
-  purchases      Purchase[]
-  reviews        Review[]
-  cart           Cart[]
+  id            String   @id @default(cuid())
+  token         String
+  email         String   @unique
+  password      String
+  name          String
+  cpf           Int
+  profile_img   String   @default("CjwveDp4bXBtZXRhPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg")
+  country       String
+  state         String
+  city          String
+  neighborhood  String
+  street        String
+  number        Int
+  cep           Int
+  purchases     Purchase[]
+  reviews       Review[]
+  cart          Cart[]
 }
 
 model Purchase {
-  id              Int      @id @default(autoincrement())
-  userId          Int
-  products        ProductPurchase[]
-  payment_method  String
-  status          String   // Use um enum se preferir
-  date            DateTime
+  id             String   @id @default(cuid())
+  userId         String
+  products       ProductPurchase[]
+  payment_method String
+  status         String
+  date           DateTime
 
   User User @relation(fields: [userId], references: [id])
 }
 
 model ProductPurchase {
-  id             Int      @id @default(autoincrement())
+  id             String   @id @default(cuid())
   name           String
   description    String
-  price          Int      // Pode ser um decimal dependendo do seu caso
+  price          Int
   stock          Int
   category       String
   sub_category   String
@@ -61,41 +69,36 @@ model ProductPurchase {
 }
 
 model Product {
-  id                Int      @id @default(autoincrement())
+  id                String   @id @default(cuid())
   name              String
   description       String
-  categoryId        Int
-  subCategoryId     Int
-  relatedProducts   Int[]
+  categoryId        String
+  subCategoryId     String
+  relatedProducts   String[]
   images            String[]
   reviews           Review[]
   colors            Color[]
   cartItems         CartItem[]
-
-  Category      Category    @relation(fields: [categoryId], references: [id])
-  SubCategory   SubCategory @relation(fields: [subCategoryId], references: [id])
 }
 
 model Category {
-  id          Int           @id @default(autoincrement())
-  name        String
-  products    Product[]
+  id            String   @id @default(cuid())
+  name          String
   subcategories SubCategory[]
 }
 
 model SubCategory {
-  id          Int           @id @default(autoincrement())
+  id          String   @id @default(cuid())
   name        String
-  categoryId  Int
-  products    Product[]
+  categoryId  String
 
   Category Category @relation(fields: [categoryId], references: [id])
 }
 
 model Color {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @default(cuid())
   product    Product  @relation(fields: [product_id], references: [id])
-  product_id Int
+  product_id String
   name       String
   price      Float
   stock      Int
@@ -103,18 +106,18 @@ model Color {
 }
 
 model Review {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @default(cuid())
   user       User     @relation(fields: [user_id], references: [id])
-  user_id    Int
+  user_id    String
   product    Product  @relation(fields: [product_id], references: [id])
-  product_id Int
+  product_id String
   comment    String
   stars      Int
 }
 
 model Cart {
-  id       Int        @id @default(autoincrement())
-  userId   Int
+  id       String   @id @default(cuid())
+  userId   String
   items    CartItem[]
   total    Int
 
@@ -122,9 +125,9 @@ model Cart {
 }
 
 model CartItem {
-  id        Int      @id @default(autoincrement())
-  cartId    Int
-  productId Int
+  id        String   @id @default(cuid())
+  cartId    String
+  productId String
   quantity  Int
   price     Int
 

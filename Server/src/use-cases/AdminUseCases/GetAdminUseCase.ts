@@ -6,7 +6,7 @@ export default class GetAdminUseCase {
         private adminsRepository: AdminRepository
     ){}
 
-    async execute(userId: number): Promise<IAdmin | undefined> {
+    async execute(userId: string): Promise<IAdmin | undefined> {
         return await this.adminsRepository.get(userId);
     }
 }

@@ -6,7 +6,7 @@ export default class ListReviewsUseCase {
         private reviewsRepository: ReviewRepository
     ){}
 
-    async execute(product_id: number): Promise<IReview[]> {
+    async execute(product_id: string): Promise<IReview[]> {
         return await this.reviewsRepository.listReviews(product_id);
     }
 }

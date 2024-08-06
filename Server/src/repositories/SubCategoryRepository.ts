@@ -11,7 +11,7 @@ export default class SubCategoryRepository {
         this.snowflake = new Snowflake(1, 1);
     }
 
-    async list(category_id: number): Promise<ISubCategory[]> {
+    async list(category_id: string): Promise<ISubCategory[]> {
         const data = await this.prisma.subCategory.findMany({
             include: {
                 Category: true,
@@ -35,7 +35,17 @@ export default class SubCategoryRepository {
     }
 
     async create(data: Omit<ISubCategory, "id">): Promise<void> {
-        const id = Number(this.snowflake.generate());
+        const id = this.snowflake.generate();
+    
+        // Check if the category exists
+        const categoryExists = await this.prisma.category.findUnique({
+            where: { id: data.category_id }
+        });
+    
+        if (!categoryExists) {
+            throw new Error(`Category with ID ${data.category_id} does not exist.`);
+        }
+    
         await this.prisma.subCategory.create({
             data: {
                 id,
@@ -43,7 +53,7 @@ export default class SubCategoryRepository {
                 categoryId: data.category_id
             }
         });
-    }
+    }    
 
     async update(data: ISubCategory): Promise<void> {
         await this.prisma.subCategory.update({
@@ -57,7 +67,7 @@ export default class SubCategoryRepository {
         });
     }
 
-    async delete(id: number): Promise<void> {
+    async delete(id: string): Promise<void> {
         await this.prisma.subCategory.delete({
             where: {
                 id

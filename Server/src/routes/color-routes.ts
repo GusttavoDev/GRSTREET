@@ -7,7 +7,7 @@ const colorRouter = Router();
 colorRouter.get("/:id", async (requets: Request, response: Response) => {
     try {
         const id = requets.query;
-        return await listColorController.execute(Number(id));
+        return await listColorController.execute(String(id));
     } catch (error: unknown) {
         return response.status(500).send({ error: String(error) });
     }
@@ -48,7 +48,7 @@ colorRouter.put("/", async (request: Request, response: Response) => {
 colorRouter.delete("/", async (request: Request, response: Response) => {
     try {
         const { id, name } = request.body;
-        return await removeColorController.execute(Number(id), name);
+        return await removeColorController.execute(String(id), name);
     } catch (error: unknown) {
         return response.status(500).send({ error: String(error) });
     }

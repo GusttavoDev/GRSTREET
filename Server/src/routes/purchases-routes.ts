@@ -47,7 +47,7 @@ purchaseRouter.put("/", async (request: Request, response: Response) => {
 purchaseRouter.patch("/status", async (request: Request, response: Response) => {
     try {
         const { id, status }: { id: number; status: "PREPARANDO" | "ENVIADO" | "CONCLUIDO" | "CANCELADO" } = request.body;
-        await updateStatusMethodPurchaseController.execute(id, status);
+        await updateStatusMethodPurchaseController.execute(String(id), status);
         return response.status(200).send({ message: "Purchase status updated successfully" });
     } catch (error: unknown) {
         return response.status(500).send({ error: String(error) });
@@ -58,7 +58,7 @@ purchaseRouter.patch("/status", async (request: Request, response: Response) => 
 purchaseRouter.patch("/payment-method", async (request: Request, response: Response) => {
     try {
         const { id, payment_method }: { id: number; payment_method: string } = request.body;
-        await updatePaymentMethodPurchaseController.execute(id, payment_method);
+        await updatePaymentMethodPurchaseController.execute(String(id), payment_method);
         return response.status(200).send({ message: "Payment method updated successfully" });
     } catch (error: unknown) {
         return response.status(500).send({ error: String(error) });
@@ -69,7 +69,7 @@ purchaseRouter.patch("/payment-method", async (request: Request, response: Respo
 purchaseRouter.delete("/", async (request: Request, response: Response) => {
     try {
         const { id } = request.body;
-        await removePurchaseController.execute(Number(id));
+        await removePurchaseController.execute(String(id));
         return response.status(200).send({ message: "Purchase deleted successfully" });
     } catch (error: unknown) {
         return response.status(500).send({ error: String(error) });
