@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import IProduct from "../entities/IProduct";
 import Snowflake from "../utils/snowflake/Snowflake";
+import path from "path";
 
 export default class ProductRepository {
     private prisma: PrismaClient;
@@ -21,7 +22,7 @@ export default class ProductRepository {
         });
     }
 
-    async getProductById(id: number): Promise<IProduct> {
+    async getProductById(id: string): Promise<IProduct> {
         // @ts-ignore
         return await this.prisma.product.findUnique({
             where: {
@@ -35,7 +36,8 @@ export default class ProductRepository {
     }
 
     async addProduct(data: Omit<IProduct, "id">): Promise<void> {
-        const id = Number(this.snowFlake.generate());
+        const id = this.snowFlake.generate();
+
         await this.prisma.product.create({
             data: {
                 id,
@@ -43,19 +45,33 @@ export default class ProductRepository {
                 description: data.description,
                 images: data.images,
                 relatedProducts: data.relatedProducts,
-                categoryId: data.category, // Mapeando category para categoryId
-                subCategoryId: data.sub_category, // Mapeando sub_category para subCategoryId
-                reviews: {
-                    create: data.reviews
-                },
-                colors: {
-                    create: data.colors
-                }
+                categoryId: data.category,
+                subCategoryId: data.sub_category,
+                reviews: data.reviews ? {
+                    create: data.reviews.map(review => ({
+                        user: {
+                            connect: { id: review.user_id }
+                        },
+                        comment: review.comment,
+                        stars: review.stars
+                    }))
+                } : undefined,
+                colors: data.colors ? {
+                    create: data.colors.map(color => {
+                        return {
+                            name: color.name,
+                            price: color.price,
+                            stock: color.stock,
+                            images: color.images
+                        }
+                    })
+                } : undefined
             }
         });
-    }
+    }     
 
     async editProduct(data: IProduct): Promise<void> {
+
         await this.prisma.product.update({
             where: {
                 id: data.id
@@ -65,8 +81,8 @@ export default class ProductRepository {
                 description: data.description,
                 images: data.images,
                 relatedProducts: data.relatedProducts,
-                categoryId: data.category, // Mapeando category para categoryId
-                subCategoryId: data.sub_category, // Mapeando sub_category para subCategoryId
+                categoryId: data.category,
+                subCategoryId: data.sub_category,
                 reviews: {
                     upsert: data.reviews.map(review => ({
                         where: { id: review.id },
@@ -75,17 +91,30 @@ export default class ProductRepository {
                     }))
                 },
                 colors: {
-                    upsert: data.colors.map(color => ({
-                        where: { id: color.id },
-                        create: color,
-                        update: color
-                    }))
+                    upsert: data.colors.map(color => {
+                        return {
+                            where: { id: color.id },
+                            create: {
+                                name: color.name,
+                                price: color.price,
+                                stock: color.stock,
+                                images: color.images,
+                                product_id: color.product_id
+                            },
+                            update: {
+                                name: color.name,
+                                price: color.price,
+                                stock: color.stock,
+                                images: color.images
+                            }
+                        }
+                    })
                 }
             }
         });
     }
 
-    async removeProduct(id: number): Promise<void> {
+    async removeProduct(id: string): Promise<void> {
         await this.prisma.product.delete({
             where: {
                 id

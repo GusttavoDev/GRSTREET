@@ -6,7 +6,7 @@ export default class GetProductByIdUseCase {
         private productRepository: ProductRepository
     ){}
 
-    async execute(id: number): Promise<IProduct> {
+    async execute(id: string): Promise<IProduct> {
         return await this.productRepository.getProductById(id);
     }
 }

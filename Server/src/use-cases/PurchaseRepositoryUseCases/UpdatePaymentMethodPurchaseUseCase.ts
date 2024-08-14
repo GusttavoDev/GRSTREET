@@ -5,7 +5,7 @@ export default class UpdatePaymentMethodPurchaseUseCase {
         private purchasesRepository: PurchaseRepository
     ){}
 
-    async execute(id: number, payment_method: string): Promise<void> {
+    async execute(id: string, payment_method: string): Promise<void> {
         return await this.purchasesRepository.updatePaymentMethod(id, payment_method);
     }
 }

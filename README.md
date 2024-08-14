@@ -372,7 +372,11 @@ Request Body:
 Response:
 ```json
 {
+<<<<<<< HEAD
  "message": "Purchase updated successfully"
+=======
+  "message": ""
+>>>>>>> f08bc107afb4788296e0ba39c5d7229ce5ac9f8f
 }
 ```
 

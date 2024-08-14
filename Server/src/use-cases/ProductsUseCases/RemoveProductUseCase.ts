@@ -5,7 +5,7 @@ export default class RemoveProductUseCase {
         private productReposiroty: ProductRepository
     ){}
 
-    async execute(id: number): Promise<void> {
+    async execute(id: string): Promise<void> {
         return await this.productReposiroty.removeProduct(id);
     }
 }

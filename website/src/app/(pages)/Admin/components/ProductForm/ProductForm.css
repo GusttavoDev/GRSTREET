@@ -1,0 +1,254 @@
+.form-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .form-container {
+    background: #fff;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 1000px;
+    position: relative;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 1.8rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: #333;
+  }
+  
+  .form-content {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+  
+  .product-form,
+  .color-form {
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  input,
+  .form-container form textarea {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+    font-size: 1rem;
+  }
+  
+  .form-container form textarea {
+    resize: none; /* Prevent resizing of textarea */
+  }
+  
+  .form-container .btn-form {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    text-align: center;
+  }
+  
+  .form-container .btn-close {
+    background-color: #6c757d;
+  }
+  
+  .image-previews,
+  .color-image-previews {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .preview-image {
+    width: 10rem; /* Defina a largura desejada para as imagens de pré-visualização */
+    height: 10rem; /* Mantém a proporção das imagens */
+    border-radius: 8px; /* Opcional: arredonda as bordas das imagens */
+  }  
+
+  .preview-container {
+    position: relative;
+    display: inline-block; /* Mantém o contêiner com o tamanho da imagem */
+    margin-right: 10px; /* Espaçamento entre as imagens */
+  }
+  
+  .remove-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.8rem;
+    padding: 5px;
+  }
+  
+
+  
+  /* Additional styles for consistency */
+  .form-container form input[type="file"] {
+    margin-bottom: 15px;
+  }
+  
+  .btn {
+    margin-top: 20px;
+  }
+  
+  .color-item {
+    margin-bottom: 20px;
+  }
+  
+  .color-images {
+    display: flex;
+    gap: 10px;
+  }
+/* Ensure the file input button looks more polished */
+.file-input {
+    display: block;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    background: #f8f9fa;
+    cursor: pointer;
+  }
+  
+  .file-input::file-selector-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  /* Additional styles for select elements */
+  select {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+    font-size: 1rem;
+  }
+  
+  .select-wrapper {
+    margin-bottom: 15px;
+  }
+  
+  /* Style improvements for color items */
+  .color-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  .color-images img {
+    width: 5rem; /* Adjust width for color images */
+    height: 5rem; /* Adjust height for color images */
+    border-radius: 8px;
+    margin-right: 10px;
+  }
+
+  .color-image-previews {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto; /* Habilita rolagem horizontal */
+    overflow-y: auto; /* Habilita rolagem vertical */
+    padding: 10px; /* Espaçamento interno */
+    max-height: 200px; /* Ajusta a altura máxima do contêiner */
+    border-radius: 8px;
+  }
+  
+  .color-image-previews::-webkit-scrollbar {
+    width: 8px; /* Define a largura da barra de rolagem vertical */
+    height: 8px; /* Define a altura da barra de rolagem horizontal */
+  }
+  
+  .color-image-previews::-webkit-scrollbar-thumb {
+    background: #007bff; /* Cor da parte deslizante da barra de rolagem */
+    border-radius: 8px;
+  }
+  
+  .color-image-previews::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Cor de fundo da área da barra de rolagem */
+  }
+
+  .colors-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espaçamento entre os itens */
+    max-height: 300px; /* Ajuste a altura máxima conforme necessário */
+    overflow: auto; /* Adiciona rolagem tanto horizontal quanto vertical */
+    padding: 10px; /* Espaçamento interno */
+    border-radius: 8px; /* Bordas arredondadas opcional */
+  }
+  
+  .color-item {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px; /* Largura mínima para itens de cor */
+    margin-right: 20px; /* Espaçamento entre os itens horizontalmente */
+    border-radius: 8px; /* Bordas arredondadas opcionais para os itens */
+    padding: 10px; /* Espaçamento interno opcional para os itens */
+  }
+  
+  .color-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .color-edit-btn, .color-remove-btn {
+    background-color: #f0f0f0; /* Background color for edit and remove buttons */
+    color: #333; /* Text color */
+    border: 1px solid #ccc; /* Border color */
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .color-remove-btn {
+    background-color: #ff4d4d; /* Different background for remove button */
+    color: white; /* White text for remove button */
+  }
+  
+  .color-edit-btn:hover, .color-remove-btn:hover {
+    background-color: #e0e0e0; /* Hover effect */
+  }
+  
+  .color-remove-btn:hover {
+    background-color: #ff3333; /* Hover effect for remove button */
+  }
+  

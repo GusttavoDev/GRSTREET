@@ -28,7 +28,7 @@ export default class UserRepository {
         return null;
     }
 
-    async get(userId: number): Promise<IUser | undefined> {
+    async get(userId: string): Promise<IUser | undefined> {
         const user = await this.prisma.user.findFirst({
             where: {
                 id: userId,
@@ -234,7 +234,7 @@ export default class UserRepository {
         });
     
         const userData = {
-            id: Number(id),
+            id: id,
             token,
             email: header.email,
             password: header.password,
@@ -255,7 +255,7 @@ export default class UserRepository {
     
         await this.prisma.cart.create({
             data: {
-                userId: Number(id),
+                userId: id,
                 total: 0,
             }
         });

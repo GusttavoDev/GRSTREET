@@ -1,0 +1,38 @@
+/* Estilos Gerais do Dashboard */
+.admin-dashboard {
+    display: flex;
+}
+
+.dashboard-content {
+    margin-left: 250px;
+    padding: 20px;
+    flex-grow: 1;
+}
+
+.dashboard-header {
+    background-color: #fff;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.product-list,
+.sales-analytics {
+    margin: 20px 0;
+}
+
+@media (max-width: 768px) {
+    .admin-dashboard {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        box-shadow: none;
+    }
+
+    .dashboard-content {
+        margin-left: 0;
+    }
+}

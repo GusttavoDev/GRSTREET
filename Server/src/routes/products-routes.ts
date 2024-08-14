@@ -1,32 +1,38 @@
 import { Router, Request, Response } from "express";
-
-import { deleteUserController, listUsersController } from "../controllers/users-controller";
-import { createProductController, editProductController, getProductByIdController } from "../controllers/products-controller";
+import { createProductController, editProductController, getProductByIdController, listProductsController, removeProductsController } from "../controllers/products-controller";
 import IProduct from "../entities/IProduct";
 
 const productsRouter = Router();
 
-productsRouter.get("/", async (request, response) => {
+// Lista produtos
+productsRouter.get("/", async (request: Request, response: Response) => {
     try {
-        return await listUsersController.execute();
+        const products = await listProductsController.execute();
+        return response.json(products);
     } catch (error: unknown) {
         return response.status(500).send({ error: String(error) });
     }
-})
+});
 
-productsRouter.get("id:", async (request, response) => {
+// Busca um produto por ID
+productsRouter.get("/:id", async (request: Request, response: Response) => {
     try {
-        const id = request.query;
-        return await getProductByIdController.execute(Number(id));
+        const id = request.params.id;
+        const product = await getProductByIdController.execute(id);
+        if (!product) {
+            return response.status(404).send({ message: "Product not found" });
+        }
+        return response.json(product);
     } catch (error: unknown) {
         return response.status(500).send({ error: String(error) });
     }
-})
+});
 
-productsRouter.post("/", async (request, response) => {
+// Adiciona um novo produto com upload de imagem
+productsRouter.post("/", async (request: Request, response: Response) => {
     try {
-        const { name, description, category, sub_category, colors, reviews, images, relatedProducts }: Omit<IProduct, "id"> = request.body;
-        return await createProductController.execute({
+        const { name, description, category, sub_category, colors, images, reviews, relatedProducts }: Omit<IProduct, "id"> = request.body;
+        await createProductController.execute({
             name,
             description,
             category,
@@ -35,16 +41,23 @@ productsRouter.post("/", async (request, response) => {
             reviews,
             images,
             relatedProducts,
-        })
+        });
+
+        return response.status(201).send({ message: "Product created successfully" });
     } catch (error: unknown) {
         return response.status(500).send({ error: String(error) });
     }
-})
+});
 
-productsRouter.put("/", async (request, response) => {
+// Edita um produto com upload de imagem
+productsRouter.put("/", async (request: Request, response: Response) => {
     try {
-        const { id, name, description, category, sub_category, colors, reviews, images, relatedProducts }: IProduct = request.body;
-        return await editProductController.execute({
+        const { id, name, description, category, sub_category, colors, images, reviews, relatedProducts }: IProduct = request.body;
+        if (!id) {
+            return response.status(400).send({ message: "Product ID is required" });
+        }
+
+        await editProductController.execute({
             id,
             name,
             description,
@@ -55,18 +68,22 @@ productsRouter.put("/", async (request, response) => {
             images,
             relatedProducts
         });
-    } catch (error: unknown) {
-        return response.status(500).send({ error: String(error) });
-    }
-})
 
-productsRouter.delete("/:token", async (request: Request, response: Response) => {
-    try {
-        const token = request.query;
-        return await deleteUserController.execute(String(token));
+        return response.status(200).send({ message: "Product updated successfully" });
     } catch (error: unknown) {
         return response.status(500).send({ error: String(error) });
     }
-})
+});
+
+// Remove um produto
+productsRouter.delete("/:id", async (request: Request, response: Response) => {
+    try {
+        const id = request.params.id;
+        await removeProductsController.execute(id);
+        return response.status(200).send({ message: "Product deleted successfully" });
+    } catch (error: unknown) {
+        return response.status(500).send({ error: String(error) });
+    }
+});
 
 export default productsRouter;

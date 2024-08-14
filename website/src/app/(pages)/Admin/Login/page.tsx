@@ -1,0 +1,85 @@
+"use client";
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+import AuthenticationAdminUseCase from '@/connection/Admin/UseCases/AuthenticationAdminUseCase';
+
+import "./style.css";
+
+const authenticationAdminUseCase = new AuthenticationAdminUseCase();
+
+export default function LoginAdmin() {
+    const [authStatus, setAuthStatus] = useState<string>('Checking authentication...');
+    const [form, setForm] = useState({
+        email: "",
+        password: "",
+    });
+    const router = useRouter();
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            try {
+                const response = await axios.get(`http://localhost:3000/pages/api/check-auth`);
+                const data = response.data;
+                setAuthStatus(data.status);
+                if(data.status === 'Authenticated') router.push('/Admin');
+            } catch (error) {
+                setAuthStatus('Error checking authentication');
+            }
+        };
+
+        checkAuth();
+    }, []);
+
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const authResponse: { token: string }  = await authenticationAdminUseCase.execute(form.email, form.password);
+            await axios.get(`http://localhost:3000/pages/api/set-auth`, {
+                params: { token: authResponse.token }
+            });
+            setAuthStatus('Authenticated');
+            router.push('/Admin');
+        } catch (error) {
+            setAuthStatus('Error during authentication');
+        }
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    return (
+        <div className="PageLoginAdmin">
+            <form className="FormLoginAdmin" onSubmit={handleLogin}>
+                <h1 className="FormLoginAdminH1">Login</h1>
+                <div className="FormLoginAdminContent">
+                    <div>
+                        <label htmlFor="email">Email:</label>
+                        <input
+                            type="text"
+                            name="email"
+                            id="email"
+                            placeholder="Escreva o Seu Email"
+                            value={form.email}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="password">Senha:</label>
+                        <input
+                            type="password"
+                            name="password"
+                            id="password"
+                            placeholder="Escreva a Sua Senha"
+                            value={form.password}
+                            onChange={handleChange}
+                        />
+                        </div>
+                    <button type="submit">Login</button>
+                </div>
+            </form>
+        </div>
+    );
+}

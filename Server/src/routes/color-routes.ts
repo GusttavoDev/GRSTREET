@@ -3,55 +3,64 @@ import { addColorController, editColorController, listColorController, removeCol
 import IColor from "../entities/IColor";
 
 const colorRouter = Router();
-
-colorRouter.get("/:id", async (requets: Request, response: Response) => {
+// Lista as cores de um produto
+colorRouter.get("/:id", async (req: Request, res: Response) => {
     try {
-        const id = requets.query;
-        return await listColorController.execute(Number(id));
+        const productId = req.params.id;
+        const colors = await listColorController.execute(productId);
+        return res.json(colors);
     } catch (error: unknown) {
-        return response.status(500).send({ error: String(error) });
+        return res.status(500).send({ error: String(error) });
     }
-})
+});
 
-colorRouter.post("/", async (request: Request, response: Response) => {
+// Adiciona uma nova cor com upload de imagem
+colorRouter.post("/", async (req: Request, res: Response) => {
     try {
-        const { name, images, price, product_id, stock }: Omit<IColor, "id"> = request.body;
-
-        return await addColorController.execute({
+        const { name, price, images, product_id, stock }: Omit<IColor, "id"> = req.body;
+        await addColorController.execute({
             name,
             images,
             price,
             product_id,
             stock
         });
-    } catch (error: unknown) {
-        return response.status(500).send({ error: String(error) });
-    }
-})
 
-colorRouter.put("/", async (request: Request, response: Response) => {
+        return res.status(201).send({ message: "Color added successfully" });
+    } catch (error: unknown) {
+        return res.status(500).send({ error: String(error) });
+    }
+});
+
+// Edita uma cor com upload de imagem
+colorRouter.put("/", async (req: Request, res: Response) => {
     try {
-        const { id, name, images, price, product_id, stock }: IColor = request.body;
-        return await editColorController.execute({
+        const { id, name, price, images, product_id, stock }: IColor = req.body;
+
+        await editColorController.execute({
             id,
             product_id,
             name,
             images,
             price,
-            stock,
-        })
-    } catch (error: unknown) {
-        return response.status(500).send({ error: String(error) });
-    }
-})
+            stock
+        });
 
-colorRouter.delete("/", async (request: Request, response: Response) => {
-    try {
-        const { id, name } = request.body;
-        return await removeColorController.execute(Number(id), name);
+        return res.status(200).send({ message: "Color updated successfully" });
     } catch (error: unknown) {
-        return response.status(500).send({ error: String(error) });
+        return res.status(500).send({ error: String(error) });
     }
-})
+});
+
+// Remove uma cor
+colorRouter.delete("/", async (req: Request, res: Response) => {
+    try {
+        const { id, name } = req.body;
+        await removeColorController.execute(id, name);
+        return res.status(200).send({ message: "Color removed successfully" });
+    } catch (error: unknown) {
+        return res.status(500).send({ error: String(error) });
+    }
+});
 
 export default colorRouter;

@@ -13,7 +13,7 @@ const reviewRouter = Router();
 // List reviews for a product
 reviewRouter.get("/product/:productId", async (request: Request, response: Response) => {
     try {
-        const productId = Number(request.params.productId);
+        const productId = request.params.productId;
         const reviews = await listReviewController.execute(productId);
         return response.json(reviews);
     } catch (error: unknown) {
@@ -24,7 +24,7 @@ reviewRouter.get("/product/:productId", async (request: Request, response: Respo
 // Get a review by ID
 reviewRouter.get("/:id", async (request: Request, response: Response) => {
     try {
-        const id = Number(request.params.id);
+        const id = request.params.id;
         const review = await getReviewUseCase.execute(id);
         if (review) {
             return response.json(review);
@@ -62,7 +62,7 @@ reviewRouter.put("/", async (request: Request, response: Response) => {
 reviewRouter.delete("/", async (request: Request, response: Response) => {
     try {
         const { id } = request.body;
-        await removeReviewController.execute(Number(id));
+        await removeReviewController.execute(id);
         return response.status(200).send({ message: "Review deleted successfully" });
     } catch (error: unknown) {
         return response.status(500).send({ error: String(error) });

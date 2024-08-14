@@ -5,7 +5,7 @@ export default class CreateCategorysUseCase {
         private categoriesRepository: CategoryRepository
     ){}
 
-    async execute(category_id: number): Promise<void> {
+    async execute(category_id: string): Promise<void> {
         return await this.categoriesRepository.delete(category_id);
     }
 }

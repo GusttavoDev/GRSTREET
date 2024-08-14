@@ -12,7 +12,7 @@ export default class ReviewRepository {
         this.snowFlake = new Snowflake(1, 1);
     }
 
-    async listReviews(product_id: number): Promise<IReview[]> {
+    async listReviews(product_id: string): Promise<IReview[]> {
         // @ts-ignore
         return await this.prisma.review.findMany({
             where: {
@@ -25,7 +25,7 @@ export default class ReviewRepository {
         });
     }
 
-    async getReviewById(id: number): Promise<IReview | null> {
+    async getReviewById(id: string): Promise<IReview | null> {
         // @ts-ignore
         return await this.prisma.review.findUnique({
             where: {
@@ -39,7 +39,7 @@ export default class ReviewRepository {
     }
 
     async addReview(data: Omit<IReview, "id">): Promise<void> {
-        const id = Number(this.snowFlake.generate());
+        const id = this.snowFlake.generate();
         await this.prisma.review.create({
             data: {
                 id,
@@ -57,7 +57,7 @@ export default class ReviewRepository {
         });
     }
 
-    async removeReview(id: number): Promise<void> {
+    async removeReview(id: string): Promise<void> {
         await this.prisma.review.delete({
             where: {
                 id,

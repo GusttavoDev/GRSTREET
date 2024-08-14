@@ -1,0 +1,155 @@
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --navbar-height: 5vh;
+    --primary-color: #0070f3;
+    --secondary-color: #ffffff;
+    --text-color: #333;
+    --border-radius: 5px;
+}
+
+body {
+    font-family: 'Inter Tight', sans-serif;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    padding-top: var(--navbar-height);
+}
+
+/* Navbar Styles */
+.navbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background-color: var(--secondary-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    height: var(--navbar-height);
+}
+
+.navbar-logo {
+    position: absolute;
+    left: 20px;
+}
+
+.navbar-logo a {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.navbar-links ul {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    list-style: none;
+    width: 100%;
+}
+
+.navbar-links ul li a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.navbar-links ul li a:hover {
+    color: var(--primary-color);
+}
+
+.navbar-icons {
+    position: absolute;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.navbar-icons .navbar-icon {
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.navbar-icons .navbar-icon:hover {
+    color: var(--primary-color);
+}
+
+.navbar-toggle {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-color);
+}
+
+/* Product List Styles */
+.product-list {
+    padding: 20px;
+}
+
+.product-list .btn {
+    margin: 10px;
+    padding: 10px;
+    border: none;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+}
+
+.product-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.product-list li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.product-list .btn {
+    margin-left: 5px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .navbar-links {
+        display: none;
+    }
+
+    .navbar-toggle {
+        display: block;
+    }
+
+    .navbar-links.active {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        background-color: var(--secondary-color);
+        position: absolute;
+        top: var(--navbar-height);
+        left: 0;
+        width: 100%;
+        padding: 10px 0;
+        align-items: center;
+    }
+
+    .navbar-search input[type="text"] {
+        width: 100%;
+    }
+}

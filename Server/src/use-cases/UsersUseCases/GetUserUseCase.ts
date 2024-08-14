@@ -6,7 +6,7 @@ export default class GetUserUseCase {
         private userRepository: UserRepository
     ){}
 
-    async execute(userId: number): Promise<IUser | undefined> {
+    async execute(userId: string): Promise<IUser | undefined> {
         return await this.userRepository.get(userId);
     }
 }

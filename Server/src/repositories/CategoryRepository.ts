@@ -26,7 +26,7 @@ export default class CategoryRepository {
     }
 
     async create(data: Omit<ICategory, "id">): Promise<void> {
-        const id = Number(this.snowflake.generate());
+        const id = this.snowflake.generate();
         await this.prisma.category.create({
             data: {
                 id,
@@ -46,7 +46,7 @@ export default class CategoryRepository {
         });
     }
 
-    async delete(id: number): Promise<void> {
+    async delete(id: string): Promise<void> {
         await this.prisma.category.delete({
             where: {
                 id
