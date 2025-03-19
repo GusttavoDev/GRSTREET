@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import './style.css';
 import IProduct from '@/entities/IProduct';
 import ICategory from '@/entities/ICategory';
@@ -13,6 +13,22 @@ import Loading from '@/app/components/loading/Loading';
 const listProductsUseCase = new ListProductsUseCase();
 const listCategoriesUseCase = new ListCategoriesUseCase();
 
+function SearchParamsWrapper({ setSelectedCategory, categories }: { setSelectedCategory: (id: string | undefined) => void; categories: ICategory[] | undefined }) {
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        const searchQuery = searchParams.get('category') || undefined;
+        if (categories && searchQuery) {
+            const newCategoryQuery = categories.filter((category: ICategory) => category.name === searchQuery);
+            if (newCategoryQuery.length > 0) {
+                setSelectedCategory(String(newCategoryQuery[0].id));
+            }
+        }
+    }, [searchParams, categories]);
+
+    return null;
+}
+
 export default function Products({ params }: { params: string }) {
     const [products, setProducts] = useState<IProduct[] | undefined>(undefined);
     const [categories, setCategories] = useState<ICategory[] | undefined>(undefined);
@@ -20,10 +36,9 @@ export default function Products({ params }: { params: string }) {
     const [search, setSearch] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
     const [minPrice, setMinPrice] = useState(0);
-    const [maxPrice, setMaxPrice] = useState(1000);  // Ajuste o valor máximo conforme necessário
-    const [sortBy, setSortBy] = useState<'name' | 'priceAsc' | 'priceDesc'>('name'); // Ordenação por nome, preço crescente ou decrescente
+    const [maxPrice, setMaxPrice] = useState(1000);
+    const [sortBy, setSortBy] = useState<'name' | 'priceAsc' | 'priceDesc'>('name');
     const router = useRouter();
-    const searchParams = useSearchParams();
 
     useEffect(() => {
         async function fetchProducts() {
@@ -55,16 +70,6 @@ export default function Products({ params }: { params: string }) {
         fetchCategories();
     }, [params]);
 
-    useEffect(() => {
-        const searchQuery = searchParams.get('category') || undefined;
-        if (categories && searchQuery) {
-            const newCategoryQuery = categories.filter((category: ICategory) => category.name === searchQuery);
-            if (newCategoryQuery.length > 0) {
-                setSelectedCategory(String(newCategoryQuery[0].id));
-            }
-        }
-    }, [searchParams, categories]);
-
     const filteredProducts = products?.filter((product) => {
         const matchesSearch = product.name.toLowerCase().includes(search.toLowerCase()) && !product.name.toLowerCase().includes('#inativo');
         const matchesCategory = !selectedCategory || product.category === selectedCategory;
@@ -76,9 +81,9 @@ export default function Products({ params }: { params: string }) {
         if (sortBy === 'name') {
             return a.name.localeCompare(b.name);
         } else if (sortBy === 'priceAsc') {
-            return a.colors[0].price - b.colors[0].price; // Menor para maior
+            return a.colors[0].price - b.colors[0].price;
         } else if (sortBy === 'priceDesc') {
-            return b.colors[0].price - a.colors[0].price; // Maior para menor
+            return b.colors[0].price - a.colors[0].price;
         }
         return 0;
     });
@@ -88,7 +93,7 @@ export default function Products({ params }: { params: string }) {
     }
 
     const updateSearchParams = (key: string, value: string | undefined) => {
-        const params = new URLSearchParams(searchParams as any);
+        const params = new URLSearchParams(window.location.search);
         if (value) {
             params.set(key, value);
         } else {
@@ -167,32 +172,32 @@ export default function Products({ params }: { params: string }) {
                     <div className="products-grid">
                         {sortedProducts && sortedProducts.length > 0 ? (
                             sortedProducts.map((product) => (
-                            <div className="product-card" key={product.id}>
-                                <img src={product.images[0]} alt={product.name} className="product-image-products" />
-                                <h2 className="product-name">{product.name}</h2>
-                                <p className="product-price">R$ {product.colors[0].price.toFixed(2)}</p>
+                                <div className="product-card" key={product.id}>
+                                    <img src={product.images[0]} alt={product.name} className="product-image-products" />
+                                    <h2 className="product-name">{product.name}</h2>
+                                    <p className="product-price">R$ {product.colors[0].price.toFixed(2)}</p>
 
-                                {/* Exibindo miniaturas de cores */}
-                                <div className="product-colors">
-                                    {product.colors.map((color) => (
-                                        <div className="product-color" key={color.id}>
-                                            <img src={color.images[0]} alt={color.name} />
-                                            <span className="product-color-name">{color.name}</span>
-                                        </div>
-                                    ))}
+                                    <div className="product-colors">
+                                        {product.colors.map((color) => (
+                                            <div className="product-color" key={color.id}>
+                                                <img src={color.images[0]} alt={color.name} />
+                                                <span className="product-color-name">{color.name}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <button className="view-button" onClick={() => handleViewMore(product.id!)}>Ver Mais</button>
                                 </div>
-
-                                <button className="view-button" onClick={() => handleViewMore(product.id!)}>Ver Mais</button>
-                            </div>
-
                             ))
                         ) : (
-                            
                             <p>Nenhum produto encontrado.</p>
                         )}
                     </div>
                 </div>
             </div>
+            <Suspense fallback={null}>
+                <SearchParamsWrapper setSelectedCategory={setSelectedCategory} categories={categories} />
+            </Suspense>
         </>
     );
 }
