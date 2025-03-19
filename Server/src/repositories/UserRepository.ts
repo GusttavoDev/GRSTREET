@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import Snowflake from "../utils/snowflake/Snowflake";
 import Jwt from "../utils/jwt/Jwt";
 
-import IUser from "../entities/IUser";
+import IUser, { CartItem } from "../entities/IUser";
 
 export default class UserRepository {
     private snowflake: Snowflake;
@@ -31,7 +31,7 @@ export default class UserRepository {
     async get(userId: string): Promise<IUser | undefined> {
         const user = await this.prisma.user.findFirst({
             where: {
-                id: userId,
+                token: userId,
             }
         });
 
@@ -52,8 +52,8 @@ export default class UserRepository {
             },
             personal_data: {
                 name: user.name,
-                cpf: user.cpf,
                 profile_img: user.profile_img,
+                cel_number: user.cel_number,
             },
             addres: {
                 country: user.country,
@@ -81,12 +81,12 @@ export default class UserRepository {
         creatingUser.purchases = await Promise.all(purchasesList.map(async purchase => {
             const productsPurchaseList = await this.prisma.productPurchase.findMany({
                 where: {
-                    id: purchase.id,
+                    purchase_id: purchase.id,
                 }
             });
 
             const products = productsPurchaseList.map(product => ({
-                id: product.id,
+                id: product.purchase_id,
                 name: product.name,
                 description: product.description,
                 price: product.price,
@@ -117,11 +117,13 @@ export default class UserRepository {
                 product_id: item.productId,
                 quantity: item.quantity,
                 price: item.price,
+                color: item.color,
+                size:  item.size,
             }));
 
             creatingUser.cart.total = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
         }
-
+        
         return creatingUser;
     }
 
@@ -146,7 +148,7 @@ export default class UserRepository {
                 },
                 personal_data: {
                     name: user.name,
-                    cpf: user.cpf,
+                    cel_number: user.cel_number,
                     profile_img: user.profile_img,
                 },
                 addres: {
@@ -175,12 +177,12 @@ export default class UserRepository {
             creatingUser.purchases = await Promise.all(purchasesList.map(async purchase => {
                 const productsPurchaseList = await this.prisma.productPurchase.findMany({
                     where: {
-                        id: purchase.id,
+                        purchase_id: purchase.id,
                     }
                 });
 
                 const products = productsPurchaseList.map(product => ({
-                    id: product.id,
+                    id: product.purchase_id,
                     name: product.name,
                     description: product.description,
                     price: product.price,
@@ -211,6 +213,8 @@ export default class UserRepository {
                     product_id: item.productId,
                     quantity: item.quantity,
                     price: item.price,
+                    color: item.color,
+                    size:  item.size,
                 }));
 
                 creatingUser.cart.total = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -233,33 +237,45 @@ export default class UserRepository {
             name: personal_data.name,
         });
     
-        const userData = {
-            id: id,
-            token,
-            email: header.email,
-            password: header.password,
-            name: personal_data.name,
-            cpf: personal_data.cpf,
-            country: addres.country,
-            state: addres.state,
-            city: addres.city,
-            neighborhood: addres.neighborhood,
-            street: addres.street,
-            number: addres.number,
-            cep: addres.cep,
-        };
+        try {
+            const userData: any = {
+                id: id,
+                token,
+                email: header.email,
+                password: header.password,
+                name: personal_data.name,
+                cel_number: personal_data.cel_number,
+                country: addres.country,
+                state: addres.state,
+                city: addres.city,
+                neighborhood: addres.neighborhood,
+                street: addres.street,
+                number: addres.number,
+                cep: addres.cep,
+            };
     
-        await this.prisma.user.create({
-            data: userData,
-        });
-    
-        await this.prisma.cart.create({
-            data: {
-                userId: id,
-                total: 0,
+            // Adiciona cpf se fornecido, ou define como null
+            if (personal_data.cpf) {
+                userData.cpf = personal_data.cpf;
+            } else {
+                userData.cpf = null;
             }
-        });
-    }    
+    
+            await this.prisma.user.create({
+                data: userData,
+            });
+    
+            await this.prisma.cart.create({
+                data: {
+                    userId: id,
+                    total: 0,
+                }
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    
 
     async delete(token: string): Promise<void> {
         const decoded = await this.jwt.verifyToken(token);
@@ -274,70 +290,162 @@ export default class UserRepository {
             },
         });
     }
-
-    async updateAddress(token: string, newAddress: Partial<IUser['addres']>): Promise<void> {
-        const decoded = await this.jwt.verifyToken(token);
+    async updateAddress(id: string, newAddress: Partial<IUser['addres']>): Promise<void> {
+        // const decoded = await this.jwt.verifyToken(id);
+    
+        // Converte o valor de 'number' para inteiro (caso seja uma string)
+        const updatedAddress = {
+            ...newAddress,
+            number: newAddress.number ? parseInt(newAddress.number.toString()) : undefined,  // Garantir que seja um número
+        };
+    
+        // if (!decoded.id) {
+        //     throw new Error('User ID is not available');
+        // }
+    
         await this.prisma.user.update({
             where: {
-                id: decoded.id,
+                id: id, // Garantir que o ID é passado corretamente
             },
             data: {
-                country: newAddress.country,
-                state: newAddress.state,
-                city: newAddress.city,
-                neighborhood: newAddress.neighborhood,
-                street: newAddress.street,
-                number: newAddress.number,
-                cep: newAddress.cep,
+                country: updatedAddress.country,
+                state: updatedAddress.state,
+                city: updatedAddress.city,
+                neighborhood: updatedAddress.neighborhood,
+                street: updatedAddress.street,
+                number: updatedAddress.number,  // Número agora é um inteiro
+                cep: updatedAddress.cep,
             },
         });
     }
+    
 
-    async updatePersonalData(token: string, newPersonalData: Partial<IUser['personal_data']>): Promise<void> {
-        const decoded = await this.jwt.verifyToken(token);
+    async updatePersonalData(id: string, newPersonalData: Partial<IUser['personal_data']>): Promise<void> {
+        // const decoded = await this.jwt.verifyToken(token);
         await this.prisma.user.update({
             where: {
-                id: decoded.id,
+                id: id,
             },
             data: {
                 name: newPersonalData.name,
                 profile_img: newPersonalData.profile_img,
-                cpf: newPersonalData.cpf,
+                cel_number: newPersonalData.cel_number,
             },
         });
     }
 
-    async updatePassword(token: string, newPassword: string): Promise<void> {
-        const decoded = await this.jwt.verifyToken(token);
-        const newToken = await this.jwt.create({
-            ...decoded,
-            password: newPassword,
-        })
+    async updatePassword(id: string, newPassword: string): Promise<void> {
+        // const decoded = await this.jwt.verifyToken(token);
+        // const newToken = await this.jwt.create({
+        //     ...decoded,
+        //     password: newPassword,
+        // })
         await this.prisma.user.update({
             where: {
-                id: decoded.id,
+                id: id,
             },
             data: {
-                token: newToken,
+                // token: newToken,
                 password: newPassword,
             },
         });
     }
 
-    async updateEmail(token: string, newEmail: string): Promise<void> {
-        const decoded = await this.jwt.verifyToken(token);
-        const newToken = await this.jwt.create({
-            ...decoded,
-            email: newEmail,
-        })
+    async updateEmail(id: string, newEmail: string): Promise<void> {
+        // const decoded = await this.jwt.verifyToken(token);
+        // const newToken = await this.jwt.create({
+        //     ...decoded,
+        //     email: newEmail,
+        // })
         await this.prisma.user.update({
             where: {
-                id: decoded.id,
+                id: id,
             },
             data: {
-                token: newToken,
+                // token: newToken,
                 email: newEmail,
             },
         });
     }
+    async updateCart(token: string, items: CartItem[]): Promise<void> {
+        // Decodifica o token para obter o ID do usuário
+        const decoded = await this.jwt.verifyToken(token);
+    
+        try {
+            // Recupera o carrinho do usuário
+            let cart = await this.prisma.cart.findFirst({
+                where: {
+                    userId: decoded.id,
+                }
+            });
+    
+            // Se não tiver carrinho, cria um novo
+            if (!cart) {
+                return;
+            }
+    
+            // Remove os itens que não estão mais no carrinho
+            await this.prisma.cartItem.deleteMany({
+                where: {
+                    cartId: cart.id,
+                    NOT: {
+                        productId: { in: items.map(item => item.product_id) },
+                    }
+                }
+            });
+    
+            // Para cada item no carrinho, verificar se já existe com a MESMA cor e tamanho
+            await Promise.all(items.map(async (item) => {
+                const existingItem = await this.prisma.cartItem.findFirst({
+                    where: {
+                        cartId: cart.id,
+                        productId: item.product_id,
+                        color: item.color,  // Agora verifica a cor
+                        size: item.size     // Agora verifica o tamanho
+                    }
+                });
+    
+                if (existingItem) {
+                    // Se o item já existe, atualiza a quantidade e o preço
+                    await this.prisma.cartItem.update({
+                        where: {
+                            id: existingItem.id,  // Atualiza o item específico
+                        },
+                        data: {
+                            quantity: item.quantity,  // Atualiza a quantidade
+                            price: item.price,  // Atualiza o preço
+                        },
+                    });
+                } else {
+                    // Se o item não existe, cria um novo item no carrinho
+                    await this.prisma.cartItem.create({
+                        data: {
+                            cartId: cart.id,
+                            productId: item.product_id,
+                            quantity: item.quantity,
+                            price: item.price,
+                            color: item.color,
+                            size: item.size,
+                        }
+                    });
+                }
+            }));
+    
+            // Atualiza o total do carrinho
+            const total = await this.prisma.cartItem.aggregate({
+                where: { cartId: cart.id },
+                _sum: { price: true },
+            });
+    
+            // Atualiza o total do carrinho no banco de dados
+            await this.prisma.cart.update({
+                where: { id: cart.id },
+                data: { total: total._sum.price ?? 0 }
+            });
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    
 }

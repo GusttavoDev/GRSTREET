@@ -1,3 +1,4 @@
+import ListAllPurchasesUseCase from "../use-cases/PurchaseRepositoryUseCases/ListAllPurchasesUseCase";
 import PurchaseRepository from "../repositories/PurchaseRepository"
 import CreatePurchasesUseCase from "../use-cases/PurchaseRepositoryUseCases/CreatePurchaseUseCase";
 import DeletePurchaseUseCase from "../use-cases/PurchaseRepositoryUseCases/DeletePurchaseUseCase";
@@ -14,6 +15,7 @@ const listPurchaseController = new ListPurchasesUseCase(PurchasesRepository);
 const removePurchaseController = new DeletePurchaseUseCase(PurchasesRepository);
 const updatePaymentMethodPurchaseController = new UpdatePaymentMethodPurchaseUseCase(PurchasesRepository);
 const updateStatusMethodPurchaseController = new UpdateStatusPurchaseUseCase(PurchasesRepository);
+const listAllPurchasesController = new ListAllPurchasesUseCase(PurchasesRepository);
 
 export {
     addPurchaseController,
@@ -21,5 +23,6 @@ export {
     listPurchaseController,
     removePurchaseController,
     updatePaymentMethodPurchaseController,
-    updateStatusMethodPurchaseController
+    updateStatusMethodPurchaseController,
+    listAllPurchasesController
 }

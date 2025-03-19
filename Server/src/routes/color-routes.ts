@@ -17,13 +17,17 @@ colorRouter.get("/:id", async (req: Request, res: Response) => {
 // Adiciona uma nova cor com upload de imagem
 colorRouter.post("/", async (req: Request, res: Response) => {
     try {
-        const { name, price, images, product_id, stock }: Omit<IColor, "id"> = req.body;
+        const { name, price, images, product_id, actived, imposto, ncm, custo, sizes }: Omit<IColor, "id"> = req.body;
         await addColorController.execute({
             name,
             images,
             price,
             product_id,
-            stock
+            actived,
+            imposto,
+            ncm,
+            custo,
+            sizes
         });
 
         return res.status(201).send({ message: "Color added successfully" });
@@ -35,7 +39,7 @@ colorRouter.post("/", async (req: Request, res: Response) => {
 // Edita uma cor com upload de imagem
 colorRouter.put("/", async (req: Request, res: Response) => {
     try {
-        const { id, name, price, images, product_id, stock }: IColor = req.body;
+        const { id, name, price, images, product_id, sizes, actived, imposto, ncm, custo }: IColor = req.body;
 
         await editColorController.execute({
             id,
@@ -43,7 +47,11 @@ colorRouter.put("/", async (req: Request, res: Response) => {
             name,
             images,
             price,
-            stock
+            sizes,
+            actived,
+            imposto,
+            ncm,
+            custo
         });
 
         return res.status(200).send({ message: "Color updated successfully" });

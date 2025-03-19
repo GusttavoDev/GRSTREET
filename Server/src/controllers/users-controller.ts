@@ -9,6 +9,7 @@ import UpdateAddresUseCase from "../use-cases/UsersUseCases/UpdateAddresUseCase"
 import UpdateEmailUseCase from "../use-cases/UsersUseCases/UpdateEmailUseCase";
 import UpdatePasswordUseCase from "../use-cases/UsersUseCases/UpdatePasswordUseCase";
 import UpdatePersonalData from "../use-cases/UsersUseCases/UpdatePersonalDataUseCase";
+import UpdateCartUseCase from "../use-cases/UsersUseCases/UpdateCartUseCase";
 
 const userRepository = new UserRepository();
 
@@ -21,6 +22,7 @@ const updateAddresController = new UpdateAddresUseCase(userRepository);
 const updateEmailController = new UpdateEmailUseCase(userRepository);
 const updatePasswordController = new UpdatePasswordUseCase(userRepository);
 const updatePersonalDataController = new UpdatePersonalData(userRepository);
+const updateCartController = new UpdateCartUseCase(userRepository);
 
 export { 
     createUserController,
@@ -31,5 +33,6 @@ export {
     updateAddresController,
     updateEmailController,
     updatePasswordController,
-    updatePersonalDataController
+    updatePersonalDataController,
+    updateCartController,
  };

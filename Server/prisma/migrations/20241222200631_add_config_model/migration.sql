@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Config" ADD COLUMN     "banner2" TEXT NOT NULL DEFAULT '',
+ADD COLUMN     "banner3" TEXT NOT NULL DEFAULT '';

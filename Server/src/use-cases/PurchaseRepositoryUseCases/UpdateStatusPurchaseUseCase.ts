@@ -5,7 +5,7 @@ export default class UpdateStatusPurchaseUseCase {
         private purchasesRepository: PurchaseRepository
     ){}
 
-    async execute(id: string, status: "PREPARANDO" | "ENVIADO" | "CONCLUIDO" | "CANCELADO"): Promise<void> {
-        return await this.purchasesRepository.updateStatus(id, status);
+    async execute(id: string, status: "PREPARANDO" | "ENVIADO" | "CONCLUIDO" | "CANCELADO", codigo_postagem: string, visualizada: boolean): Promise<void> {
+        return await this.purchasesRepository.updateStatus(id, status, codigo_postagem, visualizada);
     }
 }

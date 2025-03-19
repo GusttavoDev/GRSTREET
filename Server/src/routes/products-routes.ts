@@ -31,7 +31,7 @@ productsRouter.get("/:id", async (request: Request, response: Response) => {
 // Adiciona um novo produto com upload de imagem
 productsRouter.post("/", async (request: Request, response: Response) => {
     try {
-        const { name, description, category, sub_category, colors, images, reviews, relatedProducts }: Omit<IProduct, "id"> = request.body;
+        const { name, description, category, sub_category, colors, images, reviews, relatedProducts, afiliado, destaqued, weight, height, length, width, declared_value, package_format, sku }: Omit<IProduct, "id"> = request.body;
         await createProductController.execute({
             name,
             description,
@@ -41,6 +41,15 @@ productsRouter.post("/", async (request: Request, response: Response) => {
             reviews,
             images,
             relatedProducts,
+            afiliado,
+            destaqued,
+            weight,
+            height,
+            width,
+            length,
+            declared_value: declared_value,
+            package_format: package_format,
+            sku: sku
         });
 
         return response.status(201).send({ message: "Product created successfully" });
@@ -52,7 +61,7 @@ productsRouter.post("/", async (request: Request, response: Response) => {
 // Edita um produto com upload de imagem
 productsRouter.put("/", async (request: Request, response: Response) => {
     try {
-        const { id, name, description, category, sub_category, colors, images, reviews, relatedProducts }: IProduct = request.body;
+        const { id, name, description, category, sub_category, colors, images, reviews, relatedProducts, afiliado, destaqued, weight, height, length, width, declared_value, package_format, sku }: IProduct = request.body;
         if (!id) {
             return response.status(400).send({ message: "Product ID is required" });
         }
@@ -66,7 +75,16 @@ productsRouter.put("/", async (request: Request, response: Response) => {
             colors,
             reviews,
             images,
-            relatedProducts
+            relatedProducts,
+            afiliado,
+            destaqued,
+            weight,
+            height,
+            width,
+            length,
+            declared_value,
+            package_format,
+            sku,
         });
 
         return response.status(200).send({ message: "Product updated successfully" });

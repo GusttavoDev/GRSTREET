@@ -44,7 +44,7 @@ export default class AdminRepository {
                 name: user.name,
                 password: user.password,
                 storeLogo: "",
-                storeName: ""
+                storeName: "",
         };
 
         return creatingAdmin;

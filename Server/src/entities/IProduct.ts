@@ -1,6 +1,6 @@
 import IColor from "./IColor";
 import IReview from "./IReview";
-// IProduct.ts
+
 export default interface IProduct {
     id?: string;
     name: string;
@@ -10,5 +10,14 @@ export default interface IProduct {
     colors: IColor[];
     reviews: IReview[];
     relatedProducts?: string[];
-    images: string[]; // Atualize o tipo aqui para string[]
+    images: string[];
+    afiliado?: string;
+    destaqued: boolean;
+    weight: string;  // Corrigido de "peso"
+    height: string;
+    width: string;
+    length: string;  // Corrigido de "lenght"
+    package_format?: "box" | "roll" | "envelope"; // Novo campo
+    declared_value?: string; // Novo campo
+    sku?: string; // Novo campo
 }

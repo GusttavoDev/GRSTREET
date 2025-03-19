@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -29,8 +23,9 @@ model User {
   email         String   @unique
   password      String
   name          String
-  cpf           Int
-  profile_img   String   @default("CjwveDp4bXBtZXRhPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg")
+  cpf           String?
+  cel_number    String
+  profile_img   String   @default("https://i.imgur.com/5QpQijK.png")
   country       String
   state         String
   city          String
@@ -44,18 +39,37 @@ model User {
 }
 
 model Purchase {
-  id             String   @id @default(cuid())
+  id             String   @id // Garantindo que o ID seja único
   userId         String
-  products       ProductPurchase[]
+  userName       String
+  email          String
+  cpf           String?
+  cel_number    String
+  country       String
+  state         String
+  city          String
+  neighborhood  String
+  street        String
+  number        Int
+  cep           Int
+  products       ProductPurchase[] // Relação com os produtos da compra
   payment_method String
+  payment_status String
+  payment_id     String
+  value          String   @default("0")
   status         String
+  codigo_postagem String @default("")
   date           DateTime
+  vendedor       String   @default("")
+  frete          String   @default("")
+  visualizada    Boolean  @default(false)
 
   User User @relation(fields: [userId], references: [id])
 }
 
 model ProductPurchase {
-  id             String   @id @default(cuid())
+  purchase_id    String
+  product_id     String
   name           String
   description    String
   price          Int
@@ -63,10 +77,31 @@ model ProductPurchase {
   category       String
   sub_category   String
   color          String
+  size           String
   quantity       Int
 
-  Purchase Purchase @relation(fields: [id], references: [id])
+  weight          String @default("")
+  height          String @default("")
+  width           String @default("")
+  length          String @default("")
+  package_format  String @default("")
+  declared_value  String @default("")
+  sku             String @default("")
+
+  Purchase Purchase @relation(fields: [purchase_id], references: [id])
+  Product Product @relation(fields: [product_id], references: [id])
+
+  @@id([purchase_id, product_id])  // Definindo a chave primária composta
 }
+
+model Size {
+  id       String   @id @default(cuid())
+  name     String
+  quantity Int
+  colorId  String
+  Color    Color    @relation(fields: [colorId], references: [id])
+}
+
 
 model Product {
   id                String   @id @default(cuid())
@@ -74,13 +109,26 @@ model Product {
   description       String
   categoryId        String
   subCategoryId     String
+  destaqued         Boolean @default(false)
   relatedProducts   String[]
   images            String[]
+  
+  // Relacionamentos
   reviews           Review[]
   colors            Color[]
   cartItems         CartItem[]
-}
+  ProductPurchase   ProductPurchase[]
 
+  afiliado          String?  @default("")
+
+  weight          String @default("")
+  height          String @default("")
+  width           String @default("")
+  length          String @default("")
+  package_format  String @default("")
+  declared_value  String @default("")
+  sku             String @default("")
+}
 model Category {
   id            String   @id @default(cuid())
   name          String
@@ -101,8 +149,12 @@ model Color {
   product_id String
   name       String
   price      Float
-  stock      Int
+  ncm        String?
+  imposto    String?
+  custo      String?
+  actived    Boolean  @default(true)
   images     String[]
+  sizes      Size[]   // Relação com os tamanhos
 }
 
 model Review {
@@ -130,7 +182,32 @@ model CartItem {
   productId String
   quantity  Int
   price     Int
+  color     String
+  size      String
 
   Cart     Cart     @relation(fields: [cartId], references: [id])
   Product  Product  @relation(fields: [productId], references: [id])
+}
+
+model Config {
+  id                 String   @id @default(cuid())
+  banner1            String   @default("")
+  banner2            String   @default("")
+  banner3            String   @default("")
+  bannerLink1        String   @default("")
+  bannerLink2        String   @default("")
+  bannerLink3        String   @default("")
+  categorie1         String   @default("")
+  categorie2         String   @default("")
+  categorie3         String   @default("")
+  categorieImageLink1 String   @default("")
+  categorieImageLink2 String   @default("")
+  categorieImageLink3 String   @default("")
+  categorieImageLink4 String   @default("")
+  categorieImageLink5 String   @default("")
+  categorieImage1    String   @default("")
+  categorieImage2    String   @default("")
+  categorieImage3    String   @default("")
+  categorieImage4    String   @default("")
+  categorieImage5    String   @default("")
 }

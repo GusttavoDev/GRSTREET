@@ -9,10 +9,11 @@ import {
     updateAddresController,
     updateEmailController,
     updatePasswordController,
-    updatePersonalDataController
+    updatePersonalDataController,
+    updateCartController
 } from "../controllers/users-controller";
 
-import IUser from "../entities/IUser";
+import IUser, { CartItem } from "../entities/IUser";
 
 const userRouter = Router();
 
@@ -60,9 +61,11 @@ userRouter.post("/", async (request: Request, response: Response) => {
             msg: "Usuário Criado com Sucesso!",
         });
     } catch (error: unknown) {
-        return response.status(500).send({ error: String(error) });
+        console.error("Erro ao criar usuário:", error);  // Adicione um log para depuração
+        return response.status(500).send({ error: error instanceof Error ? error.message : String(error) });
     }
 });
+
 
 userRouter.delete("/:search", async (request: Request, response: Response) => {
     try {
@@ -77,11 +80,11 @@ userRouter.delete("/:search", async (request: Request, response: Response) => {
 
 userRouter.put("/address", async (request: Request, response: Response) => {
     try {
-        const { token, newAddress }: { token: string, newAddress: Partial<IUser['addres']> } = request.body;
-        await updateAddresController.execute(token, newAddress);
+        const { id, newAddress }: { id: string, newAddress: Partial<IUser['addres']> } = request.body;
+        await updateAddresController.execute(id, newAddress);
         return response.status(200).send({
-            msg: "Sucess!",
-        })
+            msg: "Success!",
+        });
     } catch (error: unknown) {
         return response.status(500).send({ error: String(error) });
     }
@@ -89,11 +92,11 @@ userRouter.put("/address", async (request: Request, response: Response) => {
 
 userRouter.put("/personal", async (request: Request, response: Response) => {
     try {
-        const { token, newPersonalData }: { token: string, newPersonalData: Partial<IUser['personal_data']> } = request.body;
-        await updatePersonalDataController.execute(token, newPersonalData);
+        const { id, newPersonalData }: { id: string, newPersonalData: Partial<IUser['personal_data']> } = request.body;
+        await updatePersonalDataController.execute(id, newPersonalData);
         return response.status(200).send({
-            msg: "Sucess!",
-        })
+            msg: "Success!",
+        });
     } catch (error: unknown) {
         return response.status(500).send({ error: String(error) });
     }
@@ -101,26 +104,41 @@ userRouter.put("/personal", async (request: Request, response: Response) => {
 
 userRouter.put("/email", async (request: Request, response: Response) => {
     try {
-        const { token, newEmail }: { token: string, newEmail: string } = request.body;
-        await updateEmailController.execute(token, newEmail);
+        const { id, newEmail }: { id: string, newEmail: string } = request.body;
+        await updateEmailController.execute(id, newEmail);
         return response.status(200).send({
-            msg: "Sucess!"
-        })
+            msg: "Success!",
+        });
     } catch (error: unknown) {
         return response.status(500).send({ error: String(error) });
     }
 });
 
-userRouter.put("/passoword", async (request: Request, response: Response) => {
+userRouter.put("/password", async (request: Request, response: Response) => {
     try {
-        const { token, newPassword }: { token: string, newPassword: string } = request.body;
-        await updatePasswordController.execute(token, newPassword);
+        const { id, newPassword }: { id: string, newPassword: string } = request.body;
+        await updatePasswordController.execute(id, newPassword);
         return response.status(200).send({
-            msg: "Sucess!",
-        })
+            msg: "Success!",
+        });
     } catch (error: unknown) {
         return response.status(500).send({ error: String(error) });
     }
 });
+
+
+userRouter.put("/cart", async (request: Request, response: Response) => {
+    try {
+        const { token, items }: { token: string, items: CartItem[] } = request.body;
+        console.log(items)
+        await updateCartController.execute(token, items);
+        return response.status(200).send({
+            msg: "Carrinho Atualizado com Sucesso!",
+        });
+    } catch (error: unknown) {
+        return response.status(500).send({ error: String(error) });
+    }
+});
+
 
 export default userRouter;
