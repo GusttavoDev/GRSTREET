@@ -2,12 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faUser,
-  faSearch,
-  faShoppingCart,
-  faTimes,
-} from "@fortawesome/free-solid-svg-icons";
+import { faHome, faBox, faChartLine, faGear, faShoppingCart, faUser, faSearch, faTimes } from '@fortawesome/free-solid-svg-icons'; // Ajuste na importação
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { useRouter } from "next/navigation";
 import IUser from "@/entities/IUser";
@@ -140,7 +135,7 @@ export default function NavBar() {
   return (
     <>
     <link rel="icon" type="image/jpg" href="/logo.jpg" />
-              <title>Hype GR</title>
+    <title>Hype GR</title>
     <nav className="navbar">
       <div className="navbar-logo">
         <a href={domain}>GR Street</a>
@@ -177,15 +172,15 @@ export default function NavBar() {
             <div className="search-results">
               {filteredProducts.map((product) => (
                 <div
-                key={product.id}
-                className="search-item"
-                onClick={() => handleProductClick(String(product.id))}
+                  key={product.id}
+                  className="search-item"
+                  onClick={() => handleProductClick(String(product.id))}
                 >
                   <img
                     src={product.images[0]}
                     alt={product.name}
                     className="search-item-img"
-                    />
+                  />
                   <div className="search-item-info">
                     <p className="search-item-name">{product.name}</p>
                     <p className="search-item-price">
@@ -253,6 +248,6 @@ export default function NavBar() {
         </ul>
       </div>
     </nav>
-          </>
+    </>
   );
 }

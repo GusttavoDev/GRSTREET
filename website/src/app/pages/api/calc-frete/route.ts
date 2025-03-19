@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ fretes });
 
-  } catch (error: { message: string }) {
+  } catch (error: any) {
     return NextResponse.json({ error: "Erro ao processar a requisição", details: error.message }, { status: 500 });
   }
 }
