@@ -1,7 +1,7 @@
 import AuthUser from "@/utils/AuthUser";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
     const authUser = new AuthUser();
     const authStatus = await authUser.isAuth(request.headers.get('cookie') || '');
 
