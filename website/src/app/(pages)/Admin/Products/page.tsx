@@ -8,6 +8,7 @@ import ListSubCategoriesUseCase from "@/connection/SubCategories/UseCases/ListSu
 import ICategory from "@/entities/ICategory";
 import ISubCategory from "@/entities/ISubCategory";
 import IProduct from "@/entities/IProduct";
+import Loading from "@/app/components/loading/Loading";
 
 const categoriesUseCase = new ListCategoriesUseCase();
 const subCategoriesUseCase = new ListSubCategoriesUseCase();
@@ -17,9 +18,11 @@ export default function  () {
   const [products, setProducts] = useState<IProduct[]>();
   const [categories, setCategories] = useState<ICategory[]>();
   const [subCategories, setSubCategories] = useState<ISubCategory[]>();
+  const [loading, setLoading] = useState(true);
 
   const fetchProducts = async () => {
     const response = await listProductsUseCase.execute();
+    setLoading(false)
     setProducts(response);
   }
 
@@ -40,10 +43,13 @@ export default function  () {
     // fetchSubCategories();
   }, [])
 
+    if (loading) {
+      return <Loading />;
+    }
+
   return (
     <div className="admin-dashboard">
       <div className="dashboard-content">
-        <h1>Manage Products</h1>
             {products && categories && subCategories && <ProductList products={products} fetchProducts={fetchProducts} categories={categories} subCategories={subCategories} />}
       </div>
     </div>

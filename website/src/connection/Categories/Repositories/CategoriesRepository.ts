@@ -11,4 +11,18 @@ export default class CategoriesRepository {
         const response = await axios.get(conneciton.get() + 'categories');
         return response.data;
     }
+    async add(data: Omit<ICategory, 'id'>): Promise<void> {
+        const response = await axios.post(conneciton.get() + 'categories', data);
+        return response.data;
+    }
+    async edit(data: ICategory): Promise<void> {
+        const response = await axios.put(conneciton.get() + 'categories', data);
+        return response.data
+    }
+    async delete(id: string): Promise<void> {
+        const response = await axios.delete(conneciton.get() + 'categories', {
+            data: {id}
+        });
+        return response.data;
+    }
 }

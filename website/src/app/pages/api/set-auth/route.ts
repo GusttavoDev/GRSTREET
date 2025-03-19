@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
-    const authToken = searchParams.get('token') || 'Not authenticated';
+    const authToken = searchParams.get('tokenAdmin') || 'Not authenticated';
 
     // Cria ou atualiza o cookie 'AdminIsAuthenticated'
     const response = NextResponse.json({ status: authToken });

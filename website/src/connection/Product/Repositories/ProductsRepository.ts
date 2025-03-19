@@ -10,12 +10,17 @@ export default class ProductsRepository {
         const response = (await axios.get(connection.get() + 'products/')).data;
         return response;
     }
-
     async getProductById(id: string): Promise<IProduct> {
         const response = await axios.get(connection.get() + 'products/' + id);
         return response.data;
     }
     async setProduct(data: Omit<IProduct, 'id'>): Promise<void> {
         await axios.post(connection.get() + 'products/', data);
+    }
+    async putProduct(data: IProduct): Promise<void> {
+        await axios.put(connection.get() + 'products/', data)
+    }
+    async deleteProduct(id: string): Promise<void> {
+        await axios.delete(connection.get() + 'products/'+ id)
     }
 }

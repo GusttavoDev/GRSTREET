@@ -2,6 +2,9 @@ import React from "react";
 import IProduct from "@/entities/IProduct"; // Ajuste o caminho conforme necessário
 import IColor from "@/entities/IColor"; // Ajuste o caminho conforme necessário
 
+
+import "./ProductModal.css"
+
 // Defina a interface para as props
 interface ProductModalProps {
   product: IProduct | null; // Produto pode ser null se não houver produto
@@ -18,7 +21,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
         <h2>{product.name}</h2>
         <p>{product.description}</p>
         <div className="product-images">
-          {product.images.map((image, index) => (
+        {product.images.map((image, index) => (
             <img key={index} src={image} alt={product.name} />
           ))}
         </div>
@@ -28,6 +31,9 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
               <span>{color.name}</span>
               <span>${color.price}</span>
               <img src={color.images[0]} alt={color.name} />
+              {color.images.map((url, i) => (
+                <img src={url} alt={`Color Image ${i}`}/>
+              ))}
             </div>
           ))}
         </div>

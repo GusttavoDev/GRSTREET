@@ -10,7 +10,7 @@ import "./style.css";
 const authenticationAdminUseCase = new AuthenticationAdminUseCase();
 
 export default function LoginAdmin() {
-    const [authStatus, setAuthStatus] = useState<string>('Checking authentication...');
+    const [authStatus, setAuthStatus] = useState<string>('Not authenticated');
     const [form, setForm] = useState({
         email: "",
         password: "",
@@ -18,6 +18,7 @@ export default function LoginAdmin() {
     const router = useRouter();
 
     useEffect(() => {
+        //Esta Relmente Authenticado?
         const checkAuth = async () => {
             try {
                 const response = await axios.get(`http://localhost:3000/pages/api/check-auth`);
@@ -41,6 +42,8 @@ export default function LoginAdmin() {
             });
             setAuthStatus('Authenticated');
             router.push('/Admin');
+            window.location.reload();
+
         } catch (error) {
             setAuthStatus('Error during authentication');
         }
@@ -51,35 +54,37 @@ export default function LoginAdmin() {
     };
 
     return (
-        <div className="PageLoginAdmin">
-            <form className="FormLoginAdmin" onSubmit={handleLogin}>
-                <h1 className="FormLoginAdminH1">Login</h1>
-                <div className="FormLoginAdminContent">
-                    <div>
-                        <label htmlFor="email">Email:</label>
-                        <input
-                            type="text"
-                            name="email"
-                            id="email"
-                            placeholder="Escreva o Seu Email"
-                            value={form.email}
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="password">Senha:</label>
-                        <input
-                            type="password"
-                            name="password"
-                            id="password"
-                            placeholder="Escreva a Sua Senha"
-                            value={form.password}
-                            onChange={handleChange}
-                        />
+        authStatus === "Not authenticated" && (
+            <div className="PageLoginAdmin">
+                <form className="FormLoginAdmin" onSubmit={handleLogin}>
+                    <h1 className="FormLoginAdminH1">Login</h1>
+                    <div className="FormLoginAdminContent">
+                        <div>
+                            <label htmlFor="email">Email:</label>
+                            <input
+                                type="text"
+                                name="email"
+                                id="email"
+                                placeholder="Escreva o Seu Email"
+                                value={form.email}
+                                onChange={handleChange}
+                            />
                         </div>
-                    <button type="submit">Login</button>
-                </div>
-            </form>
-        </div>
+                        <div>
+                            <label htmlFor="password">Senha:</label>
+                            <input
+                                type="password"
+                                name="password"
+                                id="password"
+                                placeholder="Escreva a Sua Senha"
+                                value={form.password}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <button type="submit">Login</button>
+                    </div>
+                </form>
+            </div>
+        )   
     );
 }

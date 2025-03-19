@@ -1,0 +1,42 @@
+/* Estilos para o Shipping Label */
+.shipping-label {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .shipping-label button {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 1rem;
+    margin: 5px;
+  }
+  
+  .shipping-label button:hover {
+    background-color: #2980b9;
+  }
+  
+  .shipping-label button:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+  }
+  
+  .shipping-label p {
+    font-size: 1rem;
+    color: #555;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  
+  .shipping-label p strong {
+    color: #333;
+  }
+  

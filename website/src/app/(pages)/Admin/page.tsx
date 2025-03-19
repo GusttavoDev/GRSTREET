@@ -26,7 +26,7 @@ export default function Admin(){
 
     return (
         <>
-            <DashboardHeader />
+            {authStatus === "Authenticated" && <DashboardHeader />}
         </>
     )
 }

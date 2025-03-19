@@ -9,10 +9,10 @@ interface Header {
 
 interface PersonalData {
     name: string,
-    cpf: number,
+    cpf?: string,
+    cel_number: string,
     profile_img: string,
 }
-
 interface Addres {
     country: string,
     state: string,
@@ -23,13 +23,15 @@ interface Addres {
     cep: number,
 }
 
-interface CartItem {
+export interface CartItem {
     product_id: string,
     quantity: number,
     price: number,
+    color: string,
+    size: string,
 }
 
-interface Cart {
+export interface Cart {
     items: CartItem[],
     total: number,
 }

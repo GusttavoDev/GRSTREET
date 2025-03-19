@@ -1,66 +1,139 @@
 "use client"
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "./style.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebook, faTwitter, faInstagram } from "@fortawesome/free-brands-svg-icons";
+import ListConfigUseCase from "@/connection/Config/UseCases/ListConfigUseCase";
+import IConfig from "@/entities/IConfig";
+import NavBar from "../components/navbar/NavBar";
+import Loading from "../components/loading/Loading";
+import ProductsDestaqued from "./components/ProductsDestaqued/ProductsDestqued";
+
+const url = 'http://localhost:3000/Products'
 
 // Configurações do carrossel
 const carouselSettings = {
   dots: true,
   infinite: true,
-  speed: 500,
+  speed: 700,
   slidesToShow: 1,
   slidesToScroll: 1,
+  autoplay: true, // Ativa o autoplay
+  autoplaySpeed: 2000, // Define o tempo de cada slide (em milissegundos)
 };
 
-const productData = [
-  { id: 1, name: "Fones", image: "https://media.discordapp.net/attachments/1264276060086866023/1264760797083734016/Screenshot_20240721_214713_AliExpress.jpg?ex=66b02f48&is=66aeddc8&hm=6fce92018df3ba109a903b2be4a74f9e43a90a51af73130703c9760c691ede53&=&format=webp&width=703&height=701" },
-  { id: 2, name: "Cabos", image: "https://media.discordapp.net/attachments/1264276060086866023/1264762028434657301/Screenshot_20240721_215134_AliExpress.jpg?ex=66b0306d&is=66aedeed&hm=71ffbc8326fe7bda438fb3fa58a0a7e6a9344dd81a86dd5846347d03956415d3&=&format=webp&width=704&height=701" },
-  { id: 3, name: "Carregadores", image: "https://media.discordapp.net/attachments/1264276060086866023/1264763382020440074/Screenshot_20240721_215607_AliExpress.jpg?ex=66b031b0&is=66aee030&hm=92e3d8fafb7a3b9c1b7683778935f3a3f2c912b14788f2a5ca50c12c32985741&=&format=webp&width=700&height=701" },
-  { id: 4, name: "Relogios", image: "https://images.samsung.com/is/image/samsung/assets/br/15363_New-Offer_Card-Pequeno_Desk.jpg?$330_330_JPG$" },
-  { id: 5, name: "Adaptadres", image: "https://media.discordapp.net/attachments/1264276060086866023/1264924850812620931/Screenshot_20240722_083839_AliExpress.jpg?ex=66b01f51&is=66aecdd1&hm=d2a2af127f4493a57ffe41e468c9f3dffce02fd1e5454df84032b165970578a1&=&format=webp&width=704&height=701" },
-];
+
+const listConfigUseCase = new ListConfigUseCase();
 
 export default function Home() {
-  return (
-    <>
-      {/* Carrossel */}
-      <div className="carousel-container">
-        <Slider {...carouselSettings}>
-          <div><img src="https://assets2.razerzone.com/images/pnx.assets/0574f0137234bbfdf0ad9af7dcc25b12/axon-wallpaper-desktop-carousel-2.jpg" alt="Slide 1" /></div>
-          <div><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiNtFl_remqCKjYMKGBJiWBWtHo0Yu-TNw6g&s" alt="Slide 2" /></div>
-        </Slider>
-      </div>
+    const [configData, setConfig] = useState<IConfig>();
+    
+    const fetchConfig = async () => {
+      const response: IConfig[] = await listConfigUseCase.execute();
+      setConfig(response[0])
+    }
 
+    useEffect(() => {
+      fetchConfig()
+    }, [])
+
+  return (
+        <>
+      {!configData ? (
+        <Loading/>
+          ) : (
+            <>
+
+        <header>
+          <NavBar></NavBar>
+        </header>
+
+          <div className="carousel-container">
+          <Slider {...carouselSettings}>
+            {configData.banner1 && <div ><img src={configData.banner1} alt="Slide 1" /></div>}
+            {configData.banner2 && <div ><img src={configData.banner2} alt="Slide 2" /></div>}
+            {configData.banner3 && <div ><img src={configData.banner3} alt="Slide 3" /></div>}
+          </Slider>
+
+      </div>
       <div>
-        <h1 className="TitlePrincipalsHome">CATEGORIAS</h1>
-        <div className="CategoriasHome">
-            <ul>
-                <li>Outros</li>
-                <li>Outros</li>
-                <li>Outros</li>
-            </ul>
-        </div>
-      <div className="products-grid">
-        <div key={productData[0].id} className="product-card large">
-            <img src={productData[0].image} alt={productData[0].name} className="product-image" />
-            <div className="product-info">
-            <h2 className="product-name">{productData[0].name}</h2>
-            <button className="product-button">Ver Mais</button>
-            </div>
-        </div>
-        {productData.slice(1).map((product, index) => (
-            <div key={product.id} className="product-card small">
-            <img src={product.image} alt={product.name} className="product-image" />
-            <div className="product-info">
-                <h2 className="product-name">{product.name}</h2>
-                <button className="product-button">Ver Mais</button>
-            </div>
-            </div>
+        {configData && (
+          <div className="CategoriasHome">
+        <ul>
+          {[configData.categorie1, configData.categorie2, configData.categorie3].map((categorie, index) => (
+            <li key={index} onClick={() => {
+              window.location.href = url + `?category=${categorie}`
+            }
+          }>{categorie}</li>
         ))}
+        </ul>
+      </div>
+      )}
+      <ProductsDestaqued/>
+
+      {configData && (
+        <>
+          <h1 className="TitlePrincipalsHome">CATEGORIAS</h1>
+        
+      <div className="products-grid">
+        <div className="product-card large">
+            <img src={configData.categorieImage1} alt={configData.categorieImageLink1} className="product-image" />
+            <div className="product-info">
+            <h2 className="product-name">{configData.categorieImageLink1}</h2>
+            <button className="product-button" onClick={() => {
+                window.location.href = url + `?category=${configData.categorieImageLink1}`
+              }
+            }>Ver Mais</button>
+            </div>
         </div>
+          <div key={configData.categorieImage2} className="product-card small">
+            <img src={configData.categorieImage2} alt={configData.categorieImageLink2} className="product-image" />
+            <div className="product-info">
+                <h2 className="product-name">{configData.categorieImageLink2}</h2>
+                <button className="product-button" onClick={() => {
+                  window.location.href = url + `?category=${configData.categorieImageLink2}`
+                }
+              }>Ver Mais</button>
+            </div>
+            </div>
+            <div key={configData.categorieImage3} className="product-card small">
+            <img src={configData.categorieImage3} alt={configData.categorieImageLink3} className="product-image" />
+            <div className="product-info">
+                <h2 className="product-name">{configData.categorieImageLink3}</h2>
+                <button className="product-button" onClick={() => {
+                  window.location.href = url + `?category=${configData.categorieImageLink3}`
+                }
+              }>Ver Mais</button>
+            </div>
+            </div>
+
+            <div key={configData.categorieImage4} className="product-card small">
+            <img src={configData.categorieImage4} alt={configData.categorieImageLink4} className="product-image" />
+            <div className="product-info">
+                <h2 className="product-name">{configData.categorieImageLink4}</h2>
+                <button className="product-button" onClick={() => {
+                  window.location.href = url + `?category=${configData.categorieImageLink4}`
+                }
+              }>Ver Mais</button>
+            </div>
+            </div>
+
+            <div key={configData.categorieImage5} className="product-card small">
+            <img src={configData.categorieImage5} alt={configData.categorieImageLink5} className="product-image" />
+            <div className="product-info">
+                <h2 className="product-name">{configData.categorieImageLink5}</h2>
+                <button className="product-button" onClick={() => {
+                  window.location.href = url + `?categoryqq=${configData.categorieImageLink5}`
+                }
+              }>Ver Mais</button>
+            </div>
+            </div>
+
+            </div>
+              </>
+        )}
     </div>
     <footer className="footer">
       <div className="footer-container">
@@ -101,6 +174,8 @@ export default function Home() {
         <p>&copy; 2024 CapyCom. Todos os direitos reservados.</p>
       </div>
     </footer>
+            </>
+        )}
     </>
   );
 }

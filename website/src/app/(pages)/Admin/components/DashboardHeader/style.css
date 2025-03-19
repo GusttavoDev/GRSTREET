@@ -1,0 +1,105 @@
+/* Estilos gerais para o painel */
+.dashboard-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 80px;
+  }
+  
+  .dashboard-container h1 {
+    text-align: center;
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  
+  .purchases-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    
+    max-height: 70vh; /* Defina um tamanho máximo */
+    overflow-y: auto; /* Adiciona rolagem vertical quando necessário */
+  }
+  
+  /* Estilo para cada pedido */
+  .purchase-item {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .purchase-item h2 {
+    font-size: 1.5rem;
+    color: #333;
+  }
+  
+  .purchase-details {
+    margin: 10px 0;
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  .purchase-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .purchase-visualizada {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .purchase-visualizada span {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    background-color: green; /* Cor inicial para "não visualizada" */
+    transition: background-color 0.3s ease;
+  }
+  
+  .purchase-actions .delete {
+    background-color: #e74c3c;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .purchase-actions .edit {
+    background-color: green;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .buttons-purchase {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+  }
+  .view-more {
+    background-color: #3498db;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 1rem;
+  }
+  
+  .view-more:hover {
+    background-color: #2980b9;
+  }
+  

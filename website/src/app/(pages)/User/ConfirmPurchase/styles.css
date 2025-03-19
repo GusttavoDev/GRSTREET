@@ -1,0 +1,189 @@
+/* Container principal */
+.confirm-purchase-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    margin-top: 80px;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Layout da página de confirmação */
+.layout-confirm-purchase {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* Formulário e lista de produtos lado a lado */
+.purchase-form, .confirm-purchase-products {
+    flex: 1;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Título principal */
+.confirm-purchase-container h1 {
+    font-size: 2.2rem;
+    color: #333;
+}
+
+/* Títulos dentro das seções */
+.purchase-form h2,
+.confirm-purchase-products h2 {
+    font-size: 1.6rem;
+    color: #333;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 5px;
+}
+
+/* Campos do formulário */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 12px;
+}
+
+.form-group label {
+    font-weight: bold;
+    color: #444;
+}
+
+.form-group input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: #2980b9;
+    box-shadow: 0 0 5px rgba(41, 128, 185, 0.5);
+    outline: none;
+}
+
+/* Lista de produtos */
+.purchase-products {
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+}
+
+.purchase-product {
+    background-color: #f7f7f7;
+    padding: 12px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 1rem;
+    color: #333;
+}
+
+/* Preço total */
+.confirm-purchase-products p {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-top: 15px;
+    color: #2c3e50;
+}
+
+/* Botão de confirmação */
+.confirm-button {
+    background-color: #3498db;
+    color: white;
+    padding: 14px;
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-top: 20px;
+}
+
+.confirm-button:hover {
+    background-color: #2980b9;
+    transform: scale(1.02);
+}
+/* Seção do Frete */
+.frete-section {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.frete-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.frete-company-img {
+    width: 90%;
+    height: 3rem;
+    object-fit: contain;
+}
+
+.frete-details {
+    flex: 1;
+}
+
+.frete-details p {
+    margin: 5px 0;
+    font-size: 1rem;
+    color: #333;
+}
+
+.frete-details p strong {
+    color: #2980b9;
+}
+
+/* Opção de Frete */
+.frete-option {
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+.frete-option:hover {
+    background-color: #ecf0f1; /* Cor de hover */
+}
+
+/* Cor de fundo para a opção selecionada */
+.frete-option.selected {
+    background-color: #e0e0e0; /* Cor levemente acinzentada para o item selecionado */
+}
+
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .layout-confirm-purchase {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .purchase-form, .confirm-purchase-products {
+        width: 100%;
+    }
+
+    .confirm-button {
+        font-size: 1rem;
+        padding: 12px;
+    }
+}

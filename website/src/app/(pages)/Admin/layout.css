@@ -136,6 +136,10 @@ body {
         display: block;
     }
 
+    .navbar-toggle-pc {
+        display: none;
+    }
+
     .navbar-links.active {
         display: flex;
         flex-direction: column;

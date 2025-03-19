@@ -1,0 +1,192 @@
+/* NavBar fixa no topo */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background-color: white; /* Cor de fundo para garantir visibilidade */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra para destacar */
+  padding: 10px 0; /* Ajuste o espaçamento conforme necessário */
+}
+
+/* Ajustes do container do carrinho */
+.cart-container {
+    width: 90%; /* Largura do container de 95% da tela */
+    margin: auto; /* Centraliza o container na tela */
+    margin-top: 80px; /* Ajuste conforme a altura da NavBar */
+    padding-top: 60px; /* Espaço para a NavBar fixa */
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Título do carrinho */
+  .cart-container h1 {
+    text-align: center;
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  
+  /* Estilo para a lista de itens do carrinho */
+  .cart-items {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  /* Estilo para cada item do carrinho */
+  .cart-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .cart-item-image {
+    width: 10rem;
+    height: 10rem;
+    object-fit: contain;
+    border-radius: 8px;
+  }
+  
+  /* Detalhes do item */
+  .cart-item-details {
+    flex: 1;
+    margin-left: 15px;
+    gap: 0.3rem;
+  }
+  
+  .cart-item-details h2 {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 5px;
+  }
+  
+  .cart-item-details p {
+    font-size: 0.9rem;
+    color: #777;
+    margin-bottom: 10px;
+  }
+  
+  .cart-item-color,
+  .cart-item-quantity {
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  .cart-item-price {
+    font-size: 1.1rem;
+    color: #198733;
+  }
+  
+  /* Estilo para o total e botão de finalização */
+  .cart-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+  }
+  
+  .cart-total h3 {
+    font-size: 1.5rem;
+    color: #333;
+  }
+  
+  .checkout-button {
+    background-color: #3498db;
+    color: white;
+    padding: 12px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 3rem;
+  }
+  
+  .checkout-button:hover {
+    background-color: #2980b9;
+  }
+
+  .cart-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.remove-button {
+  background-color: #e74c3c; /* Vermelho para indicar remoção */
+  color: white;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  align-self: flex-end; /* Alinha o botão à direita */
+  margin-top: 10px; /* Pequeno espaço superior */
+}
+
+.remove-button:hover {
+  background-color: #c0392b; /* Cor mais escura ao passar o mouse */
+}
+
+  
+  .view-button {
+    background-color: #3498db; /* Mesma cor do botão de finalizar compra */
+    color: white;
+    padding: 12px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    align-self: flex-end; /* Alinha o botão à direita */
+    margin-top: 10px; /* Pequeno espaço superior */
+}
+
+.view-button:hover {
+    background-color: #2980b9; /* Cor ao passar o mouse */
+}
+
+/* Garante que os detalhes do item fiquem em coluna */
+.cart-item-details {
+    display: flex;
+    flex-direction: column;
+}
+
+
+  /* Responsividade */
+  @media (max-width: 768px) {
+    .cart-item {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .cart-item-details {
+      margin-left: 0;
+      margin-top: 10px;
+    }
+  
+    .cart-item-price {
+      font-size: 1rem;
+    }
+  
+    .cart-total {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .checkout-button {
+      width: 100%;
+      text-align: center;
+    }
+  }
+  

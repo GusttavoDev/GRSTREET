@@ -1,0 +1,70 @@
+.product-destaqued-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    flex-direction: column; /* Para empilhar o título e a lista */
+    width: 85vw;
+    margin: auto;
+}
+
+.product-destaqued-title {
+    font-family: 'Inter Tight', sans-serif; /* Garantindo o uso da fonte Inter Tight */
+    font-size: 1.8rem; /* Tamanho do título */
+    font-weight: bold;
+    margin-bottom: 20px; /* Espaçamento entre o título e a lista */
+    color: #252525; /* Cor do título */
+    text-transform: uppercase; /* Título em maiúsculas */
+    text-align: left; /* Alinhamento à esquerda */
+    width: 100%; /* Para garantir que o título ocupe toda a largura disponível */
+}
+
+.product-destaqued-list {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    justify-content: center;
+}
+
+.product-destaqued {
+    cursor: pointer;
+    flex: 0 0 auto;
+    transition: transform 0.3s ease-in-out;
+    position: relative; /* Necessário para posicionar o preço em relação ao item */
+    margin: 10px; /* Margem discreta */
+}
+
+.product-destaqued img {
+    width: 10rem; /* Aumentando o tamanho */
+    height: 10rem;
+    border-radius: 50%;
+    object-fit: contain;
+    transition: transform 0.3s ease-in-out;
+    border: 1px solid rgba(0, 0, 0, 0.026); /* Borda discreta preta e cinza claro */
+}
+
+.product-destaqued img:hover {
+    transform: scale(1.2);
+    border: none;
+}
+
+.product-destaqued-price {
+    position: absolute;
+    bottom: -40px; /* Ajuste o valor conforme necessário para que o preço fique abaixo da imagem */
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #252525bf;
+    opacity: 0; /* Inicialmente invisível */
+    transform: translateY(30px); /* Começa abaixo da imagem */
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.product-destaqued:hover .product-destaqued-price {
+    opacity: 1; /* Torna visível */
+    transform: translateY(0); /* Animação de baixo para cima */
+}

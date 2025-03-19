@@ -1,0 +1,106 @@
+/* Overlay para o Popup */
+.edit-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Sombras no fundo para destacar o popup */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Garantir que o popup fique acima do conteúdo da página */
+}
+
+/* Conteúdo do Popup */
+.popup-content {
+    background-color: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Sombra mais forte para destacar */
+    width: 100%;
+    max-width: 450px; /* Máxima largura do popup */
+    animation: popupAnimation 0.3s ease-out; /* Animação suave */
+}
+
+/* Título do Popup */
+.popup-content h2 {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Labels do Popup */
+.popup-content label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #555;
+}
+
+/* Estilo dos Inputs e Selects */
+.popup-content select,
+.popup-content input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #333;
+    transition: border-color 0.3s ease;
+}
+
+.popup-content select:focus,
+.popup-content input:focus {
+    border-color: #2980b9; /* Mudança de cor ao focar */
+    outline: none;
+}
+
+/* Ações do Popup (botões) */
+.popup-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+
+/* Botões do Popup */
+.popup-actions button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: #2980b9; /* Cor de fundo do botão */
+    color: white;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+}
+
+/* Hover nos botões */
+.popup-actions button:hover {
+    background-color: #3498db; /* Cor ao passar o mouse */
+}
+
+/* Estilo do botão "Fechar" */
+.popup-actions button:last-child {
+    background-color: #e74c3c; /* Cor vermelha para o botão "Fechar" */
+}
+
+.popup-actions button:last-child:hover {
+    background-color: #c0392b; /* Cor ao passar o mouse */
+}
+
+/* Animação de entrada do Popup */
+@keyframes popupAnimation {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

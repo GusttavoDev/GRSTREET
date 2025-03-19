@@ -1,0 +1,125 @@
+.category-list {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.category-list .btn-new {
+    padding: 12px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.category-list .btn-new:hover {
+    background-color: #0056b3;
+}
+
+.category-list table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.category-list thead {
+    background-color: #007bff;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.category-list thead th {
+    text-align: left;
+    padding: 15px;
+    font-size: 0.9rem;
+}
+
+.category-list tbody tr {
+    transition: background-color 0.3s ease;
+}
+
+.category-list tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.category-list tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.category-list tbody td {
+    padding: 15px;
+    font-size: 0.9rem;
+    color: #333;
+    border-bottom: 1px solid #ddd;
+}
+
+.category-list tbody td:last-child {
+    text-align: right;
+}
+
+.category-list .btn {
+    padding: 8px 12px;
+    margin-left: 5px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.category-list .btn:hover {
+    background-color: #0056b3;
+}
+
+.category-list .btn-delete {
+    background-color: #dc3545;
+}
+
+.category-list .btn-delete:hover {
+    background-color: #c82333;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .category-list table {
+        font-size: 0.85rem;
+    }
+
+    .category-list thead {
+        display: none;
+    }
+
+    .category-list tbody tr {
+        display: block;
+        margin-bottom: 15px;
+    }
+
+    .category-list tbody td {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        border-bottom: none;
+    }
+
+    .category-list tbody td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .category-list .btn {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+    }
+}

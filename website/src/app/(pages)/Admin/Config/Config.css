@@ -1,0 +1,179 @@
+/* Container principal */
+.container {
+    display: flex;
+    height: calc(100vh - 60px); /* Subtrai a altura da navbar */
+    padding: 20px;
+    gap: 30px;
+    flex-wrap: wrap; /* Garante que o conteúdo se organize em várias linhas se necessário */
+  }
+  
+  /* Seção de Configurações */
+  .config-section {
+    flex: 1;
+    background-color: #f8f9fa;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    min-width: 300px;
+  }
+  
+  /* Título */
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #343a40;
+  }
+  
+  /* Estilos dos itens de configuração */
+  .config-item {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .config-item label {
+    font-weight: bold;
+    color: #495057;
+    font-size: 1rem;
+    margin-bottom: 6px;
+  }
+  
+  input[type="text"],
+  input[type="file"] {
+    padding: 14px;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: 1px solid #ced4da;
+    background-color: #fff;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+    width: 100%; /* Garante que os inputs ocupem toda a largura disponível */
+    box-sizing: border-box;
+  }
+  
+  input[type="text"]:focus,
+  input[type="file"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+  }
+  
+  input[type="file"] {
+    padding: 8px;
+    background-color: #f8f9fa;
+  }
+  
+  input[type="text"] {
+    background-color: #fff;
+  }
+  
+  /* Imagens */
+  .config-item img {
+    margin-top: 8px;
+    max-width: 100%; /* Imagem ocupa o espaço disponível */
+    max-height: 150px; /* Limita a altura para não exagerar */
+    border-radius: 8px;
+    border: 2px solid #e0e0e0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    object-fit: cover; /* Garantir que a imagem cubra o espaço sem distorcer */
+    transition: transform 0.3s ease;
+  }
+  
+  .config-item img:hover {
+    transform: scale(1.05); /* Efeito de zoom nas imagens ao passar o mouse */
+  }
+  
+  /* Estilos dos botões */
+  button {
+    margin-top: 20px;
+    padding: 12px 20px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+  }
+  
+  button:active {
+    transform: translateY(0);
+  }
+  
+  button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  /* Responsividade */
+  @media (max-width: 1200px) {
+    .container {
+      flex-direction: column;
+    }
+  
+    .config-left,
+    .config-right {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+  
+    .config-right {
+      border-left: none;
+    }
+  }
+  
+  /* Seção de links rápidos */
+  .linksrapidos input {
+    padding: 14px;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: 1px solid #ced4da;
+    margin-bottom: 15px;
+    background-color: #fff;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .linksrapidos input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+  }
+  
+  /* Seção de Categorias */
+/* Estilos para a seção de Categorias */
+.CtaegoriasGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+  }
+  
+  /* Título de Categorias Início */
+  .CtaegoriasGrid h3 {
+    font-size: 1.5rem;
+    color: #343a40;
+    font-weight: bold;
+    margin-bottom: 20px; /* Espaço entre o título e os elementos abaixo */
+    text-align: center;
+    grid-column: span 2; /* Faz o título ocupar toda a largura do grid */
+  }
+  
+  /* Configuração dos itens de categorias */
+  .config-item {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .config-item label {
+    margin-bottom: 10px;
+  }
+  
+  /* Outros estilos de inputs e imagens permanecem os mesmos */
+  
