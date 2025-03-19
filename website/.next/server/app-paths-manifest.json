@@ -1,9 +1,3 @@
 {
-  "/pages/api/check-auth-user/route": "app/pages/api/check-auth-user/route.js",
-  "/(pages)/Admin/page": "app/(pages)/Admin/page.js",
-  "/(pages)/Admin/Products/page": "app/(pages)/Admin/Products/page.js",
-  "/(pages)/Admin/Config/page": "app/(pages)/Admin/Config/page.js",
-  "/(pages)/Products/page": "app/(pages)/Products/page.js",
-  "/(pages)/User/Carrinho/page": "app/(pages)/User/Carrinho/page.js",
-  "/(pages)/Products/[id]/page": "app/(pages)/Products/[id]/page.js"
+  "/(index)/page": "app/(index)/page.js"
 }

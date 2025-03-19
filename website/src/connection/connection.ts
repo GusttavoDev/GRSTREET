@@ -1,6 +1,6 @@
 export default class Connection {
     constructor(
-        private connectionUrl: string = 'https://grstreet.com/api/'
+        private connectionUrl: string = 'https://grstreet.com/Server/api/'
     ){}
 
     get(): string {
