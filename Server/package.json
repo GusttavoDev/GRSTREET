@@ -5,7 +5,8 @@
   "main": "src/server/index.js",
   "scripts": {
     "test": "echo oooba",
-    "dev": "ts-node-dev --transpile-only --respawn --ignore-watch node_modules src/server/index.ts"
+    "dev": "ts-node-dev --transpile-only --respawn --ignore-watch node_modules src/server/index.ts",
+    "start": "ts-node-dev --transpile-only --respawn --ignore-watch node_modules src/server/index.ts"
   },
   "author": "",
   "license": "ISC",

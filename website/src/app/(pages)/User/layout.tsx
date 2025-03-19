@@ -14,7 +14,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Head>
-                  <title>Hype GR</title>
+                  <title>GR STREET</title>
         <meta name="description" content="By Gusttavo Dev" />
       </Head>
       <body>

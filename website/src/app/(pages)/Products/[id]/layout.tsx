@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Goiabaudio',
+  title: 'GR STREET',
   description: 'By Gusttavo Dev',
 }
 

@@ -6,8 +6,11 @@ import { useRouter } from 'next/navigation';
 import AuthenticationAdminUseCase from '@/connection/Admin/UseCases/AuthenticationAdminUseCase';
 
 import "./style.css";
+import Domain from '@/connection/domain';
 
 const authenticationAdminUseCase = new AuthenticationAdminUseCase();
+
+const domain = Domain()
 
 export default function LoginAdmin() {
     const [authStatus, setAuthStatus] = useState<string>('Not authenticated');
@@ -21,7 +24,7 @@ export default function LoginAdmin() {
         //Esta Relmente Authenticado?
         const checkAuth = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/pages/api/check-auth`);
+                const response = await axios.get(`${domain}pages/api/check-auth`);
                 const data = response.data;
                 setAuthStatus(data.status);
                 if(data.status === 'Authenticated') router.push('/Admin');
@@ -37,7 +40,7 @@ export default function LoginAdmin() {
         e.preventDefault();
         try {
             const authResponse: { token: string }  = await authenticationAdminUseCase.execute(form.email, form.password);
-            await axios.get(`http://localhost:3000/pages/api/set-auth`, {
+            await axios.get(`${domain}pages/api/set-auth`, {
                 params: { token: authResponse.token }
             });
             setAuthStatus('Authenticated');

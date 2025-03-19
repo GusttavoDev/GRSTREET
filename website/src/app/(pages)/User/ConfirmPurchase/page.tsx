@@ -9,6 +9,7 @@ import "./styles.css";
 import NavBar from "@/app/components/navbar/NavBar";
 import axios from "axios";
 import IProductSend from "@/entities/IProductSend";
+import Domain from "@/connection/domain";
 
 const updateCartUseCase = new UpdateCartUseCase();
 const createPurchaseUseCase = new CreatePurchaseUseCase();
@@ -25,7 +26,7 @@ interface IFrete {
     picture: string;
   };
 }
-
+const domain = Domain()
 
 
 export default function ConfirmPurchase() {
@@ -40,7 +41,7 @@ export default function ConfirmPurchase() {
 
   const calcFrete = async () => {
     try {
-      const response = await axios.post(`http://localhost:3000/pages/api/calc-frete`, {
+      const response = await axios.post(`${domain}pages/api/calc-frete`, {
         products: purchaseData?.products,
         user: {
           postal_code: purchaseData?.cep,

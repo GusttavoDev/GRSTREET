@@ -16,9 +16,12 @@ import ListProductsUseCase from "@/connection/Product/UseCases/ListProductsUseCa
 
 import "./styles.css";
 import IProduct from "@/entities/IProduct";
+import Domain from "@/connection/domain";
 
 const getUserUseCase = new GetUserUseCase();
 const listProductsUseCase = new ListProductsUseCase();
+
+const domain = Domain();
 
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -74,7 +77,7 @@ export default function NavBar() {
     const checkAuth = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/pages/api/check-auth-user"
+          `${domain}pages/api/check-auth-user`
         );
         const data = response.data;
         setAuthStatus(data.status);
@@ -125,7 +128,7 @@ export default function NavBar() {
   const handleLogOut = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.get("http://localhost:3000/pages/api/unset-auth-user");
+      await axios.get(`${domain}pages/api/unset-auth-user`);
       window.localStorage.removeItem("token");
       router.push("/");
       window.location.reload();
@@ -140,7 +143,7 @@ export default function NavBar() {
               <title>Hype GR</title>
     <nav className="navbar">
       <div className="navbar-logo">
-        <a href="http://localhost:3000/">Hype GR</a>
+        <a href={domain}>GR Street</a>
       </div>
       {/* <div className="navbar-toggle" onClick={toggleMenu}>
         <FontAwesomeIcon icon={faUser as IconProp} />
@@ -148,13 +151,13 @@ export default function NavBar() {
       <div className="navbar-links">
         <ul>
           <li>
-            <a href="http://localhost:3000/">Inicio</a>
+            <a href={domain}>Inicio</a>
           </li>
           <li>
-            <a href="http://localhost:3000/Products">Produtos</a>
+            <a href={`${domain}Products`}>Produtos</a>
           </li>
           <li>
-            <a href="https://www.instagram.com/gusttavo_santos011/">Fale Conosco</a>
+            <a href="https://www.instagram.com/grstreetofc/">Fale Conosco</a>
           </li>
         </ul>
       </div>

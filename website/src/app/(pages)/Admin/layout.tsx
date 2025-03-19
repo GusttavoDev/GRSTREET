@@ -8,6 +8,9 @@ import Head from 'next/head';
 import Link from 'next/link';
 import ToggleUser from './components/ToggleUser';
 import axios from 'axios';
+import Domain from '@/connection/domain';
+
+const domain = Domain()
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [authStatus, setAuthStatus] = useState<string>('Checking authentication...');
@@ -22,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   useEffect(() => {
       const checkAuth = async () => {
           try {
-              const response = await axios.get(`http://localhost:3000/pages/api/check-auth`);
+              const response = await axios.get(`${domain}pages/api/check-auth`);
               const data = response.data;
               setAuthStatus(data.status);
           } catch (error) {
@@ -42,7 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <nav className="navbar">
           <div className="navbar-logo">
-            <a href="#">Hype GR</a>
+            <a href="#">GR Street</a>
           </div>
     {authStatus === "Authenticated" && <>
           <div className={`navbar-links ${isMenuOpen ? 'active' : ''}`}>

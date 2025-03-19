@@ -7,8 +7,11 @@ import "./style.css";
 import AuthenticateUserUseCase from '@/connection/User/UseCases/AuthenticationUserUseCase';
 import axios from 'axios';
 import NavBar from '@/app/components/navbar/NavBar';
+import Domain from '@/connection/domain';
 
 const authUserUseCase = new AuthenticateUserUseCase()
+
+const domain = Domain()
 
 export default function LoginUser() {
     const [form, setForm] = useState({
@@ -23,7 +26,7 @@ export default function LoginUser() {
         try {
             const authResponse: { token: string }  = await authUserUseCase.execute(form.email, form.password);
             if(authResponse.token){
-                await axios.get(`http://localhost:3000/pages/api/set-auth-user`, {
+                await axios.get(`${domain}pages/api/set-auth-user`, {
                     params: { token: authResponse.token }
                 });
                 setAuthStatus('Authenticated');

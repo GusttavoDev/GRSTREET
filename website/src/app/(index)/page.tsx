@@ -10,8 +10,10 @@ import IConfig from "@/entities/IConfig";
 import NavBar from "../components/navbar/NavBar";
 import Loading from "../components/loading/Loading";
 import ProductsDestaqued from "./components/ProductsDestaqued/ProductsDestqued";
+import Domain from "@/connection/domain";
 
-const url = 'http://localhost:3000/Products'
+const domain = Domain()
+const url = `${domain}Products`
 
 // Configurações do carrossel
 const carouselSettings = {
@@ -152,8 +154,8 @@ export default function Home() {
         </div>
         <div className="footer-section">
           <h3>Contato</h3>
-          <p>Email: goiabaudio@gamil.com</p>
-          <p>Telefone: (11) 1234-5678</p>
+          <p>Email: grstreetofc@gamil.com</p>
+          <p>Telefone: (21) 9 6786-2010</p>
         </div>
         <div className="footer-section">
           <h3>Siga-nos</h3>
@@ -164,14 +166,14 @@ export default function Home() {
             <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
               <FontAwesomeIcon icon={faTwitter} />
             </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.instagram.com/grstreetofc/" target="_blank" rel="noopener noreferrer">
               <FontAwesomeIcon icon={faInstagram} />
             </a>
           </div>
         </div>
       </div>
       <div className="footer-bottom">
-        <p>&copy; 2024 CapyCom. Todos os direitos reservados.</p>
+        <p>&copy; 2025 CapyCom. Todos os direitos reservados.</p>
       </div>
     </footer>
             </>
