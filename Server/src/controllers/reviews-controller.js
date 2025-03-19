@@ -1,0 +1,23 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getReviewUseCase = exports.removeReviewController = exports.listReviewController = exports.editReviewController = exports.addReviewController = void 0;
+const ReviewRepository_1 = __importDefault(require("../repositories/ReviewRepository"));
+const CreateReviewUseCase_1 = __importDefault(require("../use-cases/ReviewsUseCases/CreateReviewUseCase"));
+const EditReviewUseCase_1 = __importDefault(require("../use-cases/ReviewsUseCases/EditReviewUseCase"));
+const ListReviewsUseCase_1 = __importDefault(require("../use-cases/ReviewsUseCases/ListReviewsUseCase"));
+const DeleteReviewUseCase_1 = __importDefault(require("../use-cases/ReviewsUseCases/DeleteReviewUseCase"));
+const GetReviewUseCase_1 = __importDefault(require("../use-cases/ReviewsUseCases/GetReviewUseCase"));
+const ReviewsRepository = new ReviewRepository_1.default();
+const addReviewController = new CreateReviewUseCase_1.default(ReviewsRepository);
+exports.addReviewController = addReviewController;
+const editReviewController = new EditReviewUseCase_1.default(ReviewsRepository);
+exports.editReviewController = editReviewController;
+const listReviewController = new ListReviewsUseCase_1.default(ReviewsRepository);
+exports.listReviewController = listReviewController;
+const removeReviewController = new DeleteReviewUseCase_1.default(ReviewsRepository);
+exports.removeReviewController = removeReviewController;
+const getReviewUseCase = new GetReviewUseCase_1.default(ReviewsRepository);
+exports.getReviewUseCase = getReviewUseCase;

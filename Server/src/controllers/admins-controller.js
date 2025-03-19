@@ -1,0 +1,26 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateAdminPasswordController = exports.updateAdminEmailController = exports.getAdminController = exports.authenticateAdminController = exports.deleteAdminController = exports.createAdminController = void 0;
+const AdminRepository_1 = __importDefault(require("../repositories/AdminRepository"));
+const AuthenticateAdminUseCase_1 = __importDefault(require("../use-cases/AdminUseCases/AuthenticateAdminUseCase"));
+const CreateAdminUseCase_1 = __importDefault(require("../use-cases/AdminUseCases/CreateAdminUseCase"));
+const DeleteAdminUseCase_1 = __importDefault(require("../use-cases/AdminUseCases/DeleteAdminUseCase"));
+const GetAdminUseCase_1 = __importDefault(require("../use-cases/AdminUseCases/GetAdminUseCase"));
+const UpdatePasswordAdminUseCase_1 = __importDefault(require("../use-cases/AdminUseCases/UpdatePasswordAdminUseCase"));
+const UpdateEmailAdminUseCase_1 = __importDefault(require("../use-cases/AdminUseCases/UpdateEmailAdminUseCase"));
+const adminRepository = new AdminRepository_1.default();
+const createAdminController = new CreateAdminUseCase_1.default(adminRepository);
+exports.createAdminController = createAdminController;
+const deleteAdminController = new DeleteAdminUseCase_1.default(adminRepository);
+exports.deleteAdminController = deleteAdminController;
+const authenticateAdminController = new AuthenticateAdminUseCase_1.default(adminRepository);
+exports.authenticateAdminController = authenticateAdminController;
+const getAdminController = new GetAdminUseCase_1.default(adminRepository);
+exports.getAdminController = getAdminController;
+const updateAdminEmailController = new UpdateEmailAdminUseCase_1.default(adminRepository);
+exports.updateAdminEmailController = updateAdminEmailController;
+const updateAdminPasswordController = new UpdatePasswordAdminUseCase_1.default(adminRepository);
+exports.updateAdminPasswordController = updateAdminPasswordController;

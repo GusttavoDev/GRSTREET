@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.removeCategoryController = exports.listCategoryController = exports.editCategoryController = exports.addCategoryController = void 0;
+const CategoryRepository_1 = __importDefault(require("../repositories/CategoryRepository"));
+const CreateCategoryUseCase_1 = __importDefault(require("../use-cases/CategoriesUseCases/CreateCategoryUseCase"));
+const UpdateCategoryUseCase_1 = __importDefault(require("../use-cases/CategoriesUseCases/UpdateCategoryUseCase"));
+const ListCategoriesUseCase_1 = __importDefault(require("../use-cases/CategoriesUseCases/ListCategoriesUseCase"));
+const DeleteCategoryUseCase_1 = __importDefault(require("../use-cases/CategoriesUseCases/DeleteCategoryUseCase"));
+const CategorysRepository = new CategoryRepository_1.default();
+const addCategoryController = new CreateCategoryUseCase_1.default(CategorysRepository);
+exports.addCategoryController = addCategoryController;
+const editCategoryController = new UpdateCategoryUseCase_1.default(CategorysRepository);
+exports.editCategoryController = editCategoryController;
+const listCategoryController = new ListCategoriesUseCase_1.default(CategorysRepository);
+exports.listCategoryController = listCategoryController;
+const removeCategoryController = new DeleteCategoryUseCase_1.default(CategorysRepository);
+exports.removeCategoryController = removeCategoryController;

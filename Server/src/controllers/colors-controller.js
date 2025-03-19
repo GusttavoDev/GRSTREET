@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.removeColorController = exports.listColorController = exports.editColorController = exports.addColorController = void 0;
+const ColorRepository_1 = __importDefault(require("../repositories/ColorRepository"));
+const AddColorUseCase_1 = __importDefault(require("../use-cases/ColorsUseCases/AddColorUseCase"));
+const EditColorUseCase_1 = __importDefault(require("../use-cases/ColorsUseCases/EditColorUseCase"));
+const ListColorsUseCase_1 = __importDefault(require("../use-cases/ColorsUseCases/ListColorsUseCase"));
+const RemoveColorUseCase_1 = __importDefault(require("../use-cases/ColorsUseCases/RemoveColorUseCase"));
+const colorsRepository = new ColorRepository_1.default();
+const addColorController = new AddColorUseCase_1.default(colorsRepository);
+exports.addColorController = addColorController;
+const editColorController = new EditColorUseCase_1.default(colorsRepository);
+exports.editColorController = editColorController;
+const listColorController = new ListColorsUseCase_1.default(colorsRepository);
+exports.listColorController = listColorController;
+const removeColorController = new RemoveColorUseCase_1.default(colorsRepository);
+exports.removeColorController = removeColorController;

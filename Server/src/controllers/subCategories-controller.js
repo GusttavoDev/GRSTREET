@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.removeSubCategoryController = exports.listSubCategoryController = exports.editSubCategoryController = exports.addSubCategoryController = void 0;
+const SubCategoryRepository_1 = __importDefault(require("../repositories/SubCategoryRepository"));
+const CreateSubCategoryUseCase_1 = __importDefault(require("../use-cases/SubCategoriesUseCases/CreateSubCategoryUseCase"));
+const DeleteSubCategoryUseCase_1 = __importDefault(require("../use-cases/SubCategoriesUseCases/DeleteSubCategoryUseCase"));
+const EditSubCategoryUseCase_1 = __importDefault(require("../use-cases/SubCategoriesUseCases/EditSubCategoryUseCase"));
+const ListSubCategoriesUseCase_1 = __importDefault(require("../use-cases/SubCategoriesUseCases/ListSubCategoriesUseCase"));
+const SubCategorysRepository = new SubCategoryRepository_1.default();
+const addSubCategoryController = new CreateSubCategoryUseCase_1.default(SubCategorysRepository);
+exports.addSubCategoryController = addSubCategoryController;
+const editSubCategoryController = new EditSubCategoryUseCase_1.default(SubCategorysRepository);
+exports.editSubCategoryController = editSubCategoryController;
+const listSubCategoryController = new ListSubCategoriesUseCase_1.default(SubCategorysRepository);
+exports.listSubCategoryController = listSubCategoryController;
+const removeSubCategoryController = new DeleteSubCategoryUseCase_1.default(SubCategorysRepository);
+exports.removeSubCategoryController = removeSubCategoryController;
