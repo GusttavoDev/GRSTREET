@@ -1,44 +1,42 @@
-// pages/api/melhor-envio/print-label.ts
-import { NextApiRequest, NextApiResponse } from 'next';
+// src/app/api/print-label/route.ts
+import { NextRequest, NextResponse } from 'next/server';
 
 // Função para verificar se o método é GET
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  // Verificar se o método da requisição é GET
-  if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Método não permitido' });
-  }
-
+export async function GET(req: NextRequest) {
+  return NextResponse.json({ error: 'ID da compra não fornecido' }, { status: 400 });
   // Obter o parâmetro de compra (purchaseId) da query string
-  const { purchaseId } = req.query;
+//   const { purchaseId } = req.nextUrl.searchParams;
 
-  // Verificar se o purchaseId foi fornecido
-  if (!purchaseId) {
-    return res.status(400).json({ error: 'ID da compra não fornecido' });
-  }
+//   // Verificar se o purchaseId foi fornecido
+//   if (!purchaseId) {
+//     return NextResponse.json({ error: 'ID da compra não fornecido' }, { status: 400 });
+//   }
 
-  try {
-    // Aqui você deve integrar com a API do Melhor Envio para gerar a etiqueta de envio
-    const shippingLabel = await generateShippingLabel(purchaseId as string);
+//   try {
+//     // Aqui você deve integrar com a API do Melhor Envio para gerar a etiqueta de envio
+//     const shippingLabel = await generateShippingLabel(purchaseId);
 
-    if (!shippingLabel) {
-      return res.status(500).json({ error: 'Erro ao gerar etiqueta de envio' });
-    }
+//     if (!shippingLabel) {
+//       return NextResponse.json({ error: 'Erro ao gerar etiqueta de envio' }, { status: 500 });
+//     }
 
-    // Enviar a etiqueta gerada como PDF ou imagem para ser baixada ou visualizada
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'attachment; filename="shipping-label.pdf"');
-    res.status(200).send(shippingLabel); // Envia o arquivo gerado
-  } catch (error) {
-    console.error('Erro ao gerar etiqueta:', error);
-    res.status(500).json({ error: 'Erro ao gerar etiqueta de envio' });
-  }
-}
+//     // Enviar a etiqueta gerada como PDF ou imagem para ser baixada ou visualizada
+//     const response = NextResponse.json(shippingLabel);
+//     response.headers.set('Content-Type', 'application/pdf');
+//     response.headers.set('Content-Disposition', 'attachment; filename="shipping-label.pdf"');
 
-// Função fictícia para simular a geração de etiqueta
-async function generateShippingLabel(purchaseId: string) {
-  // Lógica de integração com a API do Melhor Envio (substitua isso com sua lógica real)
-  const labelData = `Etiqueta de envio para o pedido ${purchaseId}\nData: ${new Date().toLocaleString()}`;
+//     return response;
+//   } catch (error) {
+//     console.error('Erro ao gerar etiqueta:', error);
+//     return NextResponse.json({ error: 'Erro ao gerar etiqueta de envio' }, { status: 500 });
+//   }
+// }
 
-  // Convertendo para PDF ou outro formato desejado
-  return Buffer.from(labelData); // Retornando o conteúdo como um buffer (substitua com o PDF real)
+// // Função fictícia para simular a geração de etiqueta
+// async function generateShippingLabel(purchaseId: string) {
+//   // Lógica de integração com a API do Melhor Envio (substitua isso com sua lógica real)
+//   const labelData = `Etiqueta de envio para o pedido ${purchaseId}\nData: ${new Date().toLocaleString()}`;
+
+//   // Convertendo para PDF ou outro formato desejado
+//   return Buffer.from(labelData); // Retornando o conteúdo como um buffer (substitua com o PDF real)
 }
