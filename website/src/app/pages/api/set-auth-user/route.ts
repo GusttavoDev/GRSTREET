@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
-    const authToken = searchParams.get('tokenUser') || 'Not authenticated';
+    const authToken = searchParams.get('token') || 'Not authenticated'; // Alterado de 'tokenUser' para 'token'
 
     // Se o token não for válido, retorna erro
     if (authToken === 'Not authenticated') {
