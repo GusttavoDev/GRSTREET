@@ -12,11 +12,14 @@ export default function RootLayout({
 }) {
 
   return (
-    <html lang="en">
-      <Head>
-                  <title>GR STREET</title>
-        <meta name="description" content="By Gusttavo Dev" />
-      </Head>
+    <html lang="pt-br">
+                <Head>
+                <title>GR Street</title>
+                <meta name="description" content="Encontre as melhores roupas masculinas na GR Street." />
+                <meta name="keywords" content="roupas masculinas, blucas, casacos, calças, multi marcas, tenis, acessorios, roupa cristão" />
+                <meta property="og:title" content="GR Street - Moda Masculina" />
+                <meta property="og:url" content="https://grstreet.com" />
+            </Head>
       <body>
               {children}
       </body>

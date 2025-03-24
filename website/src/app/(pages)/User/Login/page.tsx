@@ -8,6 +8,7 @@ import AuthenticateUserUseCase from '@/connection/User/UseCases/AuthenticationUs
 import axios from 'axios';
 import NavBar from '@/app/components/navbar/NavBar';
 import Domain from '@/connection/domain';
+import Head from 'next/head';
 
 const authUserUseCase = new AuthenticateUserUseCase()
 
@@ -31,7 +32,6 @@ export default function LoginUser() {
                 });
                 setAuthStatus('Authenticated');
                 window.localStorage.setItem('token', authResponse.token)
-                console.log(authResponse.token)
                 router.push('/');
                 return;
             }
@@ -51,6 +51,13 @@ export default function LoginUser() {
 
     return (
         <>
+                        <Head>
+                <title>GR Street Login</title>
+                <meta name="description" content="Encontre as melhores roupas masculinas na GR Street." />
+                <meta name="keywords" content="roupas masculinas, blucas, casacos, calças, multi marcas, tenis, acessorios, roupa cristão" />
+                <meta property="og:title" content="GR Street - Moda Masculina" />
+                <meta property="og:url" content="https://grstreet.com" />
+            </Head>
                     <header>
                           <NavBar></NavBar>
             </header>

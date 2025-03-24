@@ -21,3 +21,12 @@ export default interface IProduct {
     declared_value?: string; // Novo campo
     sku?: string; // Novo campo
 }
+
+export interface IPaymentProduct {
+    id: string,
+    title: string,
+    description: string,
+    picture_url: string,
+    quantity: number,
+    unit_price: number,
+}

@@ -10,6 +10,7 @@ import CreateUserUseCase from "@/connection/User/UseCases/CreateUserUseCase";
 import "./style.css";
 import RegisteredPopup from "../Components/RegisteredPopup/RegisteredPopup";
 import NavBar from "@/app/components/navbar/NavBar";
+import Head from "next/head";
 
 const createUserUseCase = new CreateUserUseCase();
 
@@ -137,6 +138,13 @@ export default function RegisterUser() {
 
   return (
     <>
+                    <Head>
+                <title>GR Street Registre-se</title>
+                <meta name="description" content="Encontre as melhores roupas masculinas na GR Street." />
+                <meta name="keywords" content="roupas masculinas, blucas, casacos, calças, multi marcas, tenis, acessorios, roupa cristão" />
+                <meta property="og:title" content="GR Street - Moda Masculina" />
+                <meta property="og:url" content="https://grstreet.com" />
+            </Head>
       <header>
         <NavBar />
       </header>

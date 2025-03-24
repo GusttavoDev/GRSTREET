@@ -6,6 +6,6 @@ export default class AuthenticateUserUseCase {
     ){}
 
     async execute(email: string, password: string): Promise<string | null> {
-        return this.userRepository.authenticate(email, password);
+        return await this.userRepository.authenticate(email, password);
     }
 }

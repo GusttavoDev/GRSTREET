@@ -41,7 +41,7 @@ export default function LoginAdmin() {
         try {
             const authResponse: { token: string }  = await authenticationAdminUseCase.execute(form.email, form.password);
             await axios.get(`${domain}pages/api/set-auth`, {
-                params: { token: authResponse.token }
+                params: { tokenAdmin: authResponse.token }
             });
             setAuthStatus('Authenticated');
             router.push('/Admin');

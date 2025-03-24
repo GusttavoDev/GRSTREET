@@ -9,6 +9,7 @@ import ListCategoriesUseCase from '@/connection/Categories/UseCases/ListCategori
 import { useRouter, useSearchParams } from 'next/navigation';
 import NavBar from '@/app/components/navbar/NavBar';
 import Loading from '@/app/components/loading/Loading';
+import Head from 'next/head';
 
 const listProductsUseCase = new ListProductsUseCase();
 const listCategoriesUseCase = new ListCategoriesUseCase();
@@ -108,6 +109,13 @@ export default function Products({ params }: { params: string }) {
 
     return (
         <>
+     <Head>
+        <title>GR Street</title>
+        <meta name="description" content="Encontre as melhores roupas masculinas na GR Street." />
+        <meta name="keywords" content="roupas masculinas, blucas, casacos, calças, multi marcas, tenis, acessorios, roupa cristão" />
+        <meta property="og:title" content="GR Street - Moda Masculina" />
+        <meta property="og:url" content="https://grstreet.com" />
+    </Head>
             <header>
                 <NavBar />
             </header>

@@ -4,15 +4,19 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import CreatePurchaseUseCase from "@/connection/Purchases/UseCases/CreatePurchaseUseCase";
 import UpdateCartUseCase from "@/connection/User/UseCases/UpdateCartUseCase";
-import IPurchase from "@/entities/IPurchase";
+import IPurchase, { type IProductPurchase } from "@/entities/IPurchase";
 import "./styles.css";
 import NavBar from "@/app/components/navbar/NavBar";
 import axios from "axios";
 import IProductSend from "@/entities/IProductSend";
 import Domain from "@/connection/domain";
+import PaymentsCheckoutUseCase from "@/connection/Payments/UseCases/PaymentsCheckoutUseCase";
+import type IProduct from "@/entities/IProduct";
+import type { IPaymentProduct } from "@/entities/IProduct";
 
 const updateCartUseCase = new UpdateCartUseCase();
 const createPurchaseUseCase = new CreatePurchaseUseCase();
+const paymentsCheckoutUseCase = new PaymentsCheckoutUseCase();
 
 interface IFrete {
   id: number;
@@ -100,30 +104,51 @@ export default function ConfirmPurchase() {
     setPurchaseData((prev) => prev ? { ...prev, [name]: value } : null);
   };
 
+  const convertProductsToPaymentProducts = (products: IProductPurchase[]): IPaymentProduct[] => {
+    return products.map((product) => ({
+      id: product.product_id,                // ID do produto
+      title: product.name,                   // Nome do produto
+      description: product.description,      // Descrição do produto
+      picture_url: "https://example.com", // URL da imagem, pode ser vazio
+      quantity: Number(product.quantity),            // Quantidade do produto
+      unit_price: Number(product.price),             // Preço unitário do produto
+    }));
+  };
+
   const confirmPurchase = async () => {
     setLoading(true);
     try {
       if (!purchaseData || !cart || !token || !selectedFrete) throw new Error("Dados inválidos.");
-
-      await createPurchaseUseCase.execute(purchaseData);
-
+  
+      // Envia os dados do pagamento para a API do Mercado Pago
       const updatedItems = cart.items.filter(
         (item) => !selectedItems.includes(`${item.product_id}-${item.color}-${item.size}`)
       );
-      await updateCartUseCase.execute(token, updatedItems);
-      const newTotal = updatedItems.reduce((acc, item) => acc + (item.price || 0) * (item.quantity || 0), 0);
 
-      setCart({ items: updatedItems, total: newTotal });
-      localStorage.setItem("cart", JSON.stringify({ items: updatedItems, total: newTotal }));
-
-      alert("Compra realizada com sucesso!");
-      router.push("/"); // Redirecionar para a página inicial ou de pedidos
+      const paymentResponse = await paymentsCheckoutUseCase.execute(
+        token,
+        convertProductsToPaymentProducts(purchaseData.products), 
+        {
+          name: purchaseData.UserName,
+          email: purchaseData.email
+        },
+        updatedItems,
+        purchaseData,
+      );
+      
+  
+      // Verifica se o pagamento foi bem-sucedido
+      if (paymentResponse.init_point) {
+        window.location.href = paymentResponse.init_point;
+      } else {
+        throw new Error("Erro ao obter link de pagamento.");
+      }
     } catch (error) {
       console.error("Erro ao confirmar a compra:", error);
       alert("Erro ao processar a compra.");
     }
     setLoading(false);
-  };
+  };  
 
   if (!purchaseData || !cart || !token) return <p>Carregando...</p>;
 

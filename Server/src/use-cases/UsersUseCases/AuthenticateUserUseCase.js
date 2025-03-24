@@ -5,7 +5,7 @@ class AuthenticateUserUseCase {
         this.userRepository = userRepository;
     }
     async execute(email, password) {
-        return this.userRepository.authenticate(email, password);
+        return await this.userRepository.authenticate(email, password);
     }
 }
 exports.default = AuthenticateUserUseCase;

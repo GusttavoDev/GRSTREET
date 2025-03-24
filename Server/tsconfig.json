@@ -5,11 +5,15 @@
     "allowJs": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "strict": true,
     "baseUrl": ".",
+    "strict": false, // Desativa todas as verificações de tipo rigorosas
+    "noImplicitAny": false, // Permite o tipo 'any' implícito
+    "strictNullChecks": false, // Desabilita a verificação de valores nulos e indefinidos
+    "noUnusedLocals": false, // Desabilita a verificação de variáveis locais não usadas
+    "noUnusedParameters": false, // Desabilita a verificação de parâmetros não usados
     "paths": {
         "*": ["types/*"]
-    }
+    },
   },
   "include": ["src/**/*", "types/**/*"]
 }

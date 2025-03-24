@@ -1,8 +1,11 @@
 "use client"
 
+import Domain from '@/connection/domain';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+
+const domain = Domain();
 
 export default function User(){
     const [authStatus, setAuthStatus] = useState<string>('Checking authentication...');
@@ -11,7 +14,7 @@ export default function User(){
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/pages/api/check-auth-user`);
+                const response = await axios.get(`${domain}pages/api/check-auth-user`);
                 const data = response.data;
                 setAuthStatus(data.status);
                 if(data.status !== 'Authenticated') router.push('/User/Login');

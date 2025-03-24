@@ -8,9 +8,11 @@ import purchaseRouter from "./purchases-routes";
 import reviewRouter from "./review-routes";
 import adminRouter from "./admins-routes";
 import configRouter from "./config-routes";
+import paymentsRouter from "./payments-routes";
 
 const routes = Router();
 
+routes.use("/payment", paymentsRouter);
 routes.use("/users", userRouter);
 routes.use("/products", productsRouter);
 routes.use("/colors", colorRouter);
@@ -19,6 +21,6 @@ routes.use("/subCategories", subCategoryRouter);
 routes.use("/purchases", purchaseRouter);
 routes.use("/review", reviewRouter);
 routes.use("/admins", adminRouter);
-routes.use("/config", configRouter)
+routes.use("/config", configRouter);
 
 export { routes };
