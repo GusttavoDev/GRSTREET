@@ -12,7 +12,7 @@ import NavBar from "../components/navbar/NavBar";
 import Loading from "../components/loading/Loading";
 import ProductsDestaqued from "./components/ProductsDestaqued/ProductsDestqued";
 import Domain from "@/connection/domain";
-import { Head } from "next/head";
+import Head from "next/head";
 
 const domain = Domain()
 const url = `${domain}Products`
