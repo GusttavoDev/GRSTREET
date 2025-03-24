@@ -123,6 +123,31 @@ export default function Home() {
                       </button>
                     </div>
                   </div>
+
+                  <div className="product-card small">
+                    <img src={configData.categorieImage4} alt={configData.categorieImageLink4} className="product-image" />
+                    <div className="product-info">
+                      <h2 className="product-name">{configData.categorieImageLink4}</h2>
+                      <button className="product-button" onClick={() => {
+                        window.location.href = `${url}?category=${configData.categorieImageLink4}`;
+                      }}>
+                        Ver Mais
+                      </button>
+                    </div>
+                  </div>
+
+                    <div className="product-card small">
+                    <img src={configData.categorieImage5} alt={configData.categorieImageLink5} className="product-image" />
+                    <div className="product-info">
+                      <h2 className="product-name">{configData.categorieImageLink5}</h2>
+                      <button className="product-button" onClick={() => {
+                        window.location.href = `${url}?category=${configData.categorieImageLink5}`;
+                      }}>
+                        Ver Mais
+                      </button>
+                    </div>
+                  </div>
+                  
                 </div>
               </>
             )}
