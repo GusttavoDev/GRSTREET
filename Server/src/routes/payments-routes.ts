@@ -60,57 +60,70 @@ paymentsRouter.post("/webhook", async (request: Request, response: Response) => 
   try {
     console.log("Recebendo notificação do Mercado Pago:", request.body);
 
-    const { type, data } = await request.body;
-    
-    console.log(type, data)
+    const { topic, resource } = request.body; // Alterado de `type` e `data` para `topic` e `resource`
 
-    if (type === "payment") {
-      const paymentId = data.id || request.query["id"];
+    console.log("Tipo de notificação:", topic, "Recurso:", resource);
 
-      if (!paymentId) {
-        console.error("ID do pagamento não encontrado.");
-        return response.status(400).json({ error: "ID do pagamento não encontrado." });
-      }
-
-
-      console.log("buscando detalhes do pagamento")
-
-      // Buscar detalhes do pagamento na API do Mercado Pago
-      const paymentInfo = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
+    if (topic === "merchant_order") {
+      // Buscar detalhes da ordem no Mercado Pago
+      const orderInfo = await fetch(`${resource}`, {
         headers: {
           Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}`,
         },
       }).then(res => res.json());
 
-      console.log("Detalhes do pagamento:", paymentInfo);
+      console.log("Detalhes da ordem:", orderInfo);
 
-      if (paymentInfo.status === "approved") {
-        console.log("Pagamento aprovado:", paymentInfo);
+      if (orderInfo.payments.length > 0) {
+        // Pegar o primeiro pagamento associado à ordem
+        const paymentId = orderInfo.payments[0].id;
 
-        const { external_reference } = paymentInfo;
-
-        if (!external_reference) {
-          console.error("Referência externa não encontrada.");
-          return response.status(400).json({ error: "Referência externa não encontrada." });
+        if (!paymentId) {
+          console.error("ID do pagamento não encontrado.");
+          return response.status(400).json({ error: "ID do pagamento não encontrado." });
         }
 
-        const { token, items, purchaseData } = JSON.parse(external_reference);
+        console.log("Buscando detalhes do pagamento...");
 
-        console.log("outros")
+        // Buscar detalhes do pagamento
+        const paymentInfo = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
+          headers: {
+            Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}`,
+          },
+        }).then(res => res.json());
 
-        // Criar a venda no banco de dados
-        await addPurchaseController.execute({
-          ...purchaseData,
-          payment_id: paymentId,
-          payment_status: paymentInfo.status,
-        });
+        console.log("Detalhes do pagamento:", paymentInfo);
 
-        // Atualizar o carrinho do usuário
-        await updateCartController.execute(token, items);
+        if (paymentInfo.status === "approved") {
+          console.log("Pagamento aprovado:", paymentInfo);
 
-        console.log("Compra registrada e carrinho atualizado.");
+          const { external_reference } = paymentInfo;
+
+          if (!external_reference) {
+            console.error("Referência externa não encontrada.");
+            return response.status(400).json({ error: "Referência externa não encontrada." });
+          }
+
+          const { token, items, purchaseData } = JSON.parse(external_reference);
+
+          console.log("Registrando compra no banco e atualizando carrinho...");
+
+          // Criar a venda no banco de dados
+          await addPurchaseController.execute({
+            ...purchaseData,
+            payment_id: paymentId,
+            payment_status: paymentInfo.status,
+          });
+
+          // Atualizar o carrinho do usuário
+          await updateCartController.execute(token, items);
+
+          console.log("Compra registrada e carrinho atualizado.");
+        } else {
+          console.log("Pagamento ainda não aprovado.");
+        }
       } else {
-        console.log("Pagamento ainda não aprovado.");
+        console.log("Nenhum pagamento associado a esta ordem.");
       }
     }
 
@@ -120,5 +133,6 @@ paymentsRouter.post("/webhook", async (request: Request, response: Response) => 
     return response.status(500).json({ error: "Erro ao processar webhook" });
   }
 });
+
 
 export default paymentsRouter;
