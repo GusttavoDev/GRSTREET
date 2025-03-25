@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 import { MercadoPagoConfig, Preference } from "mercadopago";
 import { addPurchaseController } from "../controllers/purchase-controller";
 import { updateCartController } from "../controllers/users-controller";
+import axios from "axios";
 
 const paymentsRouter = Router();
 
@@ -56,90 +57,91 @@ paymentsRouter.post("/", async (request: Request, response: Response) => {
 });
 
 // Webhook para processar notificações do Mercado Pago
-paymentsRouter.post("/webhook", async (request: Request, response: Response) => {
+paymentsRouter.post("/webhook", async (req: Request, res: Response) => {
   try {
-    console.log("🔔 Notificação recebida:", JSON.stringify(request.body, null, 2));
+    console.log("🔔 Notificação recebida:", JSON.stringify(req.body, null, 2));
 
-    const { topic, id } = request.body; // `id` é o identificador da notificação
+    const { topic, resource } = req.body;
 
-    if (!topic || !id) {
-      console.error("⚠️ Notificação inválida, falta `topic` ou `id`.");
-      return response.status(400).json({ error: "Notificação inválida" });
+    if (!topic || !resource) {
+      console.error("⚠️ Notificação inválida: falta `topic` ou `resource`.");
+      return res.status(400).json({ error: "Notificação inválida" });
     }
 
-    let paymentId;
+    // Extrai o ID da `merchant_order`
+    const merchantOrderId = resource.split("/").pop();
 
-    if (topic === "payment") {
-      paymentId = id;
-    } else if (topic === "merchant_order") {
-      // Buscar detalhes da ordem no Mercado Pago
-      const orderInfo = await fetch(`https://api.mercadopago.com/merchant_orders/${id}`, {
-        headers: {
-          Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}`,
-        },
-      }).then(res => res.json());
+    console.log(`🔍 Merchant Order ID extraído: ${merchantOrderId}`);
 
-      console.log("📄 Detalhes da ordem:", orderInfo);
-
-      if (!orderInfo.payments || orderInfo.payments.length === 0) {
-        console.warn("⚠️ Nenhum pagamento associado a esta ordem.");
-        return response.sendStatus(200);
-      }
-
-      // Pegar o primeiro pagamento associado à ordem
-      paymentId = orderInfo.payments[0].id;
+    if (!merchantOrderId) {
+      console.error("⚠️ Merchant Order ID não encontrado.");
+      return res.status(400).json({ error: "Merchant Order ID inválido" });
     }
 
-    if (!paymentId) {
-      console.error("⚠️ ID do pagamento não encontrado.");
-      return response.status(400).json({ error: "ID do pagamento não encontrado." });
+    // 🔹 Responde imediatamente para evitar notificações repetidas
+    res.sendStatus(200);
+
+    // 🔎 Busca detalhes da `merchant_order`
+    const orderUrl = `https://api.mercadopago.com/merchant_orders/${merchantOrderId}`;
+    const orderResponse = await axios.get(orderUrl, {
+      headers: { Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}` },
+    });
+
+    const orderData = orderResponse.data;
+    console.log("📦 Detalhes da ordem:", JSON.stringify(orderData, null, 2));
+
+    if (!orderData.payments || orderData.payments.length === 0) {
+      console.warn("⚠️ Nenhum pagamento encontrado para esta ordem.");
+      return;
     }
 
-    console.log("🔍 Buscando detalhes do pagamento ID:", paymentId);
+    // 🔹 Busca o primeiro pagamento aprovado
+    const approvedPayment = orderData.payments.find(
+      (p: any) => p.status === "approved"
+    );
 
-    // Buscar detalhes do pagamento
-    const paymentInfo = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
-      headers: {
-        Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}`,
-      },
-    }).then(res => res.json());
-
-    console.log("💳 Detalhes do pagamento:", paymentInfo);
-
-    if (paymentInfo.status !== "approved") {
-      console.log(`⚠️ Pagamento ainda não aprovado. Status atual: ${paymentInfo.status}`);
-      return response.sendStatus(200);
+    if (!approvedPayment) {
+      console.log("⚠️ Nenhum pagamento aprovado encontrado.");
+      return;
     }
 
-    console.log("✅ Pagamento aprovado:", paymentInfo);
+    console.log("✅ Pagamento aprovado encontrado:", approvedPayment);
 
+    // 🔎 Busca detalhes do pagamento
+    const paymentId = approvedPayment.id;
+    const paymentUrl = `https://api.mercadopago.com/v1/payments/${paymentId}`;
+    const paymentResponse = await axios.get(paymentUrl, {
+      headers: { Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}` },
+    });
+
+    const paymentInfo = paymentResponse.data;
+    console.log("💳 Detalhes do pagamento:", JSON.stringify(paymentInfo, null, 2));
+
+    // 📌 Obtém os dados da compra
     const { external_reference } = paymentInfo;
 
     if (!external_reference) {
       console.error("⚠️ Referência externa não encontrada.");
-      return response.status(400).json({ error: "Referência externa não encontrada." });
+      return;
     }
 
     const { token, items, purchaseData } = JSON.parse(external_reference);
+    console.log("🛒 Dados da compra extraídos:", purchaseData);
 
-    console.log("🛒 Registrando compra no banco e atualizando carrinho...");
-
-    // Criar a venda no banco de dados
+    // ⚡ Atualiza a compra no banco
     await addPurchaseController.execute({
       ...purchaseData,
       payment_id: paymentId,
       payment_status: paymentInfo.status,
     });
 
-    // Atualizar o carrinho do usuário
+    // ⚡ Atualiza o carrinho do usuário
     await updateCartController.execute(token, items);
 
-    console.log("✅ Compra registrada e carrinho atualizado.");
+    console.log("✅ Compra registrada com sucesso.");
 
-    return response.sendStatus(200);
   } catch (error) {
-    console.error("❌ Erro no webhook:", error);
-    return response.status(500).json({ error: "Erro ao processar webhook" });
+    console.error("❌ Erro ao processar webhook:", error);
   }
 });
 
