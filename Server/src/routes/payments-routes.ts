@@ -38,7 +38,7 @@ paymentsRouter.post("/", async (request: Request, response: Response) => {
           email: payer.email,
         },
         back_urls: {
-          success: "https://grstreet.com/Pedidos",
+          success: "https://grstreet.com/sucesso",
           failure: "https://grstreet.com/falha",
           pending: "https://grstreet.com/pendente",
         },
@@ -70,6 +70,9 @@ paymentsRouter.post("/webhook", async (request: Request, response: Response) => 
         return response.status(400).json({ error: "ID do pagamento não encontrado." });
       }
 
+
+      console.log("buscando detalhes do pagamento")
+
       // Buscar detalhes do pagamento na API do Mercado Pago
       const paymentInfo = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
         headers: {
@@ -90,6 +93,8 @@ paymentsRouter.post("/webhook", async (request: Request, response: Response) => 
         }
 
         const { token, items, purchaseData } = JSON.parse(external_reference);
+
+        console.log("outros")
 
         // Criar a venda no banco de dados
         await addPurchaseController.execute({
