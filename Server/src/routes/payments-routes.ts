@@ -45,7 +45,7 @@ paymentsRouter.post("/", async (request: Request, response: Response) => {
         },
         auto_return: "approved",
         notification_url: "https://api.grstreet.com/api/payment/webhook",
-        external_reference: JSON.stringify({ token, items: updatedItems, purchaseData }), // Armazena os dados da compra
+        external_reference: JSON.stringify({ token, items: updatedItems, purchaseData }),
       },
     });
 
@@ -70,7 +70,6 @@ paymentsRouter.post("/webhook", async (req: Request, res: Response) => {
 
     // Extrai o ID da `merchant_order`
     const merchantOrderId = resource.split("/").pop();
-
     console.log(`🔍 Merchant Order ID extraído: ${merchantOrderId}`);
 
     if (!merchantOrderId) {
@@ -83,63 +82,64 @@ paymentsRouter.post("/webhook", async (req: Request, res: Response) => {
 
     // 🔎 Busca detalhes da `merchant_order`
     const orderUrl = `https://api.mercadopago.com/merchant_orders/${merchantOrderId}`;
-    const orderResponse = await axios.get(orderUrl, {
+    let orderResponse = await axios.get(orderUrl, {
       headers: { Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}` },
     });
 
-    const orderData = orderResponse.data;
+    let orderData = orderResponse.data;
     console.log("📦 Detalhes da ordem:", JSON.stringify(orderData, null, 2));
 
-    if (!orderData.payments || orderData.payments.length === 0) {
-      console.warn("⚠️ Nenhum pagamento encontrado para esta ordem.");
-      return;
+    // 🔄 Verifica até que o pagamento esteja aprovado
+    while (orderData.status !== "closed" && orderData.payments && orderData.payments.length === 0) {
+      console.log("⏳ Aguardando pagamento...");
+      await new Promise(resolve => setTimeout(resolve, 3000)); // Espera 3 segundos antes de tentar novamente
+      orderResponse = await axios.get(orderUrl, {
+        headers: { Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}` },
+      });
+      orderData = orderResponse.data;
     }
 
-    // 🔹 Busca o primeiro pagamento aprovado
-    const approvedPayment = orderData.payments.find(
-      (p: any) => p.status === "approved"
-    );
+    if (orderData.payments && orderData.payments.length > 0) {
+      const approvedPayment = orderData.payments.find((p: any) => p.status === "approved");
+      if (approvedPayment) {
+        console.log("✅ Pagamento aprovado encontrado:", approvedPayment);
 
-    if (!approvedPayment) {
-      console.log("⚠️ Nenhum pagamento aprovado encontrado.");
-      return;
+        const paymentId = approvedPayment.id;
+        const paymentUrl = `https://api.mercadopago.com/v1/payments/${paymentId}`;
+        const paymentResponse = await axios.get(paymentUrl, {
+          headers: { Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}` },
+        });
+
+        const paymentInfo = paymentResponse.data;
+        console.log("💳 Detalhes do pagamento:", JSON.stringify(paymentInfo, null, 2));
+
+        const { external_reference } = paymentInfo;
+
+        if (!external_reference) {
+          console.error("⚠️ Referência externa não encontrada.");
+          return;
+        }
+
+        const { token, items, purchaseData } = JSON.parse(external_reference);
+        console.log("🛒 Dados da compra extraídos:", purchaseData);
+
+        // ⚡ Atualiza a compra no banco
+        await addPurchaseController.execute({
+          ...purchaseData,
+          payment_id: paymentId,
+          payment_status: paymentInfo.status,
+        });
+
+        // ⚡ Atualiza o carrinho do usuário
+        await updateCartController.execute(token, items);
+
+        console.log("✅ Compra registrada com sucesso.");
+      } else {
+        console.log("⚠️ Nenhum pagamento aprovado encontrado.");
+      }
+    } else {
+      console.log("⚠️ Nenhum pagamento encontrado.");
     }
-
-    console.log("✅ Pagamento aprovado encontrado:", approvedPayment);
-
-    // 🔎 Busca detalhes do pagamento
-    const paymentId = approvedPayment.id;
-    const paymentUrl = `https://api.mercadopago.com/v1/payments/${paymentId}`;
-    const paymentResponse = await axios.get(paymentUrl, {
-      headers: { Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}` },
-    });
-
-    const paymentInfo = paymentResponse.data;
-    console.log("💳 Detalhes do pagamento:", JSON.stringify(paymentInfo, null, 2));
-
-    // 📌 Obtém os dados da compra
-    const { external_reference } = paymentInfo;
-
-    if (!external_reference) {
-      console.error("⚠️ Referência externa não encontrada.");
-      return;
-    }
-
-    const { token, items, purchaseData } = JSON.parse(external_reference);
-    console.log("🛒 Dados da compra extraídos:", purchaseData);
-
-    // ⚡ Atualiza a compra no banco
-    await addPurchaseController.execute({
-      ...purchaseData,
-      payment_id: paymentId,
-      payment_status: paymentInfo.status,
-    });
-
-    // ⚡ Atualiza o carrinho do usuário
-    await updateCartController.execute(token, items);
-
-    console.log("✅ Compra registrada com sucesso.");
-
   } catch (error) {
     console.error("❌ Erro ao processar webhook:", error);
   }
