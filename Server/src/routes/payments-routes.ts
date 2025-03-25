@@ -61,6 +61,8 @@ paymentsRouter.post("/webhook", async (request: Request, response: Response) => 
     console.log("Recebendo notificação do Mercado Pago:", request.body);
 
     const { type, data } = request.body;
+    
+    console.log(type, data)
 
     if (type === "payment") {
       const paymentId = data.id || request.query["id"];
