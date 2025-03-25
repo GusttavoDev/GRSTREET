@@ -60,7 +60,7 @@ paymentsRouter.post("/webhook", async (request: Request, response: Response) => 
   try {
     console.log("Recebendo notificação do Mercado Pago:", request.body);
 
-    const { type, data } = request.body;
+    const { type, data } = await request.body;
     
     console.log(type, data)
 
