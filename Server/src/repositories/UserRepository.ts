@@ -250,8 +250,8 @@ export default class UserRepository {
                 city: addres.city,
                 neighborhood: addres.neighborhood,
                 street: addres.street,
-                number: addres.number,
-                cep: addres.cep,
+                number: addres.number ? Number(addres.number) : 0,
+                cep: parseInt(addres.cep.toString()),
             };
     
             // Adiciona cpf se fornecido, ou define como null
@@ -294,9 +294,11 @@ export default class UserRepository {
         // const decoded = await this.jwt.verifyToken(id);
     
         // Converte o valor de 'number' para inteiro (caso seja uma string)
+        
         const updatedAddress = {
             ...newAddress,
-            number: newAddress.number ? parseInt(newAddress.number.toString()) : undefined,  // Garantir que seja um número
+            number: newAddress.number ? parseInt(newAddress.number.toString()) : 0,  // Garantir que seja um número
+            cep: newAddress.cep ? parseInt(newAddress.cep.toString()) : 0,  // Garantir que seja um número
         };
     
         // if (!decoded.id) {

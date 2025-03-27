@@ -268,20 +268,19 @@ a {
 } */
 
 .offcanvas .offcanvas-login {
-    width: 100%;
-    padding: 0.8rem;
+    /* padding: 0.8rem; */
     border: none;
     border-radius: 8px;
-    background-color: #0071ce;
-    color: #ffffff;
+    /* background-color: #0071ce; */
+    /* color: #ffffff; */
     font-size: 1.1rem;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
 .offcanvas .offcanvas-login:hover {
-    background-color: #92c2f6;
-    color: #ccc;
+    /* background-color: #92c2f6;
+    color: #ccc; */
 }
 
 

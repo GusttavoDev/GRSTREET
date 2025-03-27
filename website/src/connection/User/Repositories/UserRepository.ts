@@ -45,7 +45,7 @@ export default class UserRepository {
         return response.data;
     }
     
-    async updateUser(userId: string, updatedData: Partial<IUser>): Promise<{ msg: string }> {
+    async upupdateUser(userId: string, updatedData: Partial<IUser>): Promise<{ msg: string }> {
         const response = await axios.put(
             connection.get() + `users/${userId}`, // Usar o userId aqui
             { ...updatedData }, // Passando os dados atualizados
@@ -88,7 +88,7 @@ export default class UserRepository {
     // Atualizar senha do usuário
      async updatePassword(id: string, newPassword: string): Promise<{ msg: string }> {
         const response = await axios.put(
-            connection.get() + "users/passoword",
+            connection.get() + "users/password",
             { id, newPassword },
             {
                 headers: {

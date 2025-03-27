@@ -65,10 +65,6 @@ export default function Carrinho() {
     fetchProducts();
   }, []);
 
-  const handleViewMore = (productId: string) => {
-    router.push(`/Products/${productId}`);
-  };
-
   const handleRemoveItem = async (productId: string, colorName: string, sizeName: string) => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -98,8 +94,12 @@ export default function Carrinho() {
 
   const handleCreatePurchase = async () => {
     const token = localStorage.getItem("token");
-    if (!token || selectedItems.length === 0) {
+    if (selectedItems.length === 0) {
       alert("Selecione pelo menos um produto.");
+      return;
+    }
+    if (!token) {
+      alert("Faça Login Primeiro!");
       return;
     }
 
@@ -204,7 +204,7 @@ export default function Carrinho() {
               const size = color?.sizes.find((s) => s.name.toLowerCase() === item.size.toLowerCase());
               return (
                 <div key={index} className="cart-item">
-                  <input type="checkbox" checked={selectedItems.includes(`${item.product_id}-${item.color}-${item.size}`)} onChange={() => toggleSelectItem(item.product_id, item.color, item.size)} />
+                  <input className="checkbox" type="checkbox" checked={selectedItems.includes(`${item.product_id}-${item.color}-${item.size}`)} onChange={() => toggleSelectItem(item.product_id, item.color, item.size)} />
                   <img src={color?.images?.[0] || "https://via.placeholder.com/150"} alt={product?.name || "Produto"} className="cart-item-image" />
                   <div className="cart-item-details">
                     <h2>{product?.name || "Produto não encontrado"}</h2>
@@ -213,7 +213,6 @@ export default function Carrinho() {
                     <span>Quantidade: {item.quantity}</span>
                     <span>R$ {(item.quantity * (color?.price || 0)).toFixed(2)}</span>
                     <div className="cart-buttons">
-                    <button className="view-button" onClick={() => handleViewMore}>Ver Mais</button>
                     <button className="remove-button" onClick={() => handleRemoveItem(item.product_id, item.color, item.size)}>Remover</button>
                     </div>
                   </div>

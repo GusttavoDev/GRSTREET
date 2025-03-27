@@ -159,7 +159,7 @@ export default function Product({ params }: { params: { id: number } }) {
     };
     
     const decreaseQuantity = () => {
-        setQuantity((prev) => (prev > 1 ? prev - 1 : 1)); // Quantidade mínima de 1
+        setQuantity((prev) => (prev > 0 ? prev - 1 : 1)); // Quantidade mínima de 1
     };
     
     
@@ -185,21 +185,28 @@ export default function Product({ params }: { params: { id: number } }) {
     };
 
     const handleAddCart = async () => {
+        const token = localStorage.getItem("token");
+        if(quantity == 0) return alert("Adcione pelomenos 1")
         if (!product) return;
-    
-        // Obtenha o carrinho do localStorage
-        const cartData = localStorage.getItem("cart");
-        let cart: Cart = cartData ? JSON.parse(cartData) : { items: [], total: 0 };
-    
-        const selectedColorData = product.colors[selectedColor];
-        const selectedSizeData = product.colors[selectedColor].sizes.find((s) => s.name === selectedSize);
-        const newItem: CartItem = {
-            product_id: product.id!,
-            quantity,
-            price: selectedColorData.price,
-            color: selectedColorData.name,
-            size: selectedSizeData!.name,
-        };    
+        if (!token) {
+            alert("Faça Login Primeiro!");
+            return;
+          }      
+          // Obtenha o carrinho do localStorage
+          const cartData = localStorage.getItem("cart");
+          let cart: Cart = cartData ? JSON.parse(cartData) : { items: [], total: 0 };
+          
+          const selectedColorData = product.colors[selectedColor];
+          const selectedSizeData = product.colors[selectedColor].sizes.find((s) => s.name === selectedSize);
+          const newItem: CartItem = {
+              product_id: product.id!,
+              quantity,
+              price: selectedColorData.price,
+              color: selectedColorData.name,
+              size: selectedSizeData!.name,
+            };    
+        try {
+            setLoading(true)
     
         // Verifique se o item já existe no carrinho
         const existingItemIndex = cart.items.findIndex(
@@ -218,23 +225,24 @@ export default function Product({ params }: { params: { id: number } }) {
         cart.total = cart.items.reduce((acc, item) => acc + item.price * item.quantity, 0);
     
         // Atualize o carrinho no banco de dados
-        try {
             const token = localStorage.getItem("token");  // Pegue o token de autenticação
             if (token) {
                 await updateCartUseCase.execute(token, cart.items);  // Use o caso de uso para atualizar o carrinho no banco
             }
         } catch (error) {
             console.error("Erro ao atualizar o carrinho no banco de dados:", error);
+        } finally {
+            // Salve o carrinho atualizado no localStorage
+            localStorage.setItem("cart", JSON.stringify(cart));
+        
+            // Exibe o popup de sucesso
+            setPopupVisible(true);
+        
+            // Fecha o popup após 3 segundos
+            setTimeout(() => setPopupVisible(false), 3000);
+            setLoading(false)
         }
     
-        // Salve o carrinho atualizado no localStorage
-        localStorage.setItem("cart", JSON.stringify(cart));
-    
-        // Exibe o popup de sucesso
-        setPopupVisible(true);
-    
-        // Fecha o popup após 3 segundos
-        setTimeout(() => setPopupVisible(false), 3000);
     };
 
     const handleShare = () => {
@@ -305,7 +313,12 @@ export default function Product({ params }: { params: { id: number } }) {
                     </div>
                     <p className="product-price">Preço: R$ {totalPrice.toFixed(2)}</p>
                     <p className="product-stock">
-                    Estoque: {stock}
+                    {Number(stock) >= 1 ? (
+                            <p>Estoque: {stock}</p>
+                        ) : (
+                            <p>Estoque zerado, o prazo de entrega será enviado por WhatsApp.</p>
+                        )}
+
                     </p>
 
                     <div className="size-selector">

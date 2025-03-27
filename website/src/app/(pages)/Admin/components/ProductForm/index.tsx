@@ -83,6 +83,7 @@ export default function ProductForm({ onClose, categories, subCategories, produc
   const [valueMargin, setValueMargin] = useState<number>();
   const [margin, setMargin] = useState<number>();
   const [isShippingFormOpen, setIsShippingFormOpen] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   
 
   useEffect(() => {
@@ -284,6 +285,10 @@ export default function ProductForm({ onClose, categories, subCategories, produc
   };
 
   const handleSubmit = async () => {
+    
+    if (loading) return; // Evita duplicação de envio
+
+    setLoading(true);
   
     // Aqui você faz a chamada para salvar ou atualizar o produto
     productEdit ? await putProductUseCase.execute(product) : await setProductUseCase.execute(product);
@@ -392,7 +397,13 @@ export default function ProductForm({ onClose, categories, subCategories, produc
           </div>
 
           <div className="form-actions">
-            <button type="submit" className="btn" onClick={handleSubmit}>Salvar</button>
+          <button 
+            type="submit" 
+            className="btn" 
+            disabled={loading}
+          >
+            {loading ? 'Salvando...' : 'Salvar'}
+          </button>
             <button type="button" onClick={onClose} className="btn">Cancelar</button>
           </div>
         </form>
@@ -447,7 +458,7 @@ export default function ProductForm({ onClose, categories, subCategories, produc
 
       <label>Formato da Embalagem:  
         <select
-          name="package"
+          name="package_format" // Corrigido aqui
           value={product.package_format}
           onChange={handleChange}
         >
@@ -456,6 +467,7 @@ export default function ProductForm({ onClose, categories, subCategories, produc
           <option value="envelope">Envelope</option>
         </select>
       </label>
+
 
       <label>Valor do Seguro (R$):  
         <input

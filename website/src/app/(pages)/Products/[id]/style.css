@@ -535,7 +535,6 @@
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
-        justify-content: center; /* Centraliza as opções de cor */
     }
 
     .color-option {
@@ -706,8 +705,10 @@
     }
 
     .color-selector {
-        flex-direction: column; /* Coloca as opções de cor em uma coluna */
-        align-items: center;
+
+        display: flex
+;
+        flex-wrap: wrap;
     }
 
     .color-option {
@@ -717,7 +718,6 @@
     }
 
     .quantity-selector {
-        flex-direction: row;
         width: auto; /* Não ocupa toda a largura */
         gap: 10px;
     }

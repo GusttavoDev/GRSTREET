@@ -8,11 +8,13 @@ import "./style.css";
 import UpdateEmailUseCase from "@/connection/User/UseCases/UpdateEmailUseCase";
 import UpdateAddressUseCase from "@/connection/User/UseCases/UpdateAddressUseCase";
 import UpdatePersonalDataUseCase from "@/connection/User/UseCases/UpdatePersonalDataUseCase";
+import UpdatePasswordUseCase from "@/connection/User/UseCases/UpdatePasswordUseCase";
 
 const getUserUseCase = new GetUserUseCase();
 const updatePersonalDataUseCase = new UpdatePersonalDataUseCase()
 const updateEmailUseCase = new UpdateEmailUseCase()
 const updateAddressUseCase = new UpdateAddressUseCase()
+const updatePasswordUseCase = new UpdatePasswordUseCase();
 
 export default function MyAccount() {
   const [user, setUser] = useState<IUser | null>(null);
@@ -107,6 +109,9 @@ export default function MyAccount() {
       // Atualizar o email, se necessário
       if (editedUser.header.email !== user.header.email) {
         await updateEmailUseCase.execute(user.header.id, editedUser.header.email);
+      }
+      if(editedUser.header.password != password) {
+        await updatePasswordUseCase.execute(user.header.id, password)
       }
   
       alert("Informações atualizadas com sucesso!");

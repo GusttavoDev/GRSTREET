@@ -211,8 +211,8 @@ class UserRepository {
                 city: addres.city,
                 neighborhood: addres.neighborhood,
                 street: addres.street,
-                number: addres.number,
-                cep: addres.cep,
+                number: addres.number ? Number(addres.number) : 0,
+                cep: parseInt(addres.cep.toString()),
             };
             // Adiciona cpf se fornecido, ou define como null
             if (personal_data.cpf) {
@@ -251,7 +251,7 @@ class UserRepository {
     async updateAddress(id, newAddress) {
         // const decoded = await this.jwt.verifyToken(id);
         // Converte o valor de 'number' para inteiro (caso seja uma string)
-        const updatedAddress = Object.assign(Object.assign({}, newAddress), { number: newAddress.number ? parseInt(newAddress.number.toString()) : undefined });
+        const updatedAddress = Object.assign(Object.assign({}, newAddress), { number: newAddress.number ? parseInt(newAddress.number.toString()) : 0, cep: newAddress.cep ? parseInt(newAddress.cep.toString()) : 0 });
         // if (!decoded.id) {
         //     throw new Error('User ID is not available');
         // }

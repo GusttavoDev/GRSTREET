@@ -166,16 +166,32 @@
         }    
         
         async removeProduct(id: string): Promise<void> {
-            await this.prisma.color.deleteMany({
-                where: {
-                    product_id: id
-                }
+            // Excluir os tamanhos associados à cor
+            await this.prisma.size.deleteMany({
+                where: { colorId: { in: (await this.prisma.color.findMany({ where: { product_id: id }, select: { id: true } })).map(color => color.id) } }
             });
         
+            // Excluir as cores associadas ao produto
+            await this.prisma.color.deleteMany({
+                where: { product_id: id }
+            });
+        
+            // Excluir as outras dependências
+            // await this.prisma.productPurchase.deleteMany({
+            //     where: { product_id: id }
+            // });
+            
+            await this.prisma.cartItem.deleteMany({
+                where: { productId: id }
+            });
+            
+            await this.prisma.review.deleteMany({
+                where: { product_id: id }
+            });
+        
+            // Agora, excluir o produto
             await this.prisma.product.delete({
-                where: {
-                    id
-                }
+                where: { id }
             });
         }
         

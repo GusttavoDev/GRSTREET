@@ -10,6 +10,10 @@ header {
   padding: 10px 0; /* Ajuste o espaçamento conforme necessário */
 }
 
+.checkbox {
+  margin: 2%;
+}
+
 /* Ajustes do container do carrinho */
 .cart-container {
     width: 90%; /* Largura do container de 95% da tela */

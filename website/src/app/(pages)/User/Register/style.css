@@ -9,14 +9,14 @@ header {
     top: 0;
     left: 0;
     right: 0;
-    height: 60px; /* Ajuste conforme a altura da sua navbar */
-    background-color: #fff; /* Cor de fundo da navbar */
-    z-index: 1000; /* Garante que a navbar fique acima de outros elementos */
+    height: 60px;
+    background-color: #fff;
+    z-index: 1000;
 }
 
 .PageRegisterUser {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -28,11 +28,9 @@ header {
 }
 
 .FormRegisterUser {
-    width: 32vw;
-    max-width: 30vw; /* Limita a largura máxima */
-    height: 80vh;
-    max-height: 90vh; /* Limita a altura máxima */
-    overflow-y: auto; /* Adiciona barra de rolagem vertical quando necessário */
+    width: 100%;
+    max-width: 480px; /* Define largura máxima para telas grandes */
+    height: auto;
     padding: 2rem;
     background-color: #ffffff;
     border-radius: 12px;
@@ -69,12 +67,6 @@ header {
     text-align: end;
 }
 
-.FormRegisterUserContent a {
-    text-decoration: none;
-    color: inherit;
-    cursor: pointer;
-}
-
 .FormRegisterUserContent input {
     width: 100%;
     padding: 0.8rem;
@@ -84,7 +76,6 @@ header {
     color: #333;
     outline: none;
     transition: border-color 0.3s;
-    margin-block: 1%;
 }
 
 .FormRegisterUserContent input:focus {
@@ -105,6 +96,11 @@ header {
 }
 
 .FormRegisterUserContent button:hover {
+    background-color: rgb(2, 85, 168);
+}
+
+.FormRegisterUserContent button:focus {
+    outline: none;
     background-color: rgb(2, 85, 168);
 }
 
@@ -133,4 +129,71 @@ header {
     font-size: 0.9rem;
     margin-top: 0.5rem;
     text-align: center;
+}
+
+/* Responsividade */
+
+/* Para tablets */
+@media (max-width: 1024px) {
+    .FormRegisterUser {
+        width: 80%;
+    }
+
+    .FormRegisterUserH1 {
+        font-size: 1.6rem;
+    }
+
+    .FormRegisterUserContent input,
+    .FormRegisterUserContent button {
+        padding: 0.7rem;
+        font-size: 0.9rem;
+    }
+
+    .error, .success {
+        font-size: 0.8rem;
+    }
+}
+
+/* Para celulares */
+@media (max-width: 768px) {
+    .FormRegisterUser {
+        width: 90%;
+        padding: 1.5rem;
+    }
+
+    .FormRegisterUserH1 {
+        font-size: 1.5rem;
+    }
+
+    .FormRegisterUserContent input,
+    .FormRegisterUserContent button {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+
+    .error, .success {
+        font-size: 0.7rem;
+    }
+}
+
+/* Para telas muito pequenas */
+@media (max-width: 480px) {
+    .FormRegisterUser {
+        width: 95%;
+        padding: 1rem;
+    }
+
+    .FormRegisterUserH1 {
+        font-size: 1.3rem;
+    }
+
+    .FormRegisterUserContent input,
+    .FormRegisterUserContent button {
+        padding: 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .error, .success {
+        font-size: 0.6rem;
+    }
 }

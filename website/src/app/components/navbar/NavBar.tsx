@@ -219,6 +219,15 @@ export default function NavBar() {
         </div>
 
         <ul className="offcanvas-links">
+              <li>
+                <a href={domain}>Inicio</a>
+              </li>
+              <li>
+                <a href={`${domain}Products`}>Produtos</a>
+              </li>
+              <li>
+                <a href="https://www.instagram.com/grstreetofc/">Fale Conosco</a>
+              </li>
           {authStatus === "Authenticated" ? (
             <>
               <li>
@@ -241,7 +250,7 @@ export default function NavBar() {
           ) : (
             <li>
               <a href="/User/Login" className="offcanvas-login">
-                Entrar
+                Login
               </a>
             </li>
           )}

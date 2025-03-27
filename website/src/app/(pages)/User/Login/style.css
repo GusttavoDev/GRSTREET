@@ -19,8 +19,8 @@
 
 .FormLoginUser {
     width: 100%;
-    height: 40%;
-    max-width: 400px;
+    height: 45%;
+    max-width: 25vw;
     padding: 2rem;
     background-color: #ffffff;
     border-radius: 12px;
@@ -54,16 +54,14 @@
     font-weight: 600;
 }
 
-
 .FormLoginUserContent p {
     text-align: end;
 }
 
 .FormLoginUserContent a {
-    text-decoration: none; /* Remove o sublinhado */
-    color: inherit; /* Faz com que a cor herde do elemento pai */
-    cursor: pointer; /* Mantém o cursor de link */
-      
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
 }
 
 .auth-status {
@@ -78,16 +76,6 @@
 
 .auth-status.error {
     color: #dc3545;
-}
-
-.FormLoginUserContent p a {
-    text-decoration: none;
-    color: #0071ce;
-    font-weight: 600;
-}
-
-.FormLoginUserContent p {
-    text-align: end;
 }
 
 .FormLoginUserContent input {
@@ -133,4 +121,80 @@ p {
     margin-top: 1rem;
     font-size: 0.9rem;
     color: #0071ce;
+}
+
+/* Responsividade */
+
+/* Para tablets */
+@media (max-width: 1024px) {
+    .FormLoginUser {
+        height: 50vh;
+        max-width: 50vw;
+        padding: 2rem;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .FormLoginUserH1 {
+        font-size: 1.5rem;
+    }
+
+    .FormLoginUserContent input,
+    .FormLoginUserContent button {
+        padding: 0.7rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Para celulares */
+@media (max-width: 768px) {
+    .FormLoginUser {
+        height: 50vh;
+        max-width: 35vw;
+        padding: 2rem;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .FormLoginUserH1 {
+        font-size: 1.5rem;
+    }
+
+    .FormLoginUserContent input,
+    .FormLoginUserContent button {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+
+    .auth-status {
+        font-size: 0.8rem;
+    }
+}
+
+/* Para telas muito pequenas */
+@media (max-width: 480px) {
+    .FormLoginUser {
+        height: 50vh;
+        max-width: 85vw;
+        padding: 2rem;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .FormLoginUserH1 {
+        font-size: 1.3rem;
+    }
+
+    .FormLoginUserContent input,
+    .FormLoginUserContent button {
+        padding: 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .auth-status {
+        font-size: 0.7rem;
+    }
 }

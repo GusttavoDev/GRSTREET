@@ -114,7 +114,6 @@ userRouter.put("/password", async (request, response) => {
 userRouter.put("/cart", async (request, response) => {
     try {
         const { token, items } = request.body;
-        console.log(items);
         await users_controller_1.updateCartController.execute(token, items);
         return response.status(200).send({
             msg: "Carrinho Atualizado com Sucesso!",
