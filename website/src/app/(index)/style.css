@@ -79,7 +79,7 @@ button {
 .category-image {
     width: 28rem;
     height: 28rem;
-    object-fit: contain;
+    object-fit: cover;
     border-radius: 10px;
     margin-right: 20px;
 }
