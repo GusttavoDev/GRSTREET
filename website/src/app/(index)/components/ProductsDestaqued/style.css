@@ -10,6 +10,7 @@
 
 .product-destaqued-title {
     font-family: 'Inter Tight', sans-serif; /* Garantindo o uso da fonte Inter Tight */
+    margin-left: -7.5%;
     font-size: 1.8rem; /* Tamanho do título */
     font-weight: bold;
     margin-bottom: 20px; /* Espaçamento entre o título e a lista */
