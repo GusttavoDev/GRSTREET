@@ -145,6 +145,7 @@ export default function Home() {
                     return (
                       <div key={category.id} className={`category-card ${index === 0 ? "large" : "small"}`}>
                         {/* Imagem da categoria */}
+                        <h3 className="titleNameCategory">{category.name}</h3>
                         <img src={configData?.[(`categorieImage${index + 1}` as keyof IConfig)]} alt={category.name} className="category-image" />
 
                           <div className="GridProducts">

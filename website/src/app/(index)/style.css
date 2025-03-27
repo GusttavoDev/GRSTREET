@@ -61,6 +61,17 @@ button {
     padding: 20px;
 }
 
+.titleNameCategory {
+    font-family: 'Inter Tight', sans-serif; /* Garantindo o uso da fonte Inter Tight */
+    font-size: 1.8rem; /* Tamanho do título */
+    font-weight: bold;
+    margin-block: 20px; /* Espaçamento entre o título e a lista */
+    color: #252525; /* Cor do título */
+    text-transform: uppercase; /* Título em maiúsculas */
+    text-align: left; /* Alinhamento à esquerda */
+    width: 100%; /* Para garantir que o título ocupe toda a largura disponível */
+}
+
 /* Card de cada categoria */
 .category-card {
     display: flex;
