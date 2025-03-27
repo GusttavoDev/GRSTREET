@@ -67,6 +67,7 @@ button {
     background: #ffffff;
     border-radius: 10px;
     overflow: hidden;
+    margin-inline: 5%;
     transition: transform 0.3s ease;
     flex-direction: row;
 }
