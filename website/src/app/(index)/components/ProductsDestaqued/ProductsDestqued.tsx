@@ -4,8 +4,19 @@ import { useRouter } from 'next/navigation';
 
 import "./style.css"
 import ListProductsUseCase from "@/connection/Product/UseCases/ListProductsUseCase";
+import Slider from "react-slick";
 
 const listProductsUseCase = new ListProductsUseCase();
+
+const carouselSettingsDestaquedProducts = {
+    dots: true,
+    infinite: true,
+    speed: 700,
+    slidesToShow: 7,  // Agora exibe 5 produtos ao mesmo tempo
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000,
+};
 
 export default function ProductsDestaqued() {
     const [products, setProducts] = useState<IProduct[]>();
@@ -28,27 +39,35 @@ export default function ProductsDestaqued() {
     }
 
     useEffect(() => {
-        fetchProducts()
-    }, [products]);
+        fetchProducts();
+    }, []);    
 
     return (
-    <section className="product-destaqued-section">
-        <h2 className="product-destaqued-title">Produtos em Destaque</h2> {/* Título adicionado */}
-        <ul className="product-destaqued-list">
-            {productsDestaqued.map((product) => (
-                <li
-                    className="product-destaqued"
-                    key={product.id}
-                    onClick={() => router.push(`/Products/${product.id}`)}
-                >
-                    <img src={product.images[0]} alt={product.name} />
-                    <p className="product-destaqued-price">
-                        <span className="span-border">R$ {product.colors[0].price.toFixed(2)}</span> {/* Valor do produto */}
-                    </p>
-                </li>
-            ))}
-        </ul>
-    </section>
+        <section className="product-destaqued-section">
+            <h2 className="product-destaqued-title">Produtos em Destaque</h2> {/* Título adicionado */}
+            <ul className="product-destaqued-list">
+            {productsDestaqued.length > 0 ? (
+        <Slider {...carouselSettingsDestaquedProducts}>
+                {productsDestaqued.map((product) => (
+                    <li
+                        className="product-destaqued"
+                        key={product.id}
+                        onClick={() => router.push(`/Products/${product.id}`)}
+                    >
+                        <img src={product.images[0]} alt={product.name} />
+                        <p className="product-destaqued-price">
+                            <span className="span-border">
+                                R$ {product.colors[0].price.toFixed(2)}
+                            </span>
+                        </p>
+                    </li>
+                    ))} 
+                </Slider>
+            ) : (
+                <p>Nenhum produto em destaque encontrado.</p>
+            )}
+            </ul>
+        </section>
 
     );
 }

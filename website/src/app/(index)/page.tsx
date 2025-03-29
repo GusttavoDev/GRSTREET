@@ -32,6 +32,25 @@ const carouselSettings = {
   autoplaySpeed: 2000, // Define o tempo de cada slide (em milissegundos)
 };
 
+const carouselSettingsProducts  = {
+  dots: true,  // Adiciona os dots abaixo do carrossel
+  infinite: true,
+  speed: 700,
+  slidesToShow: 3,
+  slidesToScroll: 1,
+  autoplay: true,
+  autoplaySpeed: 2000,
+  appendDots: (dots: React.ReactNode) => (
+    <div className="custom-dots-container">
+      <ul className="custom-dots"> {dots} </ul>
+    </div>
+  ),
+  customPaging: (i: number) => (
+    <button className="custom-dot"></button>
+  )
+};
+
+
 const listConfigUseCase = new ListConfigUseCase();
 const listProductsUseCase = new ListProductsUseCase();
 const listCategoriesUseCase = new ListCategoriesUseCase();
@@ -135,65 +154,59 @@ export default function Home() {
 
             <ProductsDestaqued />
 
-            {configData && (
+            {configData && categories && (
               <>
                 {/* <h1 className="TitlePrincipalsHome">CATEGORIAS</h1> */}
                 <div className="categories-grid">
-                  {categories?.map((category, index) => {
-                    const categoryProducts = products?.filter((product) => product.category === category.id);
+  {categories
+    ?.filter((category) => category.destaqued) // Filtra as categorias em destaque
+    .map((category, index) => {
+      const categoryProducts = products?.filter((product) => product.category === category.id);
 
-                    return (
-                      <>
-                      <h3 className="titleNameCategory">{category.name}</h3>
-                      <div key={category.id} className={`category-card ${index === 0 ? "large" : "small"}`}>
-                        {/* Imagem da categoria */}
-                        <img src={configData?.[(`categorieImage${index + 1}` as keyof IConfig)]} alt={category.name} className="category-image" />
+      return (
+        <>
+          <h3 className="titleNameCategory">{category.name}</h3>
+          <div key={category.id} className={`category-card ${index === 0 ? "large" : "small"}`}>
+            {/* Imagem da categoria */}
+            <img src={category.image} alt={category.name} className="category-image" />
 
-                          <div className="GridProducts">
-                        {/* Carrossel de produtos da categoria */}
-                        <div className="category-products-carousel">
-                            <button className="carousel-nav carousel-prev" onClick={() => {
-                            const container = document.getElementById(`products-scroll-${index}`);
-                            if (container) {
-                                const cardWidth = container.querySelector(".product-card")?.clientWidth || 200;
-                                container.scrollBy({ left: -cardWidth - 15, behavior: "smooth" });
-                            }
-                        }}>‹</button>
-
-                          <div className="products-scroll" id={`products-scroll-${index}`}>
-                            {categoryProducts?.slice(0, 6).map((product) => (
-                              <div key={product.id} className="product-card" onClick={() => {
-                                window.location.href = `${url}/${product.id}`;
-                              }}>
-                                <img src={product.images[0]} alt={product.name} className="product-image" />
-                                <h3 className="product-name">{product.name}</h3>
-                                <p className="product-price">R$ {product.colors[0].price.toFixed(2)}</p>
-                              </div>
-                            ))}
+            <div className="GridProducts">
+              {/* Carrossel de produtos da categoria */}
+                  <div className="category-products-carousel">
+                    <div className="products-scroll" id={`products-scroll-${index}`}>
+                      <Slider {...carouselSettingsProducts}>
+                        {categoryProducts?.slice(0, 4).map((product) => (
+                          <div
+                            key={product.id}
+                            className="product-card"
+                            onClick={() => {
+                              window.location.href = `${url}/${product.id}`;
+                            }}
+                          >
+                            <img src={product.images[0]} alt={product.name} className="product-image" />
+                            <h3 className="product-name">{product.name}</h3>
+                            <p className="product-price">R$ {product.colors[0].price.toFixed(2)}</p>
                           </div>
-
-                      <button className="carousel-nav carousel-next" onClick={() => {
-                          const container = document.getElementById(`products-scroll-${index}`);
-                          if (container) {
-                              const cardWidth = container.querySelector(".product-card")?.clientWidth || 200;
-                              container.scrollBy({ left: cardWidth + 15, behavior: "smooth" });
-                          }
-                      }}>›</button>
-
-                        </div>
-                        <div className="VerMaisDiv">
-                          <button className="view-button" onClick={() => {
-                            window.location.href = `${url}?category=${configData?.[(`categorieImage${index + 1}` as keyof IConfig)]}`;
-                          }}>Ver Mais</button>
-                        </div>
-
-                        </div>
+                        ))}
+                      </Slider>
+                    </div>
+                  </div>
+                  <div className="VerMaisDiv">
+                    <button
+                      className="view-button"
+                      onClick={() => {
+                        window.location.href = `${url}?category=${configData?.[(`categorieImage${index + 1}` as keyof IConfig)]}`;
+                      }}
+                    >
+                      Ver Mais
+                      </button>
                       </div>
-                      </>
-                    );
-                  })}
-                </div>
-
+                    </div>
+                  </div>
+                </>
+              );
+            })}
+        </div>
               </>
             )}
           </div>

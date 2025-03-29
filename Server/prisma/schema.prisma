@@ -8,139 +8,140 @@ datasource db {
 }
 
 model Admin {
-  id            String   @id @default(cuid())
-  token         String
-  name          String
-  email         String   @unique
-  password      String
-  storeName     String
-  storeLogo     String
+  id        String @id @default(cuid())
+  token     String
+  name      String
+  email     String @unique
+  password  String
+  storeName String
+  storeLogo String
 }
 
 model User {
-  id            String   @id @default(cuid())
-  token         String
-  email         String   @unique
-  password      String
-  name          String
-  cpf           String?
-  cel_number    String
-  profile_img   String   @default("https://i.imgur.com/5QpQijK.png")
-  country       String
-  state         String
-  city          String
-  neighborhood  String
-  street        String
-  number        Int
-  cep           Int
-  purchases     Purchase[]
-  reviews       Review[]
-  cart          Cart[]
+  id           String     @id @default(cuid())
+  token        String
+  email        String     @unique
+  password     String
+  name         String
+  cpf          String?
+  cel_number   String
+  profile_img  String     @default("https://i.imgur.com/5QpQijK.png")
+  country      String
+  state        String
+  city         String
+  neighborhood String
+  street       String
+  number       Int
+  cep          Int
+  purchases    Purchase[]
+  reviews      Review[]
+  cart         Cart[]
 }
 
 model Purchase {
-  id             String   @id // Garantindo que o ID seja único
-  userId         String
-  userName       String
-  email          String
-  cpf           String?
-  cel_number    String
-  country       String
-  state         String
-  city          String
-  neighborhood  String
-  street        String
-  number        Int
-  cep           Int
-  products       ProductPurchase[] // Relação com os produtos da compra
-  payment_method String
-  payment_status String
-  payment_id     String
-  value          String   @default("0")
-  status         String
-  codigo_postagem String @default("")
-  date           DateTime
-  vendedor       String   @default("")
-  frete          String   @default("")
-  visualizada    Boolean  @default(false)
+  id              String            @id // Garantindo que o ID seja único
+  userId          String
+  userName        String
+  email           String
+  cpf             String?
+  cel_number      String
+  country         String
+  state           String
+  city            String
+  neighborhood    String
+  street          String
+  number          Int
+  cep             Int
+  products        ProductPurchase[] // Relação com os produtos da compra
+  payment_method  String
+  payment_status  String
+  payment_id      String
+  value           String            @default("0")
+  status          String
+  codigo_postagem String            @default("")
+  date            DateTime
+  vendedor        String            @default("")
+  frete           String            @default("")
+  visualizada     Boolean           @default(false)
 
   User User @relation(fields: [userId], references: [id])
 }
 
 model ProductPurchase {
-  purchase_id    String
-  product_id     String
-  name           String
-  description    String
-  price          Int
-  stock          Int
-  category       String
-  sub_category   String
-  color          String
-  size           String
-  quantity       Int
+  purchase_id  String
+  product_id   String
+  name         String
+  description  String
+  price        Int
+  stock        Int
+  category     String
+  sub_category String
+  color        String
+  size         String
+  quantity     Int
 
-  weight          String @default("")
-  height          String @default("")
-  width           String @default("")
-  length          String @default("")
-  package_format  String @default("")
-  declared_value  String @default("")
-  sku             String @default("")
+  weight         String @default("")
+  height         String @default("")
+  width          String @default("")
+  length         String @default("")
+  package_format String @default("")
+  declared_value String @default("")
+  sku            String @default("")
 
   Purchase Purchase @relation(fields: [purchase_id], references: [id])
-  Product Product @relation(fields: [product_id], references: [id])
+  Product  Product  @relation(fields: [product_id], references: [id])
 
-  @@id([purchase_id, product_id])  // Definindo a chave primária composta
+  @@id([purchase_id, product_id]) // Definindo a chave primária composta
 }
 
 model Size {
-  id       String   @id @default(cuid())
+  id       String @id @default(cuid())
   name     String
   quantity Int
   colorId  String
-  Color    Color    @relation(fields: [colorId], references: [id])
+  Color    Color  @relation(fields: [colorId], references: [id])
 }
-
 
 model Product {
-  id                String   @id @default(cuid())
-  name              String
-  description       String
-  categoryId        String
-  subCategoryId     String
-  destaqued         Boolean @default(false)
-  relatedProducts   String[]
-  images            String[]
-  
+  id              String   @id @default(cuid())
+  name            String
+  description     String
+  categoryId      String
+  subCategoryId   String
+  destaqued       Boolean  @default(false)
+  relatedProducts String[]
+  images          String[]
+
   // Relacionamentos
-  reviews           Review[]
-  colors            Color[]
-  cartItems         CartItem[]
-  ProductPurchase   ProductPurchase[]
+  reviews         Review[]
+  colors          Color[]
+  cartItems       CartItem[]
+  ProductPurchase ProductPurchase[]
 
-  afiliado          String?  @default("")
+  afiliado String? @default("")
 
-  weight          String @default("")
-  height          String @default("")
-  width           String @default("")
-  length          String @default("")
-  package_format  String @default("")
-  declared_value  String @default("")
-  sku             String @default("")
+  weight         String @default("")
+  height         String @default("")
+  width          String @default("")
+  length         String @default("")
+  package_format String @default("")
+  declared_value String @default("")
+  sku            String @default("")
 }
+
 model Category {
-  id            String   @id @default(cuid())
+  id            String        @id @default(cuid())
   name          String
+  image         String        @default("https://sp-ao.shortpixel.ai/client/to_webp,q_glossy,ret_img,w_600/https://tenisatacado30.com.br/wp-content/uploads/2025/03/Tenis-Nike-Air-Force-F1-Preto-Masculino-Premium-3-600x698.jpeg")
+  destaqued     Boolean       @default(true)
   subcategories SubCategory[]
 }
 
 model SubCategory {
-  id          String   @id @default(cuid())
-  name        String
-  categoryId  String
-
-  Category Category @relation(fields: [categoryId], references: [id])
+  id         String   @id @default(cuid())
+  name       String
+  categoryId String
+  Category   Category @relation(fields: [categoryId], references: [id])
 }
 
 model Color {
@@ -154,30 +155,30 @@ model Color {
   custo      String?
   actived    Boolean  @default(true)
   images     String[]
-  sizes      Size[]   // Relação com os tamanhos
+  sizes      Size[] // Relação com os tamanhos
 }
 
 model Review {
-  id         String   @id @default(cuid())
-  user       User     @relation(fields: [user_id], references: [id])
+  id         String  @id @default(cuid())
+  user       User    @relation(fields: [user_id], references: [id])
   user_id    String
-  product    Product  @relation(fields: [product_id], references: [id])
+  product    Product @relation(fields: [product_id], references: [id])
   product_id String
   comment    String
   stars      Int
 }
 
 model Cart {
-  id       String   @id @default(cuid())
-  userId   String
-  items    CartItem[]
-  total    Int
+  id     String     @id @default(cuid())
+  userId String
+  items  CartItem[]
+  total  Int
 
   User User @relation(fields: [userId], references: [id])
 }
 
 model CartItem {
-  id        String   @id @default(cuid())
+  id        String @id @default(cuid())
   cartId    String
   productId String
   quantity  Int
@@ -185,29 +186,19 @@ model CartItem {
   color     String
   size      String
 
-  Cart     Cart     @relation(fields: [cartId], references: [id])
-  Product  Product  @relation(fields: [productId], references: [id])
+  Cart    Cart    @relation(fields: [cartId], references: [id])
+  Product Product @relation(fields: [productId], references: [id])
 }
 
 model Config {
-  id                 String   @id @default(cuid())
-  banner1            String   @default("")
-  banner2            String   @default("")
-  banner3            String   @default("")
-  bannerLink1        String   @default("")
-  bannerLink2        String   @default("")
-  bannerLink3        String   @default("")
-  categorie1         String   @default("")
-  categorie2         String   @default("")
-  categorie3         String   @default("")
-  categorieImageLink1 String   @default("")
-  categorieImageLink2 String   @default("")
-  categorieImageLink3 String   @default("")
-  categorieImageLink4 String   @default("")
-  categorieImageLink5 String   @default("")
-  categorieImage1    String   @default("")
-  categorieImage2    String   @default("")
-  categorieImage3    String   @default("")
-  categorieImage4    String   @default("")
-  categorieImage5    String   @default("")
+  id          String @id @default(cuid())
+  banner1     String @default("")
+  banner2     String @default("")
+  banner3     String @default("")
+  bannerLink1 String @default("")
+  bannerLink2 String @default("")
+  bannerLink3 String @default("")
+  categorie1  String @default("")
+  categorie2  String @default("")
+  categorie3  String @default("")
 }

@@ -24,16 +24,6 @@ export default class ConfigRepository {
             categorie1: config.categorie1,
             categorie2: config.categorie2,
             categorie3: config.categorie3,
-            categorieImage1: config.categorieImage1,
-            categorieImage2: config.categorieImage2,
-            categorieImage3: config.categorieImage3,
-            categorieImage4: config.categorieImage4,
-            categorieImage5: config.categorieImage5,
-            categorieImageLink1: config.categorieImageLink1,
-            categorieImageLink2: config.categorieImageLink2,
-            categorieImageLink3: config.categorieImageLink3,
-            categorieImageLink4: config.categorieImageLink4,
-            categorieImageLink5: config.categorieImageLink5,
         }));
     }
 
@@ -50,16 +40,6 @@ export default class ConfigRepository {
                 categorie1: '',
                 categorie2: '',
                 categorie3: '',
-                categorieImage1: '',
-                categorieImage2: '',
-                categorieImage3: '',
-                categorieImage4: '',
-                categorieImage5: '',
-                categorieImageLink1: '',
-                categorieImageLink2: '',
-                categorieImageLink3: '',
-                categorieImageLink4: '',
-                categorieImageLink5: ''
             }
         })
     }

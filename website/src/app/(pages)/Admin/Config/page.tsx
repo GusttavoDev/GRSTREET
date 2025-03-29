@@ -92,32 +92,6 @@ export default function Config() {
     }
   };  
 
-  const handleImageChange = (imageNumber: number, newValue: string) => {
-    if (config) {
-      const updatedConfig = { ...config };
-      switch (imageNumber) {
-        case 1:
-          updatedConfig.categorieImage1 = newValue;
-          break;
-        case 2:
-          updatedConfig.categorieImage2 = newValue;
-          break;
-        case 3:
-          updatedConfig.categorieImage3 = newValue;
-          break;
-        case 4:
-          updatedConfig.categorieImage4 = newValue;
-          break;
-        case 5:
-          updatedConfig.categorieImage5 = newValue;
-          break;
-        default:
-          break;
-      }
-      setConfig(updatedConfig);
-    }
-  };
-
   const handleNameChange = (categoryNumber: number, newName: string) => {
     if (config) {
       const updatedConfig = { ...config };
@@ -131,26 +105,11 @@ export default function Config() {
         case 3:
           updatedConfig.categorie3 = newName;
           break;
-        case 4:
-          updatedConfig.categorieImageLink4 = newName;
-          break;
-          case 5:
-            updatedConfig.categorieImageLink5 = newName;
-          break;
+
         default:
           break;
       }
       setConfig(updatedConfig);
-    }
-  };
-  
-
-  // Função para lidar com upload de imagens
-  const handleImageUpload = async (imageNumber: number, event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const newImageUrl = URL.createObjectURL(file);
-      handleImageChange(imageNumber, newImageUrl); // Atualiza a imagem com o URL gerado
     }
   };
 
@@ -236,95 +195,6 @@ export default function Config() {
                 onChange={(e) => handleQuickLinkChange(3, e.target.value)} 
               />
             </div>
-
-
-            <div className="CtaegoriasGrid">
-              <h3>Categorias Inicio</h3>
-              <div className="config-item">
-              <label><strong>Categoria 1:</strong></label>
-              <input 
-                type="text" 
-                value={config.categorie1} 
-                onChange={(e) => handleNameChange(1, e.target.value)} 
-                placeholder="Digite o nome da categoria 1" 
-              />
-              <input 
-                type="text" 
-                value={config.categorieImage1} 
-                onChange={(e) => handleImageChange(1, e.target.value)} 
-                placeholder="Digite o link da imagem da categoria 1" 
-              />
-              {config.categorieImage1 && <img src={config.categorieImage1} alt="Imagem Categoria 1" width="100" />}
-            </div>
-
-            <div className="config-item">
-              <label><strong>Categoria 2:</strong></label>
-              <input 
-                type="text" 
-                value={config.categorie2} 
-                onChange={(e) => handleNameChange(2, e.target.value)} 
-                placeholder="Digite o nome da categoria 2" 
-              />
-              <input 
-                type="text" 
-                value={config.categorieImage2} 
-                onChange={(e) => handleImageChange(2, e.target.value)} 
-                placeholder="Digite o link da imagem da categoria 2" 
-              />
-              {config.categorieImage2 && <img src={config.categorieImage2} alt="Imagem Categoria 2" width="100" />}
-            </div>
-
-            <div className="config-item">
-              <label><strong>Categoria 3:</strong></label>
-              <input 
-                type="text" 
-                value={config.categorie3} 
-                onChange={(e) => handleNameChange(3, e.target.value)} 
-                placeholder="Digite o link da categoria 3" 
-                />
-              <input 
-                type="text" 
-                value={config.categorieImage3} 
-                onChange={(e) => handleImageChange(3, e.target.value)} 
-                placeholder="Digite o link da imagem da categoria 3" 
-                />
-              {config.categorieImage3 && <img src={config.categorieImage3} alt="Imagem Categoria 3" width="100" />}
-            </div>
-
-            <div className="config-item">
-              <label><strong>Categoria 4:</strong></label>
-              <input 
-                type="text" 
-                value={config.categorieImageLink4} 
-                onChange={(e) => handleNameChange(4, e.target.value)} 
-                placeholder="Digite o link da categoria 4" 
-                />
-              <input 
-                type="text" 
-                value={config.categorieImage4} 
-                onChange={(e) => handleImageChange(4, e.target.value)} 
-                placeholder="Digite o link da imagem da categoria 4" 
-                />
-              {config.categorieImage4 && <img src={config.categorieImage4} alt="Imagem Categoria 4" width="100" />}
-            </div>
-
-              <div className="config-item">
-              <label><strong>Categoria 5:</strong></label>
-              <input 
-                type="text" 
-                value={config.categorieImageLink5} 
-                onChange={(e) => handleNameChange(5, e.target.value)} 
-                placeholder="Digite o link da categoria 5" 
-                />
-              <input 
-                type="text" 
-                value={config.categorieImage5} 
-                onChange={(e) => handleImageChange(5, e.target.value)} 
-                placeholder="Digite o link da imagem da categoria 5" 
-                />
-              {config.categorieImage5 && <img src={config.categorieImage5} alt="Imagem Categoria 5" width="100" />}
-            </div>
-          </div>
             {/* Repita para outras categorias e imagens conforme necessário */}
 
             {/* Botão de salvar */}

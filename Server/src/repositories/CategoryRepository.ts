@@ -21,6 +21,8 @@ export default class CategoryRepository {
         return data.map(category => ({
             id: category.id,
             name: category.name,
+            image: category.image,
+            destaqued: category.destaqued,
             subcategories: category.subcategories
         }));
     }
@@ -31,6 +33,8 @@ export default class CategoryRepository {
             data: {
                 id,
                 name: data.name,
+                image: data.image,
+                destaqued: data.destaqued,
             }
         });
     }
@@ -42,6 +46,8 @@ export default class CategoryRepository {
             },
             data: {
                 name: data.name,
+                image: data.image,
+                destaqued: data.destaqued,
             }
         });
     }
