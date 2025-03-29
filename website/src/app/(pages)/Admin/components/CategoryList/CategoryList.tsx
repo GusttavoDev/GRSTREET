@@ -24,6 +24,7 @@ export default function CategoryList({ categories, subCategories, fetchCategorie
     image: "",
     destaqued: true,
   });
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -79,9 +80,10 @@ export default function CategoryList({ categories, subCategories, fetchCategorie
     } else {
       handleAddCategory(); // Add new category if no id
     }
+    setIsOpen(false)
   };
 
-  const categoryFormComponent = () => {
+  const CategoryFormComponent = () => {
     return (
       <div className="category-popup">
         <form onSubmit={handleSubmit}>
@@ -112,6 +114,7 @@ export default function CategoryList({ categories, subCategories, fetchCategorie
           <button type="submit" className="btn-submit">
             {data.id ? "Editar Categoria" : "Adicionar Categoria"}
           </button>
+          <button onClick={() => setIsOpen(false)}>Canclar</button>
         </form>
       </div>
     );
@@ -119,7 +122,7 @@ export default function CategoryList({ categories, subCategories, fetchCategorie
 
   return (
     <div className="category-list">
-      <button className="btn-new" onClick={() => setData({ id: "", name: "", image: "", destaqued: true })}>
+      <button className="btn-new" onClick={() => {setData({ id: "", name: "", image: "", destaqued: true }); setIsOpen(true)}}>
         Nova Categoria
       </button>
       <table>
@@ -134,7 +137,7 @@ export default function CategoryList({ categories, subCategories, fetchCategorie
             <tr key={category.id}>
               <td>{category.name}</td>
               <td>
-                <button className="btn" onClick={() => setData(category)}>Editar</button>
+                <button className="btn" onClick={() => {setData(category); setIsOpen(true)}}>Editar</button>
                 <button className="btn btn-delete" onClick={() => handleDeleteCategory(category.id)}>Apagar</button>
               </td>
             </tr>
@@ -142,7 +145,7 @@ export default function CategoryList({ categories, subCategories, fetchCategorie
         </tbody>
       </table>
 
-      {categoryFormComponent()}
+      {isOpen && <CategoryFormComponent/>}
     </div>
   );
 }
