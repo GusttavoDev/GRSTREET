@@ -32,26 +32,6 @@ const carouselSettings = {
   autoplaySpeed: 2000, // Define o tempo de cada slide (em milissegundos)
 };
 
-const carouselSettingsProducts = {
-  dots: true,
-  infinite: true,
-  speed: 700,
-  slidesToShow: window.innerWidth < 768 ? 2 : 3,  // Ajusta dependendo da largura da tela
-  slidesToScroll: 1,
-  autoplay: true,
-  autoplaySpeed: 2000,
-  appendDots: (dots: React.ReactNode) => (
-    <div className="custom-dots-container">
-      <ul className="custom-dots"> {dots} </ul>
-    </div>
-  ),
-  customPaging: (i: number) => (
-    <button className="custom-dot"></button>
-  )
-};
-
-
-
 const listConfigUseCase = new ListConfigUseCase();
 const listProductsUseCase = new ListProductsUseCase();
 const listCategoriesUseCase = new ListCategoriesUseCase();
@@ -76,6 +56,7 @@ export default function Home() {
     const [configData, setConfig] = useState<IConfig>();
     const [products, setProducts] = useState<IProduct[] | undefined>(undefined);
     const [categories, setCategories] = useState<ICategory[] | undefined>(undefined);
+    const [slidesToShow, setSlidesToShow] = useState(3);
     
     const fetchConfig = async () => {
       const response: IConfig[] = await listConfigUseCase.execute();
@@ -110,7 +91,40 @@ export default function Home() {
 
   fetchProducts();
   fetchCategories();
+
+  const updateSlidesToShow = () => {
+    setSlidesToShow(window.innerWidth < 768 ? 2 : 3);
+  };
+
+  updateSlidesToShow(); // Chama ao carregar
+
+  // Adiciona um listener para quando a tela for redimensionada
+  window.addEventListener("resize", updateSlidesToShow);
+
+  // Limpa o listener ao desmontar o componente
+  return () => {
+    window.removeEventListener("resize", updateSlidesToShow);
+  };
     }, []);
+
+    
+  const carouselSettingsProducts = {
+    dots: true,
+    infinite: true,
+    speed: 700,
+    slidesToShow: slidesToShow,  // Usa o estado para definir o número de slides
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    appendDots: (dots: React.ReactNode) => (
+      <div className="custom-dots-container">
+        <ul className="custom-dots"> {dots} </ul>
+      </div>
+    ),
+    customPaging: (i: number) => (
+      <button className="custom-dot"></button>
+    )
+  };
 
   return (
     <>
