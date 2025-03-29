@@ -152,9 +152,13 @@ export default function Home() {
                           <div className="GridProducts">
                         {/* Carrossel de produtos da categoria */}
                         <div className="category-products-carousel">
-                          <button className="carousel-nav carousel-prev" onClick={() => {
-                            document.getElementById(`products-scroll-${index}`)?.scrollBy({ left: -200, behavior: 'smooth' });
-                          }}>‹</button>
+                            <button className="carousel-nav carousel-prev" onClick={() => {
+                            const container = document.getElementById(`products-scroll-${index}`);
+                            if (container) {
+                                const cardWidth = container.querySelector(".product-card")?.clientWidth || 200;
+                                container.scrollBy({ left: -cardWidth - 15, behavior: "smooth" });
+                            }
+                        }}>‹</button>
 
                           <div className="products-scroll" id={`products-scroll-${index}`}>
                             {categoryProducts?.slice(0, 6).map((product) => (
@@ -167,10 +171,15 @@ export default function Home() {
                               </div>
                             ))}
                           </div>
-                          <button className="carousel-nav carousel-next" onClick={() => {
-                            document.getElementById(`products-scroll-${index}`)?.scrollBy({ left: 200, behavior: 'smooth' });
-                          }}>
-                            ›</button>
+
+                      <button className="carousel-nav carousel-next" onClick={() => {
+                          const container = document.getElementById(`products-scroll-${index}`);
+                          if (container) {
+                              const cardWidth = container.querySelector(".product-card")?.clientWidth || 200;
+                              container.scrollBy({ left: cardWidth + 15, behavior: "smooth" });
+                          }
+                      }}>›</button>
+
                         </div>
                         <div className="VerMaisDiv">
                           <button className="view-button" onClick={() => {
