@@ -137,15 +137,16 @@ export default function Home() {
 
             {configData && (
               <>
-                <h1 className="TitlePrincipalsHome">CATEGORIAS</h1>
+                {/* <h1 className="TitlePrincipalsHome">CATEGORIAS</h1> */}
                 <div className="categories-grid">
                   {categories?.map((category, index) => {
                     const categoryProducts = products?.filter((product) => product.category === category.id);
 
                     return (
+                      <>
+                      <h3 className="titleNameCategory">{category.name}</h3>
                       <div key={category.id} className={`category-card ${index === 0 ? "large" : "small"}`}>
                         {/* Imagem da categoria */}
-                        <h3 className="titleNameCategory">{category.name}</h3>
                         <img src={configData?.[(`categorieImage${index + 1}` as keyof IConfig)]} alt={category.name} className="category-image" />
 
                           <div className="GridProducts">
@@ -166,19 +167,20 @@ export default function Home() {
                               </div>
                             ))}
                           </div>
-
                           <button className="carousel-nav carousel-next" onClick={() => {
                             document.getElementById(`products-scroll-${index}`)?.scrollBy({ left: 200, behavior: 'smooth' });
-                          }}>›</button>
+                          }}>
+                            ›</button>
                         </div>
                         <div className="VerMaisDiv">
                           <button className="view-button" onClick={() => {
-                        window.location.href = `${url}?category=${configData?.[(`categorieImage${index + 1}` as keyof IConfig)]}`;
-                      }}>Ver Mais</button>
+                            window.location.href = `${url}?category=${configData?.[(`categorieImage${index + 1}` as keyof IConfig)]}`;
+                          }}>Ver Mais</button>
                         </div>
 
                         </div>
                       </div>
+                      </>
                     );
                   })}
                 </div>

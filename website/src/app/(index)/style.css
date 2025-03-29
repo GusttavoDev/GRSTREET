@@ -15,6 +15,21 @@ button {
     height: 45vh;
     object-fit: contain;
 }
+
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 40px; /* Garante um tamanho fixo */
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* Títulos e Categorias */
 .TitlePrincipalsHome {
     /* text-align: left; Alinhamento à esquerda */
@@ -57,7 +72,7 @@ button {
 .categories-grid {
     display: flex;
     flex-direction: column;
-    gap: 5em;
+    gap: 3em;
     padding: 20px;
 }
 
@@ -65,11 +80,12 @@ button {
     font-family: 'Inter Tight', sans-serif; /* Garantindo o uso da fonte Inter Tight */
     font-size: 1.8rem; /* Tamanho do título */
     font-weight: bold;
-    margin-block: 20px; /* Espaçamento entre o título e a lista */
+    margin-left: 5.5%;
     color: #252525; /* Cor do título */
     text-transform: uppercase; /* Título em maiúsculas */
     text-align: left; /* Alinhamento à esquerda */
     width: 100%; /* Para garantir que o título ocupe toda a largura disponível */
+    margin-bottom: 5px; /* Reduz a distância */
 }
 
 /* Card de cada categoria */
@@ -94,6 +110,7 @@ button {
     object-fit: cover;
     border-radius: 10px;
     margin-right: 20px;
+    margin-bottom: 5px;
 }
 
 /* Seção de produtos da categoria */
@@ -200,11 +217,11 @@ button {
 }
 
 .carousel-prev {
-    left: 10px;
+    left: -2%;
 }
 
 .carousel-next {
-    right: 10px;
+    right: 2%;
 }
 
 /* Responsividade */
@@ -379,6 +396,27 @@ button {
 }
 
 @media (max-width: 768px) {
+    .category-card {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .category-products-carousel {
+        width: 100%;
+    }
+
+    .products-scroll {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-padding: 10px;
+        gap: 10px;
+    }
+
+    .product-card {
+        width: 100%;
+        scroll-snap-align: center;
+    }
 
     .footer-container {
         padding: 20px;

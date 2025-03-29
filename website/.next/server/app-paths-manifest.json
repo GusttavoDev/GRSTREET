@@ -1,7 +1,6 @@
 {
+  "/pages/api/check-auth-user/route": "app/pages/api/check-auth-user/route.js",
   "/(index)/page": "app/(index)/page.js",
   "/(pages)/Products/page": "app/(pages)/Products/page.js",
-  "/(pages)/Admin/Products/page": "app/(pages)/Admin/Products/page.js",
-  "/(pages)/Admin/Config/page": "app/(pages)/Admin/Config/page.js",
-  "/(pages)/Admin/Login/page": "app/(pages)/Admin/Login/page.js"
+  "/(pages)/Products/[id]/page": "app/(pages)/Products/[id]/page.js"
 }
