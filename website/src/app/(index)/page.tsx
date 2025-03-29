@@ -32,11 +32,11 @@ const carouselSettings = {
   autoplaySpeed: 2000, // Define o tempo de cada slide (em milissegundos)
 };
 
-const carouselSettingsProducts  = {
-  dots: true,  // Adiciona os dots abaixo do carrossel
+const carouselSettingsProducts = {
+  dots: true,
   infinite: true,
   speed: 700,
-  slidesToShow: 2,
+  slidesToShow: window.innerWidth < 768 ? 2 : 3,  // Ajusta dependendo da largura da tela
   slidesToScroll: 1,
   autoplay: true,
   autoplaySpeed: 2000,
@@ -49,6 +49,7 @@ const carouselSettingsProducts  = {
     <button className="custom-dot"></button>
   )
 };
+
 
 
 const listConfigUseCase = new ListConfigUseCase();

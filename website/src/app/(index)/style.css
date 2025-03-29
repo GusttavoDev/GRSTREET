@@ -413,23 +413,26 @@ button {
         flex-direction: column;
         align-items: center;
     }
-
-    .category-products-carousel {
+    /* .product-card {
         width: 100%;
-    }
-
-    .products-scroll {
+      }
+     */
+      .category-products-carousel {
+        width: 100%;
+      }
+    
+      .products-scroll {
         display: flex;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
         scroll-padding: 10px;
         gap: 10px;
-    }
-
-    .product-card {
+      }
+    
+      .product-card {
         width: 100%;
         scroll-snap-align: center;
-    }
+      }
 
     .footer-container {
         padding: 20px;
