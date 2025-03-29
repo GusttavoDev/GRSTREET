@@ -36,7 +36,7 @@ const carouselSettingsProducts  = {
   dots: true,  // Adiciona os dots abaixo do carrossel
   infinite: true,
   speed: 700,
-  slidesToShow: 3,
+  slidesToShow: 2,
   slidesToScroll: 1,
   autoplay: true,
   autoplaySpeed: 2000,
