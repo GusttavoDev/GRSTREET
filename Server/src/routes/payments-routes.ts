@@ -6,8 +6,12 @@ import axios from "axios";
 
 const paymentsRouter = Router();
 
+if (!process.env.MP_ACCESS_TOKEN) {
+  throw new Error("⚠️ MP_ACCESS_TOKEN não definido no ambiente.");
+}
+
 const client = new MercadoPagoConfig({
-  accessToken: process.env.MP_ACCESS_TOKEN || "",
+  accessToken: process.env.MP_ACCESS_TOKEN,
 });
 
 // Rota para iniciar o checkout do Mercado Pago
@@ -23,6 +27,10 @@ paymentsRouter.post("/", async (request: Request, response: Response) => {
 
     const preference = new Preference(client);
 
+    const payerData = payer?.email
+      ? { name: payer.name || "Cliente", email: payer.email }
+      : undefined;
+
     const preferenceResponse = await preference.create({
       body: {
         items: items.map((item: any) => ({
@@ -34,10 +42,7 @@ paymentsRouter.post("/", async (request: Request, response: Response) => {
           unit_price: Number(item.unit_price),
           currency_id: "BRL",
         })),
-        payer: {
-          name: payer.name,
-          email: payer.email,
-        },
+        payer: payerData,
         back_urls: {
           success: "https://grstreet.com/sucesso",
           failure: "https://grstreet.com/falha",
@@ -62,25 +67,15 @@ paymentsRouter.post("/webhook", async (req: Request, res: Response) => {
     console.log("🔔 Notificação recebida:", JSON.stringify(req.body, null, 2));
 
     const { topic, resource } = req.body;
-
-    if (!topic || !resource) {
-      console.error("⚠️ Notificação inválida: falta `topic` ou `resource`.");
-      return res.status(400).json({ error: "Notificação inválida" });
-    }
-
-    // Extrai o ID da `merchant_order`
-    const merchantOrderId = resource.split("/").pop();
-    console.log(`🔍 Merchant Order ID extraído: ${merchantOrderId}`);
+    const merchantOrderId = req.body?.merchant_order_id || resource?.split("/").pop();
 
     if (!merchantOrderId) {
       console.error("⚠️ Merchant Order ID não encontrado.");
       return res.status(400).json({ error: "Merchant Order ID inválido" });
     }
 
-    // 🔹 Responde imediatamente para evitar notificações repetidas
     res.sendStatus(200);
 
-    // 🔎 Busca detalhes da `merchant_order`
     const orderUrl = `https://api.mercadopago.com/merchant_orders/${merchantOrderId}`;
     let orderResponse = await axios.get(orderUrl, {
       headers: { Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}` },
@@ -89,56 +84,38 @@ paymentsRouter.post("/webhook", async (req: Request, res: Response) => {
     let orderData = orderResponse.data;
     console.log("📦 Detalhes da ordem:", JSON.stringify(orderData, null, 2));
 
-    // 🔄 Verifica até que o pagamento esteja aprovado
-    while (orderData.status !== "closed" && orderData.payments && orderData.payments.length === 0) {
+    let attempts = 5;
+    while (attempts > 0 && orderData.status !== "closed" && (!orderData.payments || orderData.payments.length === 0)) {
       console.log("⏳ Aguardando pagamento...");
-      await new Promise(resolve => setTimeout(resolve, 3000)); // Espera 3 segundos antes de tentar novamente
-      orderResponse = await axios.get(orderUrl, {
-        headers: { Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}` },
-      });
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      orderResponse = await axios.get(orderUrl, { headers: { Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}` } });
       orderData = orderResponse.data;
+      attempts--;
     }
 
-    if (orderData.payments && orderData.payments.length > 0) {
+    if (orderData.payments?.length > 0) {
       const approvedPayment = orderData.payments.find((p: any) => p.status === "approved");
       if (approvedPayment) {
         console.log("✅ Pagamento aprovado encontrado:", approvedPayment);
 
         const paymentId = approvedPayment.id;
         const paymentUrl = `https://api.mercadopago.com/v1/payments/${paymentId}`;
-        const paymentResponse = await axios.get(paymentUrl, {
-          headers: { Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}` },
-        });
+        const paymentResponse = await axios.get(paymentUrl, { headers: { Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}` } });
 
-        const paymentInfo = paymentResponse.data;
-        console.log("💳 Detalhes do pagamento:", JSON.stringify(paymentInfo, null, 2));
-
-        const { external_reference } = paymentInfo;
-
-        if (!external_reference) {
-          console.error("⚠️ Referência externa não encontrada.");
+        const { external_reference } = paymentResponse.data;
+        let purchaseDetails;
+        try {
+          purchaseDetails = JSON.parse(external_reference);
+        } catch (err) {
+          console.error("❌ Erro ao parsear `external_reference`:", err);
           return;
         }
 
-        const { token, items, purchaseData } = JSON.parse(external_reference);
-        console.log("🛒 Dados da compra extraídos:", purchaseData);
+        await addPurchaseController.execute({ ...purchaseDetails.purchaseData, payment_id: paymentId, payment_status: "approved" });
+        await updateCartController.execute(purchaseDetails.token, purchaseDetails.items);
 
-        // ⚡ Atualiza a compra no banco
-        await addPurchaseController.execute({
-          ...purchaseData,
-          payment_id: paymentId,
-          payment_status: paymentInfo.status,
-        });
-
-        // ⚡ Atualiza o carrinho do usuário
-        await updateCartController.execute(token, items);
-
-        console.log("✅ Compra registrada com sucesso.");
-      } else {
-        console.log("⚠️ Nenhum pagamento aprovado encontrado.");
+        console.log("✅ Compra e carrinho atualizados.");
       }
-    } else {
-      console.log("⚠️ Nenhum pagamento encontrado.");
     }
   } catch (error) {
     console.error("❌ Erro ao processar webhook:", error);
