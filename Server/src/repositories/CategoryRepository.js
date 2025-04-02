@@ -19,6 +19,8 @@ class CategoryRepository {
         return data.map(category => ({
             id: category.id,
             name: category.name,
+            image: category.image,
+            destaqued: category.destaqued,
             subcategories: category.subcategories
         }));
     }
@@ -28,6 +30,8 @@ class CategoryRepository {
             data: {
                 id,
                 name: data.name,
+                image: data.image,
+                destaqued: data.destaqued,
             }
         });
     }
@@ -38,6 +42,8 @@ class CategoryRepository {
             },
             data: {
                 name: data.name,
+                image: data.image,
+                destaqued: data.destaqued,
             }
         });
     }

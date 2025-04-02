@@ -14,8 +14,8 @@ categoryRouter.get("/", async (request, response) => {
 });
 categoryRouter.post("/", async (request, response) => {
     try {
-        const { name } = request.body;
-        await categories_controller_1.addCategoryController.execute({ name });
+        const { name, image, destaqued } = request.body;
+        await categories_controller_1.addCategoryController.execute({ name, image, destaqued });
         return response.status(201).send({ message: "Category created successfully" });
     }
     catch (error) {
@@ -24,8 +24,8 @@ categoryRouter.post("/", async (request, response) => {
 });
 categoryRouter.put("/", async (request, response) => {
     try {
-        const { id, name } = request.body;
-        await categories_controller_1.editCategoryController.execute({ id, name });
+        const { id, name, image, destaqued } = request.body;
+        await categories_controller_1.editCategoryController.execute({ id, name, image, destaqued });
         return response.status(200).send({ message: "Category updated successfully" });
     }
     catch (error) {
