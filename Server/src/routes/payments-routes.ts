@@ -74,49 +74,52 @@ paymentsRouter.post("/webhook", async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Merchant Order ID inválido" });
     }
 
-    res.sendStatus(200);
+    res.sendStatus(200); // Respondemos antes para evitar timeout no Mercado Pago
 
     const orderUrl = `https://api.mercadopago.com/merchant_orders/${merchantOrderId}`;
-    let orderResponse = await axios.get(orderUrl, {
+    const orderResponse = await axios.get(orderUrl, {
       headers: { Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}` },
     });
 
-    let orderData = orderResponse.data;
+    const orderData = orderResponse.data;
     console.log("📦 Detalhes da ordem:", JSON.stringify(orderData, null, 2));
 
-    let attempts = 5;
-    while (attempts > 0 && orderData.status !== "closed" && (!orderData.payments || orderData.payments.length === 0)) {
-      console.log("⏳ Aguardando pagamento...");
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      orderResponse = await axios.get(orderUrl, { headers: { Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}` } });
-      orderData = orderResponse.data;
-      attempts--;
+    if (!orderData.payments || orderData.payments.length === 0) {
+      console.log("⚠️ Nenhum pagamento encontrado na ordem.");
+      return;
     }
 
-    if (orderData.payments?.length > 0) {
-      const approvedPayment = orderData.payments.find((p: any) => p.status === "approved");
-      if (approvedPayment) {
-        console.log("✅ Pagamento aprovado encontrado:", approvedPayment);
+    const lastPayment = orderData.payments[0]; // Pegamos o primeiro pagamento registrado
+    console.log("💰 Último pagamento:", lastPayment);
 
-        const paymentId = approvedPayment.id;
-        const paymentUrl = `https://api.mercadopago.com/v1/payments/${paymentId}`;
-        const paymentResponse = await axios.get(paymentUrl, { headers: { Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}` } });
+    const paymentId = lastPayment.id;
+    const paymentStatus = lastPayment.status; // pending, in_process, approved, rejected, etc.
 
-        const { external_reference } = paymentResponse.data;
-        let purchaseDetails;
-        try {
-          purchaseDetails = JSON.parse(external_reference);
-        } catch (err) {
-          console.error("❌ Erro ao parsear `external_reference`:", err);
-          return;
-        }
+    const paymentUrl = `https://api.mercadopago.com/v1/payments/${paymentId}`;
+    const paymentResponse = await axios.get(paymentUrl, {
+      headers: { Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}` },
+    });
 
-        await addPurchaseController.execute({ ...purchaseDetails.purchaseData, payment_id: paymentId, payment_status: "approved" });
-        await updateCartController.execute(purchaseDetails.token, purchaseDetails.items);
-
-        console.log("✅ Compra e carrinho atualizados.");
-      }
+    const { external_reference } = paymentResponse.data;
+    let purchaseDetails;
+    try {
+      purchaseDetails = JSON.parse(external_reference);
+    } catch (err) {
+      console.error("❌ Erro ao parsear `external_reference`:", err);
+      return;
     }
+
+    console.log("📝 Registrando compra com status:", paymentStatus);
+
+    await addPurchaseController.execute({
+      ...purchaseDetails.purchaseData,
+      payment_id: paymentId,
+      payment_status: paymentStatus, // Agora registramos o status correto do pagamento
+    });
+
+    await updateCartController.execute(purchaseDetails.token, purchaseDetails.items);
+
+    console.log("✅ Compra e carrinho atualizados.");
   } catch (error) {
     console.error("❌ Erro ao processar webhook:", error);
   }
