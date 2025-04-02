@@ -45,7 +45,7 @@ paymentsRouter.post("/", async (request: Request, response: Response) => {
             first_name: payerData.name,
             email: payerData.email
           },
-          payment_method_id: 'master',
+          payment_method_id: 'Pix',
           transaction_amount: Number(purchaseData.value),
           callback_url: "https://grstreet.com/sucesso",
           notification_url: "https://api.grstreet.com/api/payment/webhook",
