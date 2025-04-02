@@ -18,43 +18,62 @@ const client = new MercadoPagoConfig({
 paymentsRouter.post("/", async (request: Request, response: Response) => {
   try {
     const { token, items, payer, updatedItems, purchaseData } = request.body;
-    console.log(client.accessToken)
     if (!items || items.length === 0) {
       return response.status(400).json({ error: "Itens inválidos ou ausentes." });
     }
 
-    const preference = new Preference(client);
+    // const preference = new Preference(client);
+    const pay = new Payment(client);
 
     const payerData = payer?.email
       ? { name: payer.name || "Cliente", email: payer.email }
       : undefined;
 
-    const preferenceResponse = await preference.create(
-      {
-      body: {
-        items: items.map((item: any) => ({
-          id: item.id,
-          title: item.title,
-          description: item.description,
-          picture_url: item.picture_url,
-          quantity: Number(item.quantity),
-          unit_price: Number(item.unit_price),
-          currency_id: "BRL",
-        })),
+      const paymentPayload = await pay.create({
+        body: {
+          additional_info: {
+          items: items.map((item: any) => ({
+            id: item.id,
+            title: item.title,
+            description: item.description,
+            picture_url: item.picture_url,
+            quantity: Number(item.quantity),
+            unit_price: Number(item.unit_price),
+            currency_id: "BRL",
+          })),
         payer: payerData,
-        back_urls: {
-          success: "https://grstreet.com/sucesso",
-          failure: "https://grstreet.com/falha",
-          pending: "https://grstreet.com/pendente",
+          },
+          callback_url: "https://grstreet.com/sucesso",
+          notification_url: "https://api.grstreet.com/api/payment/webhook",
         },
-        auto_return: "approved",
-        notification_url: "https://api.grstreet.com/api/payment/webhook",
-        external_reference: JSON.stringify({ token, items: updatedItems, purchaseData }),
-      },
-    }
-  );
+      })
+
+  //   const preferenceResponse = await preference.create(
+  //     {
+  //     body: {
+  //       items: items.map((item: any) => ({
+  //         id: item.id,
+  //         title: item.title,
+  //         description: item.description,
+  //         picture_url: item.picture_url,
+  //         quantity: Number(item.quantity),
+  //         unit_price: Number(item.unit_price),
+  //         currency_id: "BRL",
+  //       })),
+  //       payer: payerData,
+  //       back_urls: {
+  //         success: "https://grstreet.com/sucesso",
+  //         failure: "https://grstreet.com/falha",
+  //         pending: "https://grstreet.com/pendente",
+  //       },
+  //       auto_return: "approved",
+  //       notification_url: "https://api.grstreet.com/api/payment/webhook",
+  //       external_reference: JSON.stringify({ token, items: updatedItems, purchaseData }),
+  //     },
+  //   }
+  // );
     // console.log('POST', response.json())
-    return response.status(200).json({ init_point: preferenceResponse.init_point });
+    return response.status(200).json({ init_point: paymentPayload.api_response});
   } catch (error: any) {
     console.error("❌ Erro ao criar pagamento:", error);
     return response.status(500).json({ error: error.message });
