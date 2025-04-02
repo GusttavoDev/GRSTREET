@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import { MercadoPagoConfig, Preference } from "mercadopago";
+import { MercadoPagoConfig, Preference, Payment,  } from "mercadopago";
 import { addPurchaseController } from "../controllers/purchase-controller";
 import { updateCartController } from "../controllers/users-controller";
 import axios from "axios";
@@ -18,7 +18,7 @@ const client = new MercadoPagoConfig({
 paymentsRouter.post("/", async (request: Request, response: Response) => {
   try {
     const { token, items, payer, updatedItems, purchaseData } = request.body;
-
+    console.log(client.accessToken)
     if (!items || items.length === 0) {
       return response.status(400).json({ error: "Itens inválidos ou ausentes." });
     }
@@ -29,7 +29,8 @@ paymentsRouter.post("/", async (request: Request, response: Response) => {
       ? { name: payer.name || "Cliente", email: payer.email }
       : undefined;
 
-    const preferenceResponse = await preference.create({
+    const preferenceResponse = await preference.create(
+      {
       body: {
         items: items.map((item: any) => ({
           id: item.id,
@@ -50,8 +51,9 @@ paymentsRouter.post("/", async (request: Request, response: Response) => {
         notification_url: "https://api.grstreet.com/api/payment/webhook",
         external_reference: JSON.stringify({ token, items: updatedItems, purchaseData }),
       },
-    });
-    console.log('POST', response.json())
+    }
+  );
+    // console.log('POST', response.json())
     return response.status(200).json({ init_point: preferenceResponse.init_point });
   } catch (error: any) {
     console.error("❌ Erro ao criar pagamento:", error);
