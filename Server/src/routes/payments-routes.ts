@@ -54,7 +54,7 @@ paymentsRouter.post("/", async (request: Request, response: Response) => {
       },
     });
 
-    return response.status(200).json({ init_point: preferenceResponse.sandbox_init_point || preferenceResponse.init_point });
+    return response.status(200).json({ init_point: preferenceResponse.init_point });
   } catch (error: any) {
     console.error("❌ Erro ao criar pagamento:", error);
     return response.status(500).json({ error: error.message });
@@ -76,7 +76,7 @@ paymentsRouter.post("/webhook", async (req: Request, res: Response) => {
 
     res.sendStatus(200);
 
-    const orderUrl = `https://api.mercadolibre.com/merchant_orders/${merchantOrderId}`;
+    const orderUrl = `https://api.mercadopago.com/merchant_orders/${merchantOrderId}`;
     let orderResponse = await axios.get(orderUrl, {
       headers: { Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}` },
     });
@@ -113,7 +113,7 @@ paymentsRouter.post("/webhook", async (req: Request, res: Response) => {
         console.log("✅ Pagamento aprovado encontrado:", approvedPayment);
 
         const paymentId = approvedPayment.id;
-        const paymentUrl = `https://api.mercadol pago.com/v1/payments/${paymentId}`;
+        const paymentUrl = `https://api.mercadopago.com/v1/payments/${paymentId}`;
         const paymentResponse = await axios.get(paymentUrl, { headers: { Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}` } });
 
         const { external_reference } = paymentResponse.data;
