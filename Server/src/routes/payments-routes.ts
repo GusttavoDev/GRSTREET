@@ -23,8 +23,6 @@ paymentsRouter.post("/", async (request: Request, response: Response) => {
       return response.status(400).json({ error: "Itens inválidos ou ausentes." });
     }
 
-    console.log("📦 Itens recebidos:", items, payer, token, updatedItems, purchaseData);
-
     const preference = new Preference(client);
 
     const payerData = payer?.email
@@ -53,7 +51,7 @@ paymentsRouter.post("/", async (request: Request, response: Response) => {
         external_reference: JSON.stringify({ token, items: updatedItems, purchaseData }),
       },
     });
-
+    console.log('POST', response.json())
     return response.status(200).json({ init_point: preferenceResponse.init_point });
   } catch (error: any) {
     console.error("❌ Erro ao criar pagamento:", error);
@@ -82,7 +80,7 @@ paymentsRouter.post("/webhook", async (req: Request, res: Response) => {
     });
 
     let orderData = orderResponse.data;
-    console.log("📦 Detalhes da ordem:", JSON.stringify(orderData, null, 2));
+    // console.log("📦 Detalhes da ordem:", JSON.stringify(orderData, null, 2));
 
     // Verifique o status da ordem
     if (orderData.order_status === "payment_required") {
