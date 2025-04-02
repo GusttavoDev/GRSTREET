@@ -74,55 +74,71 @@ paymentsRouter.post("/webhook", async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Merchant Order ID inválido" });
     }
 
-    res.sendStatus(200); // Respondemos antes para evitar timeout no Mercado Pago
+    res.sendStatus(200);
 
-    const orderUrl = `https://api.mercadopago.com/merchant_orders/${merchantOrderId}`;
-    const orderResponse = await axios.get(orderUrl, {
+    const orderUrl = `https://api.mercadolibre.com/merchant_orders/${merchantOrderId}`;
+    let orderResponse = await axios.get(orderUrl, {
       headers: { Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}` },
     });
 
-    const orderData = orderResponse.data;
+    let orderData = orderResponse.data;
     console.log("📦 Detalhes da ordem:", JSON.stringify(orderData, null, 2));
 
-    if (!orderData.payments || orderData.payments.length === 0) {
-      console.log("⚠️ Nenhum pagamento encontrado na ordem.");
+    // Verifique o status da ordem
+    if (orderData.order_status === "payment_required") {
+      // Se o pagamento ainda não foi realizado, marca como "PENDENTE"
+      const { external_reference } = orderData;
+      let purchaseDetails;
+      try {
+        purchaseDetails = JSON.parse(external_reference);
+      } catch (err) {
+        console.error("❌ Erro ao parsear `external_reference`:", err);
+        return;
+      }
+
+      // Atualize a compra com o status de pagamento "PENDENTE"
+      await addPurchaseController.execute({
+        ...purchaseDetails.purchaseData,
+        payment_status: "PENDENTE", // Marca como pendente
+        payment_id: "Não disponível", // Pode ser um placeholder
+      });
+
+      console.log("✅ Compra marcada como PENDENTE.");
       return;
     }
 
-    const lastPayment = orderData.payments[0]; // Pegamos o primeiro pagamento registrado
-    console.log("💰 Último pagamento:", lastPayment);
+    if (orderData.payments?.length > 0) {
+      const approvedPayment = orderData.payments.find((p: any) => p.status === "approved");
+      if (approvedPayment) {
+        console.log("✅ Pagamento aprovado encontrado:", approvedPayment);
 
-    const paymentId = lastPayment.id;
-    const paymentStatus = lastPayment.status; // pending, in_process, approved, rejected, etc.
+        const paymentId = approvedPayment.id;
+        const paymentUrl = `https://api.mercadol pago.com/v1/payments/${paymentId}`;
+        const paymentResponse = await axios.get(paymentUrl, { headers: { Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}` } });
 
-    const paymentUrl = `https://api.mercadopago.com/v1/payments/${paymentId}`;
-    const paymentResponse = await axios.get(paymentUrl, {
-      headers: { Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}` },
-    });
+        const { external_reference } = paymentResponse.data;
+        let purchaseDetails;
+        try {
+          purchaseDetails = JSON.parse(external_reference);
+        } catch (err) {
+          console.error("❌ Erro ao parsear `external_reference`:", err);
+          return;
+        }
 
-    const { external_reference } = paymentResponse.data;
-    let purchaseDetails;
-    try {
-      purchaseDetails = JSON.parse(external_reference);
-    } catch (err) {
-      console.error("❌ Erro ao parsear `external_reference`:", err);
-      return;
+        await addPurchaseController.execute({
+          ...purchaseDetails.purchaseData,
+          payment_id: paymentId,
+          payment_status: "approved",
+        });
+        await updateCartController.execute(purchaseDetails.token, purchaseDetails.items);
+
+        console.log("✅ Compra e carrinho atualizados.");
+      }
     }
-
-    console.log("📝 Registrando compra com status:", paymentStatus);
-
-    await addPurchaseController.execute({
-      ...purchaseDetails.purchaseData,
-      payment_id: paymentId,
-      payment_status: paymentStatus, // Agora registramos o status correto do pagamento
-    });
-
-    await updateCartController.execute(purchaseDetails.token, purchaseDetails.items);
-
-    console.log("✅ Compra e carrinho atualizados.");
   } catch (error) {
     console.error("❌ Erro ao processar webhook:", error);
   }
 });
+
 
 export default paymentsRouter;
